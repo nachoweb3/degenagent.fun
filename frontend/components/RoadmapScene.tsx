@@ -1,9 +1,21 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text, Float, MeshDistortMaterial, Line } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Error boundary fallback
+function ErrorFallback() {
+  return (
+    <div className="w-full h-[600px] bg-gray-900/50 rounded-2xl flex items-center justify-center">
+      <div className="text-center text-gray-400">
+        <p className="text-xl mb-2">🚀</p>
+        <p>Roadmap visualization loading...</p>
+      </div>
+    </div>
+  );
+}
 
 function AnimatedSphere({ position, color }: { position: [number, number, number]; color: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -131,11 +143,18 @@ function Scene() {
 }
 
 export default function RoadmapScene() {
-  return (
-    <div className="w-full h-[600px] bg-black rounded-2xl overflow-hidden">
-      <Canvas camera={{ position: [0, 0, 12], fov: 50 }}>
-        <Scene />
-      </Canvas>
-    </div>
-  );
+  try {
+    return (
+      <div className="w-full h-[600px] bg-black rounded-2xl overflow-hidden">
+        <Canvas camera={{ position: [0, 0, 12], fov: 50 }}>
+          <Suspense fallback={null}>
+            <Scene />
+          </Suspense>
+        </Canvas>
+      </div>
+    );
+  } catch (error) {
+    console.error('RoadmapScene error:', error);
+    return <ErrorFallback />;
+  }
 }

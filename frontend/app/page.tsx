@@ -4,7 +4,10 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-const RoadmapScene = dynamic(() => import('@/components/RoadmapScene'), {
+const RoadmapScene = dynamic(() => import('@/components/RoadmapScene').catch(() => {
+  // Fallback if Three.js fails to load
+  return { default: () => <div className="w-full h-[600px] bg-gray-900/50 rounded-2xl flex items-center justify-center text-gray-400">3D Roadmap Loading...</div> };
+}), {
   ssr: false,
   loading: () => <div className="w-full h-[600px] bg-gray-900/50 rounded-2xl animate-pulse" />
 });
