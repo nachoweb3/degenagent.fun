@@ -1,0 +1,43 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9945FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14F195;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="robotGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cccccc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle with gradient -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient)"/>
+
+  <!-- Robot head -->
+  <rect x="156" y="180" width="200" height="180" rx="20" fill="url(#robotGradient)" stroke="#000" stroke-width="8"/>
+
+  <!-- Robot antenna -->
+  <line x1="256" y1="180" x2="256" y2="140" stroke="#000" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="256" cy="130" r="15" fill="#14F195" stroke="#000" stroke-width="4"/>
+
+  <!-- Robot eyes -->
+  <circle cx="206" cy="240" r="25" fill="#9945FF"/>
+  <circle cx="306" cy="240" r="25" fill="#9945FF"/>
+
+  <!-- Eye highlights -->
+  <circle cx="212" cy="234" r="8" fill="#ffffff"/>
+  <circle cx="312" cy="234" r="8" fill="#ffffff"/>
+
+  <!-- Robot mouth/display -->
+  <rect x="186" y="290" width="140" height="40" rx="10" fill="#000"/>
+  <text x="256" y="318" font-family="monospace" font-size="24" font-weight="bold" fill="#14F195" text-anchor="middle">$$$</text>
+
+  <!-- Robot ears/speakers -->
+  <rect x="136" y="220" width="20" height="60" rx="5" fill="#000"/>
+  <rect x="356" y="220" width="20" height="60" rx="5" fill="#000"/>
+
+  <!-- Small details on head -->
+  <circle cx="176" cy="200" r="4" fill="#9945FF"/>
+  <circle cx="336" cy="200" r="4" fill="#9945FF"/>
+</svg>
