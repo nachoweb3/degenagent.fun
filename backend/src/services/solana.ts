@@ -63,9 +63,10 @@ export async function createAgent(
   );
 
   // Get treasury from factory state (for MVP, use creator as treasury)
-  const treasury = new PublicKey(
-    process.env.TREASURY_WALLET || creator.toString()
-  );
+  const treasuryAddress = process.env.TREASURY_WALLET;
+  const treasury = treasuryAddress && treasuryAddress.length === 44
+    ? new PublicKey(treasuryAddress)
+    : creator;
 
   // Create transaction
   const transaction = new Transaction();
