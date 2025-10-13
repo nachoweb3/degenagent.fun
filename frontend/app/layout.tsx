@@ -35,6 +35,9 @@ export default function RootLayout({
                   <a href="/explore" className="text-gray-300 hover:text-white">
                     Explore
                   </a>
+                  <a href="/docs" className="text-gray-300 hover:text-white">
+                    Docs
+                  </a>
                   <a href="/profile" className="text-gray-300 hover:text-white">
                     Profile
                   </a>

@@ -2,6 +2,12 @@
 
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const RoadmapScene = dynamic(() => import('@/components/RoadmapScene'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[600px] bg-gray-900/50 rounded-2xl animate-pulse" />
+});
 
 export default function Home() {
   return (
@@ -79,6 +85,52 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Roadmap */}
+      <div className="mb-12 sm:mb-20">
+        <h2 className="text-2xl sm:text-4xl font-bold text-center mb-4 sm:mb-6 px-2">Roadmap</h2>
+        <p className="text-center text-gray-400 mb-8 max-w-2xl mx-auto px-4">
+          Our vision for the future of AI-powered trading on Solana
+        </p>
+        <RoadmapScene />
+
+        {/* Roadmap Details */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+          <RoadmapCard
+            phase="Q2 2025"
+            title="Subagent System"
+            status="In Progress"
+            description="Create specialized subagents that work together under a master agent for complex trading strategies"
+            features={[
+              "Market analyzer subagent",
+              "Risk manager subagent",
+              "Execution optimizer subagent"
+            ]}
+          />
+          <RoadmapCard
+            phase="Q2 2025"
+            title="NFT Collection"
+            status="Coming Soon"
+            description="Exclusive NFT collection for early adopters with special benefits and governance rights"
+            features={[
+              "Unique AI-generated art",
+              "Premium agent features",
+              "Revenue share boost"
+            ]}
+          />
+          <RoadmapCard
+            phase="Q3 2025"
+            title="Social Trading"
+            status="Planned"
+            description="Follow and copy successful agents automatically to benefit from proven strategies"
+            features={[
+              "Agent leaderboards",
+              "Copy trading",
+              "Social portfolios"
+            ]}
+          />
+        </div>
+      </div>
+
       {/* Stats */}
       <div className="bg-gray-900/50 rounded-xl p-6 sm:p-8 border border-gray-800">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
@@ -88,6 +140,35 @@ export default function Home() {
           <StatCard label="Success Rate" value="87%" />
         </div>
       </div>
+    </div>
+  );
+}
+
+function RoadmapCard({ phase, title, status, description, features }: {
+  phase: string;
+  title: string;
+  status: string;
+  description: string;
+  features: string[];
+}) {
+  const statusColor = status === 'In Progress' ? 'text-solana-purple' : status === 'Coming Soon' ? 'text-solana-green' : 'text-gray-400';
+
+  return (
+    <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-800 hover:border-solana-purple transition-all">
+      <div className="flex justify-between items-start mb-3">
+        <span className="text-sm text-gray-500">{phase}</span>
+        <span className={`text-xs font-semibold ${statusColor}`}>{status}</span>
+      </div>
+      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <p className="text-sm text-gray-400 mb-4">{description}</p>
+      <ul className="space-y-2">
+        {features.map((feature, i) => (
+          <li key={i} className="text-sm text-gray-300 flex items-start">
+            <span className="text-solana-green mr-2">✓</span>
+            {feature}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
