@@ -46,14 +46,14 @@ export default function MobileMenu() {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] md:hidden"
+          className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] md:hidden"
           onClick={toggleMenu}
         />
       )}
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 border-l border-gray-800 transform transition-transform duration-300 ease-in-out z-[110] md:hidden ${
+        className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-b from-gray-900 via-gray-900 to-black border-l-2 border-solana-purple shadow-2xl shadow-solana-purple/20 transform transition-transform duration-300 ease-in-out z-[110] md:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
