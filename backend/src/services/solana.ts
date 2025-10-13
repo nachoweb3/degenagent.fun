@@ -19,12 +19,13 @@ import { connection } from '../index';
 import * as anchor from '@coral-xyz/anchor';
 
 // Use valid default program IDs (will be updated when programs are deployed)
+// Default to System Program for MVP until actual programs are deployed
 const FACTORY_PROGRAM_ID = new PublicKey(
-  process.env.FACTORY_PROGRAM_ID || '11111111111111111111111111111111'
+  process.env.FACTORY_PROGRAM_ID || SystemProgram.programId.toString()
 );
 
 const MANAGER_PROGRAM_ID = new PublicKey(
-  process.env.MANAGER_PROGRAM_ID || '11111111111111111111111111111111'
+  process.env.MANAGER_PROGRAM_ID || SystemProgram.programId.toString()
 );
 
 export async function createAgent(
