@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { WalletProviderWrapper } from '@/components/WalletProvider';
+import MobileMenu from '@/components/MobileMenu';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,20 +26,22 @@ export default function RootLayout({
           <nav className="border-b border-gray-800 bg-black/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between h-16 items-center">
-                <a href="/" className="text-2xl font-bold text-solana-purple">
+                <a href="/" className="text-xl sm:text-2xl font-bold text-solana-purple">
                   AGENT.FUN
                 </a>
-                <div className="flex items-center gap-4">
-                  <a href="/create" className="text-gray-300 hover:text-white">
+
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center gap-4">
+                  <a href="/create" className="text-gray-300 hover:text-white transition-colors">
                     Create Agent
                   </a>
-                  <a href="/explore" className="text-gray-300 hover:text-white">
+                  <a href="/explore" className="text-gray-300 hover:text-white transition-colors">
                     Explore
                   </a>
-                  <a href="/docs" className="text-gray-300 hover:text-white">
+                  <a href="/docs" className="text-gray-300 hover:text-white transition-colors">
                     Docs
                   </a>
-                  <a href="/profile" className="text-gray-300 hover:text-white">
+                  <a href="/profile" className="text-gray-300 hover:text-white transition-colors">
                     Profile
                   </a>
                   <div className="flex items-center gap-3 ml-4 border-l border-gray-700 pl-4">
@@ -77,6 +80,9 @@ export default function RootLayout({
                     </a>
                   </div>
                 </div>
+
+                {/* Mobile Menu */}
+                <MobileMenu />
               </div>
             </div>
           </nav>
