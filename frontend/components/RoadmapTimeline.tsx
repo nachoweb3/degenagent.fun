@@ -67,26 +67,33 @@ export default function RoadmapTimeline() {
   };
 
   return (
-    <div className="relative w-full py-12">
-      {/* Timeline line */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-solana-green via-solana-purple to-gray-700" />
+    <div className="relative w-full py-8 sm:py-12">
+      {/* Timeline line - Hidden on mobile, shown on desktop */}
+      <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-solana-green via-solana-purple to-gray-700" />
+
+      {/* Mobile timeline line - Left side */}
+      <div className="md:hidden absolute left-4 top-0 h-full w-1 bg-gradient-to-b from-solana-green via-solana-purple to-gray-700" />
 
       {/* Roadmap items */}
-      <div className="space-y-16">
+      <div className="space-y-8 sm:space-y-16">
         {roadmapData.map((item, index) => (
           <div
             key={index}
             className={`relative flex items-center ${
-              index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-            }`}
+              index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+            } flex-row`}
           >
             {/* Content */}
-            <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-              <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-solana-purple transition-all hover:scale-105">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-semibold text-gray-400">{item.quarter}</span>
+            <div className={`w-full md:w-5/12 ${
+              index % 2 === 0
+                ? 'md:pr-8 md:text-right pl-12 md:pl-0'
+                : 'md:pl-8 md:text-left pl-12'
+            }`}>
+              <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-xl p-4 sm:p-6 hover:border-solana-purple transition-all hover:scale-105 touch-manipulation">
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <span className="text-xs sm:text-sm font-semibold text-gray-400">{item.quarter}</span>
                   <span
-                    className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                    className={`text-xs font-semibold px-2 sm:px-3 py-1 rounded-full ${
                       item.status === 'completed'
                         ? 'bg-solana-green/20 text-solana-green'
                         : item.status === 'inProgress'
@@ -97,36 +104,38 @@ export default function RoadmapTimeline() {
                     {getStatusText(item.status)}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                <ul className="space-y-2">
+                <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">{item.title}</h3>
+                <ul className="space-y-1 sm:space-y-2">
                   {item.features.map((feature, i) => (
-                    <li key={i} className="text-sm text-gray-400 flex items-start">
-                      <span className="text-solana-green mr-2">•</span>
-                      {feature}
+                    <li key={i} className="text-xs sm:text-sm text-gray-400 flex items-start">
+                      <span className="text-solana-green mr-2 flex-shrink-0">•</span>
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            {/* Center dot */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 z-10">
+            {/* Center/Left dot */}
+            <div className={`absolute ${
+              index % 2 === 0 ? 'md:left-1/2' : 'md:left-1/2'
+            } left-4 md:transform md:-translate-x-1/2 z-10`}>
               <div
-                className={`w-6 h-6 rounded-full border-4 ${getStatusColor(
+                className={`w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 sm:border-4 ${getStatusColor(
                   item.status
                 )} shadow-lg`}
               />
             </div>
 
-            {/* Empty space on other side */}
-            <div className="w-5/12" />
+            {/* Empty space on other side - Desktop only */}
+            <div className="hidden md:block md:w-5/12" />
           </div>
         ))}
       </div>
 
       {/* Bottom decoration */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-solana-purple to-solana-green animate-pulse" />
+      <div className="absolute bottom-0 left-4 md:left-1/2 md:transform md:-translate-x-1/2">
+        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-solana-purple to-solana-green animate-pulse" />
       </div>
     </div>
   );
