@@ -20,13 +20,13 @@ import * as anchor from '@coral-xyz/anchor';
 
 // Use valid default program IDs (will be updated when programs are deployed)
 // Default to System Program for MVP until actual programs are deployed
-const FACTORY_PROGRAM_ID = new PublicKey(
-  process.env.FACTORY_PROGRAM_ID || SystemProgram.programId.toString()
-);
+function getFactoryProgramId(): PublicKey {
+  return SystemProgram.programId; // Use System Program as default for MVP
+}
 
-const MANAGER_PROGRAM_ID = new PublicKey(
-  process.env.MANAGER_PROGRAM_ID || SystemProgram.programId.toString()
-);
+function getManagerProgramId(): PublicKey {
+  return SystemProgram.programId; // Use System Program as default for MVP
+}
 
 export async function createAgent(
   creator: PublicKey,
@@ -38,19 +38,19 @@ export async function createAgent(
   // Find factory state PDA
   const [factoryState] = PublicKey.findProgramAddressSync(
     [Buffer.from('factory')],
-    FACTORY_PROGRAM_ID
+    getFactoryProgramId()
   );
 
   // Find agent state PDA
   const [agentState] = PublicKey.findProgramAddressSync(
     [Buffer.from('agent'), creator.toBuffer()],
-    MANAGER_PROGRAM_ID
+    getManagerProgramId()
   );
 
   // Find vault PDA
   const [vault] = PublicKey.findProgramAddressSync(
     [Buffer.from('vault'), agentState.toBuffer()],
-    MANAGER_PROGRAM_ID
+    getManagerProgramId()
   );
 
   // Generate token mint keypair
@@ -170,7 +170,7 @@ export async function depositFunds(
   // Find vault PDA
   const [vault] = PublicKey.findProgramAddressSync(
     [Buffer.from('vault'), agentPubkey.toBuffer()],
-    MANAGER_PROGRAM_ID
+    getManagerProgramId()
   );
 
   const transaction = new Transaction().add(
