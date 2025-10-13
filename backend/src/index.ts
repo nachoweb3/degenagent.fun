@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Connection, PublicKey } from '@solana/web3.js';
 import agentRoutes from './routes/agent';
+import olympicsRoutes from './routes/olympics';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 
@@ -23,6 +24,7 @@ export const connection = new Connection(
 
 // Routes
 app.use('/api/agent', agentRoutes);
+app.use('/api/olympics', olympicsRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

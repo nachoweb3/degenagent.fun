@@ -38,6 +38,9 @@ export default function RootLayout({
                   <a href="/explore" className="text-gray-300 hover:text-white transition-colors">
                     Explore
                   </a>
+                  <a href="/olympics" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                    🏆 Olympics
+                  </a>
                   <a href="/docs" className="text-gray-300 hover:text-white transition-colors">
                     Docs
                   </a>

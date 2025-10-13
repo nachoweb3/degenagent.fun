@@ -12,6 +12,7 @@ export default function MobileMenu() {
     { href: '/', label: 'Home' },
     { href: '/create', label: 'Create Agent' },
     { href: '/explore', label: 'Explore' },
+    { href: '/olympics', label: '🏆 Olympics' },
     { href: '/docs', label: 'Docs' },
     { href: '/profile', label: 'Profile' },
   ];
