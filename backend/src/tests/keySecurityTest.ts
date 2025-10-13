@@ -52,8 +52,8 @@ function logTest(name: string, passed: boolean, message: string) {
  * Capture console output to verify no keys are logged
  */
 class ConsoleCapture {
-  private originalLog: typeof console.log;
-  private originalError: typeof console.error;
+  private originalLog!: typeof console.log;
+  private originalError!: typeof console.error;
   private logs: string[] = [];
 
   start() {
