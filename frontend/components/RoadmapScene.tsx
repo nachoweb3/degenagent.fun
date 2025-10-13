@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Float, MeshDistortMaterial } from '@react-three/drei';
+import { OrbitControls, Text, Float, MeshDistortMaterial, Line } from '@react-three/drei';
 import * as THREE from 'three';
 
 function AnimatedSphere({ position, color }: { position: [number, number, number]; color: string }) {
@@ -32,16 +32,15 @@ function AnimatedSphere({ position, color }: { position: [number, number, number
 }
 
 function ConnectionLine({ start, end }: { start: [number, number, number]; end: [number, number, number] }) {
-  const points = [];
-  points.push(new THREE.Vector3(...start));
-  points.push(new THREE.Vector3(...end));
-
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+  const points = [start, end];
 
   return (
-    <line_ geometry={lineGeometry} renderOrder={-1}>
-      <lineBasicMaterial attach="material" color="#14F195" linewidth={2} />
-    </line_>
+    <Line
+      points={points}
+      color="#14F195"
+      lineWidth={1}
+      dashed={false}
+    />
   );
 }
 
