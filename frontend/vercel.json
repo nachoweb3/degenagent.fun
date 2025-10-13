@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_RPC_ENDPOINT": "https://api.devnet.solana.com",
+    "NEXT_PUBLIC_BACKEND_API": "https://your-backend-api.vercel.app/api"
+  }
+}

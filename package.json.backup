@@ -1,0 +1,32 @@
+{
+  "name": "agent-fun",
+  "version": "1.0.0",
+  "description": "Launch autonomous AI trading agents on Solana",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "executor"
+  ],
+  "scripts": {
+    "build": "anchor build",
+    "test": "anchor test",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:executor": "cd executor && npm run dev",
+    "deploy:devnet": "anchor deploy --provider.cluster devnet",
+    "deploy:mainnet": "anchor deploy --provider.cluster mainnet"
+  },
+  "keywords": [
+    "solana",
+    "ai",
+    "trading",
+    "autonomous",
+    "agent",
+    "defi",
+    "web3",
+    "gpt4"
+  ],
+  "author": "AGENT.FUN Team",
+  "license": "MIT"
+}

@@ -1,0 +1,17 @@
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/.next",
+  "framework": "nextjs",
+  "installCommand": "cd frontend && npm install",
+  "devCommand": "cd frontend && npm run dev",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://your-backend-url.railway.app/api/:path*"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_RPC_ENDPOINT": "https://api.devnet.solana.com",
+    "NEXT_PUBLIC_NETWORK": "devnet"
+  }
+}
