@@ -39,9 +39,9 @@ function ConnectionLine({ start, end }: { start: [number, number, number]; end: 
   const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
 
   return (
-    <line geometry={lineGeometry}>
+    <line_ geometry={lineGeometry} renderOrder={-1}>
       <lineBasicMaterial attach="material" color="#14F195" linewidth={2} />
-    </line>
+    </line_>
   );
 }
 
