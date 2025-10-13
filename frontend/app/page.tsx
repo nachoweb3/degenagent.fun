@@ -2,15 +2,7 @@
 
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-
-const RoadmapScene = dynamic(() => import('@/components/RoadmapScene').catch(() => {
-  // Fallback if Three.js fails to load
-  return { default: () => <div className="w-full h-[600px] bg-gray-900/50 rounded-2xl flex items-center justify-center text-gray-400">3D Roadmap Loading...</div> };
-}), {
-  ssr: false,
-  loading: () => <div className="w-full h-[600px] bg-gray-900/50 rounded-2xl animate-pulse" />
-});
+import RoadmapTimeline from '@/components/RoadmapTimeline';
 
 export default function Home() {
   return (
@@ -94,7 +86,7 @@ export default function Home() {
         <p className="text-center text-gray-400 mb-8 max-w-2xl mx-auto px-4">
           Our vision for the future of AI-powered trading on Solana
         </p>
-        <RoadmapScene />
+        <RoadmapTimeline />
 
         {/* Roadmap Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
