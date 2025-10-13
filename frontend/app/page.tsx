@@ -73,7 +73,7 @@ export default function Home() {
       <div className="mb-12 sm:mb-20">
         <h2 className="text-2xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 px-2">How It Works</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          <StepCard number="1" title="Create" description="Define your agent's mission and launch it for 0.5 SOL" />
+          <StepCard number="1" title="Create" description="Define your agent's mission and launch it for 0.1 SOL" />
           <StepCard number="2" title="Fund" description="Deposit SOL into your agent's vault to start trading" />
           <StepCard number="3" title="Trade" description="Your agent analyzes markets and executes trades autonomously" />
           <StepCard number="4" title="Earn" description="Hold agent tokens to claim your share of trading profits" />

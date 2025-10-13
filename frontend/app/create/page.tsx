@@ -19,6 +19,9 @@ export default function CreateAgent() {
     name: '',
     symbol: '',
     purpose: '',
+    riskTolerance: 5,
+    tradingFrequency: 'medium',
+    maxTradeSize: 10,
   });
 
   const [loading, setLoading] = useState(false);
@@ -151,6 +154,66 @@ export default function CreateAgent() {
               <p className="text-xs sm:text-sm text-gray-500 mt-1">{formData.purpose.length}/200 characters</p>
             </div>
 
+            {/* Advanced Options */}
+            <div className="border-t border-gray-700 pt-5 sm:pt-6">
+              <h3 className="text-lg font-semibold mb-4">Advanced Settings</h3>
+
+              {/* Risk Tolerance */}
+              <div className="mb-5">
+                <label className="block text-sm font-medium mb-2">
+                  Risk Tolerance: <span className="text-solana-purple">{formData.riskTolerance}/10</span>
+                </label>
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={formData.riskTolerance}
+                  onChange={(e) => setFormData({ ...formData, riskTolerance: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-solana-purple"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Conservative</span>
+                  <span>Aggressive</span>
+                </div>
+              </div>
+
+              {/* Trading Frequency */}
+              <div className="mb-5">
+                <label className="block text-sm font-medium mb-2">
+                  Trading Frequency
+                </label>
+                <select
+                  value={formData.tradingFrequency}
+                  onChange={(e) => setFormData({ ...formData, tradingFrequency: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-solana-purple focus:ring-2 focus:ring-solana-purple/20 transition-all text-base"
+                >
+                  <option value="low">Low (1-2 trades/day)</option>
+                  <option value="medium">Medium (3-5 trades/day)</option>
+                  <option value="high">High (6-10 trades/day)</option>
+                  <option value="very-high">Very High (10+ trades/day)</option>
+                </select>
+              </div>
+
+              {/* Max Trade Size */}
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Max Trade Size: <span className="text-solana-purple">{formData.maxTradeSize}%</span>
+                </label>
+                <input
+                  type="range"
+                  min="5"
+                  max="50"
+                  step="5"
+                  value={formData.maxTradeSize}
+                  onChange={(e) => setFormData({ ...formData, maxTradeSize: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-solana-purple"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Maximum % of vault balance per trade
+                </p>
+              </div>
+            </div>
+
             {/* Error */}
             {error && (
               <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-xl text-sm sm:text-base animate-shake">
@@ -173,12 +236,12 @@ export default function CreateAgent() {
                   Creating Agent...
                 </span>
               ) : (
-                'Launch Agent (0.5 SOL)'
+                'Launch Agent (0.1 SOL)'
               )}
             </button>
 
             <p className="text-xs sm:text-sm text-gray-500 text-center px-2">
-              By creating an agent, you agree to pay the 0.5 SOL creation fee.
+              By creating an agent, you agree to pay the 0.1 SOL creation fee.
               You will receive 1,000,000 tokens of your agent.
             </p>
           </div>

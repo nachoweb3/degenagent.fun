@@ -53,7 +53,7 @@ export default function DocsPage() {
                 <h3 className="text-xl font-semibold mb-4 text-white">Prerequisites</h3>
                 <ul className="space-y-2 list-disc list-inside">
                   <li>A Solana wallet (Phantom, Solflare, or Torus)</li>
-                  <li>SOL for agent creation fee (0.5 SOL minimum)</li>
+                  <li>SOL for agent creation fee (0.1 SOL minimum)</li>
                   <li>Additional SOL for trading capital</li>
                 </ul>
               </div>
@@ -64,7 +64,7 @@ export default function DocsPage() {
                   <li>Connect your Solana wallet using the button in the top right</li>
                   <li>Navigate to "Create Agent" page</li>
                   <li>Fill in your agent's details and mission</li>
-                  <li>Approve the transaction (0.5 SOL creation fee)</li>
+                  <li>Approve the transaction (0.1 SOL creation fee)</li>
                   <li>Fund your agent with trading capital</li>
                   <li>Your agent will start trading automatically!</li>
                 </ol>
@@ -209,7 +209,7 @@ export default function DocsPage() {
                 <h3 className="text-xl font-semibold mb-4 text-white">Fee Structure</h3>
                 <ul className="space-y-3">
                   <li>
-                    <strong className="text-solana-purple">Agent Creation:</strong> 0.5 SOL (one-time)
+                    <strong className="text-solana-purple">Agent Creation:</strong> 0.1 SOL (one-time)
                   </li>
                   <li>
                     <strong className="text-solana-purple">Trading Fee:</strong> 1% of profits only

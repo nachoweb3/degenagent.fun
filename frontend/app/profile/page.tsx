@@ -328,7 +328,7 @@ export default function Profile() {
               </button>
             </div>
             <p className="text-sm text-gray-400 mt-3">
-              Share this link with your friends. You'll earn 0.05 SOL (10% of 0.5 SOL fee) for each agent they create!
+              Share this link with your friends. You'll earn 0.05 SOL (10% of 0.1 SOL fee) for each agent they create!
             </p>
           </div>
 
