@@ -15,6 +15,10 @@ interface AgentAttributes {
   tradingEnabled: boolean;
   aiModel: string;
   riskLevel: 'low' | 'medium' | 'high';
+  riskTolerance: number; // 1-10 scale
+  tradingFrequency: string; // low, medium, high, very-high
+  maxTradeSize: number; // percentage 5-50
+  useSubagents: boolean; // enable 3-subagent system
   totalTrades: number;
   successfulTrades: number;
   totalVolume: string;
@@ -41,6 +45,10 @@ class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements A
   public tradingEnabled!: boolean;
   public aiModel!: string;
   public riskLevel!: 'low' | 'medium' | 'high';
+  public riskTolerance!: number;
+  public tradingFrequency!: string;
+  public maxTradeSize!: number;
+  public useSubagents!: boolean;
   public totalTrades!: number;
   public successfulTrades!: number;
   public totalVolume!: string;
@@ -118,6 +126,30 @@ Agent.init(
       type: DataTypes.ENUM('low', 'medium', 'high'),
       defaultValue: 'medium',
       allowNull: false,
+    },
+    riskTolerance: {
+      type: DataTypes.INTEGER,
+      defaultValue: 5,
+      allowNull: false,
+      comment: 'Risk tolerance 1-10',
+    },
+    tradingFrequency: {
+      type: DataTypes.STRING(20),
+      defaultValue: 'medium',
+      allowNull: false,
+      comment: 'low, medium, high, very-high',
+    },
+    maxTradeSize: {
+      type: DataTypes.INTEGER,
+      defaultValue: 10,
+      allowNull: false,
+      comment: 'Max % of vault per trade (5-50)',
+    },
+    useSubagents: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+      comment: 'Enable 3-subagent system',
     },
     totalTrades: {
       type: DataTypes.INTEGER,

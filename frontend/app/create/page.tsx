@@ -52,6 +52,9 @@ export default function CreateAgent() {
         symbol: formData.symbol,
         purpose: formData.purpose,
         creatorWallet: publicKey.toString(),
+        riskTolerance: formData.riskTolerance,
+        tradingFrequency: formData.tradingFrequency,
+        maxTradeSize: formData.maxTradeSize,
       });
 
       console.log('Response:', response.data);
@@ -211,6 +214,40 @@ export default function CreateAgent() {
                 <p className="text-xs text-gray-500 mt-1">
                   Maximum % of vault balance per trade
                 </p>
+              </div>
+            </div>
+
+            {/* Subagent System Info */}
+            <div className="border-t border-gray-700 pt-5 sm:pt-6">
+              <div className="bg-gradient-to-r from-solana-purple/10 to-solana-green/10 border-2 border-solana-purple/50 rounded-xl p-5">
+                <div className="flex items-start gap-3">
+                  <div className="text-3xl">🤖</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold mb-2 bg-gradient-to-r from-solana-purple to-solana-green bg-clip-text text-transparent">
+                      Powered by 3-Subagent System
+                    </h3>
+                    <p className="text-sm text-gray-300 mb-3">
+                      Your agent uses 3 specialized AI subagents working together for optimal trading:
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="bg-black/30 rounded-lg p-3">
+                        <div className="text-xl mb-1">📊</div>
+                        <div className="text-xs font-semibold text-blue-400">Market Analyzer</div>
+                        <div className="text-xs text-gray-400 mt-1">Finds opportunities</div>
+                      </div>
+                      <div className="bg-black/30 rounded-lg p-3">
+                        <div className="text-xl mb-1">🛡️</div>
+                        <div className="text-xs font-semibold text-yellow-400">Risk Manager</div>
+                        <div className="text-xs text-gray-400 mt-1">Protects your funds</div>
+                      </div>
+                      <div className="bg-black/30 rounded-lg p-3">
+                        <div className="text-xl mb-1">⚡</div>
+                        <div className="text-xs font-semibold text-purple-400">Execution Optimizer</div>
+                        <div className="text-xs text-gray-400 mt-1">Best price execution</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -20,7 +20,15 @@ import {
 
 export async function createAgentHandler(req: Request, res: Response) {
   try {
-    const { name, symbol, purpose, creatorWallet } = req.body;
+    const {
+      name,
+      symbol,
+      purpose,
+      creatorWallet,
+      riskTolerance,
+      tradingFrequency,
+      maxTradeSize
+    } = req.body;
 
     // Validation
     if (!name || !symbol || !purpose || !creatorWallet) {
