@@ -1,6 +1,8 @@
-# 🚀 Agent.fun - AI Trading Agents on Solana
+# 🚀 AGENT.FUN - AI Trading Agents on Solana
 
-**Built on Solana by [@nachoweb3](https://twitter.com/nachoweb3)** 💜
+**Autonomous AI traders operating 24/7 on Solana blockchain**
+
+Built by [@nachoweb3](https://twitter.com/nachoweb3) 💜
 
 ---
 
@@ -8,396 +10,402 @@
 
 1. [Quick Start](#quick-start)
 2. [What is Agent.fun?](#what-is-agentfun)
-3. [Current Status](#current-status)
-4. [Deployment to Mainnet](#deployment-to-mainnet)
-5. [Project Structure](#project-structure)
-6. [Documentation](#documentation)
+3. [Features](#features)
+4. [Current Status](#current-status)
+5. [Tech Stack](#tech-stack)
+6. [Project Structure](#project-structure)
+7. [Documentation](#documentation)
+8. [Deployment](#deployment)
 
 ---
 
 ## ⚡ QUICK START
 
-### View the Live UI
+**Guías disponibles:**
+- **QUICK_START.md** - Guía rápida en español (5 minutos)
+- **DEV_GUIDE.md** - Guía completa de desarrollo
+
+### Inicio Rápido
+
 ```bash
-# Open in browser
-http://localhost:3002
+# 1. Backend
+cd backend
+npm install
+npm run dev
+
+# 2. Frontend (nueva terminal)
+cd ..
+npm install
+npm run dev
+
+# 3. Verificar
+# Backend: http://localhost:3001/health
+# Frontend: http://localhost:5173
 ```
 
-**Services Running:**
-- ✅ Frontend: http://localhost:3002
-- ✅ Backend: http://localhost:3001
-- ✅ Executor: Ready to start
+### Test del Sistema
 
-### Test Locally
 ```bash
-# Backend health check
-curl http://localhost:3001/health
-
-# Should return:
-# {"status":"ok","network":"devnet","blockHeight":<number>}
+cd backend
+npx tsx src/tests/tradingSystemTest.ts
 ```
 
 ---
 
 ## 🤖 WHAT IS AGENT.FUN?
 
-Agent.fun is a revolutionary platform that enables anyone to create and deploy **autonomous AI trading agents** on the Solana blockchain.
+Plataforma revolucionaria que permite crear **agentes de IA autónomos** que operan 24/7 en el mercado crypto de Solana.
 
-### Key Features
-- 🤖 **AI-Powered Trading**: Google Gemini Pro analyzes markets and makes intelligent decisions
-- ⚡ **Fully Autonomous**: Agents operate 24/7 without manual intervention
-- 🔒 **Secure & Transparent**: All trades executed on-chain
-- 💰 **Tokenized Ownership**: Each agent has its own SPL token
-- 📈 **Revenue Sharing**: Token holders earn from agent profits
-- 📱 **Mobile-Ready**: Optimized for Solana Saga
+### Características Principales
 
-### How It Works
-1. **Create**: Launch your AI agent for 0.5 SOL
-2. **Fund**: Deposit SOL into the agent's vault
-3. **Trade**: AI analyzes markets every 5 minutes and executes trades
-4. **Earn**: 1% platform fee, rest goes to token holders
+- 🤖 **Trading con IA**: Sistema de trading automático con estrategias configurables
+- 📊 **Gestión de Riesgo**: Risk management avanzado con stop-loss y límites
+- 📺 **Reality Show**: Stream en vivo de las operaciones de los agentes
+- 🔒 **Seguro**: Todas las operaciones on-chain en Solana
+- 💰 **Vault Lending**: Sistema DeFi de préstamos (en desarrollo)
+- ⚡ **Jupiter Integration**: DEX aggregator para mejor ejecución
+
+### Cómo Funciona
+
+1. **Crear**: Lanza tu agente de IA con personalidad customizable
+2. **Configurar**: Define estrategia de trading y nivel de riesgo (0-100)
+3. **Trading**: El agente analiza mercados y ejecuta operaciones automáticamente
+4. **Monitorear**: Sigue en tiempo real el performance en el reality show
 
 ---
 
-## ✅ CURRENT STATUS
+## ✅ ESTADO ACTUAL
 
-### Completed (95%)
+### Completado ✅
+
+#### Backend API
+- [x] Sistema de trading completo con 7 servicios principales
+- [x] Price Feed (Jupiter API integration)
+- [x] Trading Strategy (RSI, EMA, trend analysis)
+- [x] Risk Manager (stop-loss, position limits)
+- [x] Trading Engine (ejecución de órdenes)
+- [x] Order Manager (monitoreo automático)
+- [x] Database (SQLite/Sequelize)
+- [x] REST API con endpoints para agentes, trading y olympics
 
 #### Frontend
-- [x] Complete UI with 4 pages (Home, Create, Explore, Agent Details)
-- [x] Wallet Adapter configured (Phantom, Solflare, Torus)
-- [x] Mobile-first responsive design
-- [x] Tailwind CSS with Solana gradient effects
-- [x] Footer credit: @nachoweb3 with gradient animation
+- [x] UI completa con React + TypeScript + Vite
+- [x] Páginas: Home, Create, Dashboard, Reality Show
+- [x] Wallet Adapter (Phantom, Solflare)
+- [x] Diseño responsive mobile-first
+- [x] Integración con backend API
 
-#### Backend
-- [x] REST API with 6 endpoints
-- [x] Solana blockchain integration
-- [x] AES-256-GCM encryption system (8/8 tests passing)
-- [x] Secure key management
+#### Trading System
+- [x] Integración completa con Jupiter DEX
+- [x] Sistema de órdenes (market, limit, stop-loss)
+- [x] Monitoreo automático de precios
+- [x] Gestión de riesgo configurable
+- [x] Portfolio tracking en tiempo real
+- [x] Caching y optimización de requests
 
-#### Executor
-- [x] Gemini AI integration (complete)
-- [x] Jupiter DEX integration (complete)
-- [x] Cron job configured (every 5 min)
-- [x] Autonomous trading logic
+#### Documentación
+- [x] DEV_GUIDE.md - Guía completa de desarrollo
+- [x] QUICK_START.md - Guía rápida
+- [x] Tests del sistema de trading
+- [x] Documentación de hosting y dominios
 
-#### Smart Contracts
-- [x] agent-factory program (Rust/Anchor)
-- [x] agent-manager program (Rust/Anchor)
-- [x] Complete and tested code
-
-### Pending (5%)
-- [ ] Deploy smart contracts to mainnet (~20 SOL cost)
-- [ ] Configure premium RPC (Helius)
-- [ ] Deploy frontend to Vercel
-- [ ] Setup monitoring
+### En Desarrollo 🚧
+- [ ] Reality Show stream en tiempo real
+- [ ] Vault Lending (modelos creados)
+- [ ] Smart contracts deployment
+- [ ] Olympics leaderboard avanzado
 
 ---
 
-## 💰 DEPLOYMENT TO MAINNET
+## 🛠️ TECH STACK
 
-### Costs
+### Backend
+- **Runtime**: Node.js 18+ con Express
+- **Language**: TypeScript
+- **Blockchain**: Solana Web3.js
+- **DEX**: Jupiter Aggregator API
+- **Database**: SQLite (dev) / PostgreSQL (prod)
+- **ORM**: Sequelize
 
-| Item | Cost (SOL) | Cost (USD @ $100/SOL) |
-|------|------------|----------------------|
-| Deploy agent-factory | 3-5 SOL | $300-500 |
-| Deploy agent-manager | 8-12 SOL | $800-1,200 |
-| Testing & fees | 1-2 SOL | $100-200 |
-| Buffer for errors | 3-5 SOL | $300-500 |
-| **TOTAL** | **15-25 SOL** | **$1,500-2,500** |
+### Frontend
+- **Framework**: React 18 con Vite
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Wallet**: Solana Wallet Adapter
+- **Build**: Vite
 
-**Recommended**: Fund wallet with 20-25 SOL for safe deployment
+### Trading System
+- **Price Feed**: Jupiter Price API v2
+- **Strategy**: RSI, EMA, Trend Analysis
+- **Risk Management**: Custom risk engine
+- **Execution**: Jupiter Swap API v6
+- **Monitoring**: Node-cron automático
 
-### Deployment Process
-
-**Automated script available** (`./scripts/deploy-mainnet.sh`)
-
-```bash
-# 1. Install tools (one-time)
-# - Solana CLI
-# - Anchor Framework
-
-# 2. Fund deployment wallet
-# Transfer 20-25 SOL to deployment wallet
-
-# 3. Run deployment
-./scripts/deploy-mainnet.sh
-
-# 4. Initialize factory
-ts-node scripts/initialize-mainnet.ts
-
-# 5. Verify
-./scripts/verify-mainnet.sh
-```
-
-**Total time**: 45-60 minutes
-
-### Assisted Deployment Available
-
-I can handle the entire deployment process for you:
-- Compile programs
-- Deploy to mainnet
-- Initialize factory
-- Test with first agent
-- Configure all services
-
-**Requirements:**
-- 20-25 SOL in a wallet
-- Access to wallet (temporary or screen share)
-- 1 hour of your time
-
-See `docs/DEPLOYMENT_GUIDE.md` for full details.
+### Infrastructure
+- **Backend Hosting**: Railway / Render / DigitalOcean
+- **Frontend Hosting**: Vercel (recomendado)
+- **Database**: Railway Postgres / Supabase / Neon
+- **RPC**: Helius / QuickNode / Alchemy
+- **DNS**: Cloudflare (recomendado)
 
 ---
 
-## 📁 PROJECT STRUCTURE
+## 📁 ESTRUCTURA DEL PROYECTO
 
 ```
 Agent.fun/
-├── frontend/           # Next.js UI (running :3002)
-├── backend/            # Express API (running :3001)
-├── executor/           # AI worker with cron jobs
-├── programs/           # Solana smart contracts (Rust)
-│   ├── agent-factory/
-│   └── agent-manager/
-├── scripts/            # Deployment automation
-├── docs/               # Documentation
-└── tests/              # Test suites
+├── backend/                      # Backend API (Puerto 3001)
+│   ├── src/
+│   │   ├── controllers/          # Controladores de rutas
+│   │   │   └── tradingController.ts
+│   │   ├── models/               # Modelos de base de datos
+│   │   │   ├── Agent.ts
+│   │   │   ├── TradingOrder.ts
+│   │   │   └── VaultLending.ts
+│   │   ├── routes/               # Definición de rutas
+│   │   │   ├── agent.ts
+│   │   │   ├── trading.ts
+│   │   │   └── olympics.ts
+│   │   ├── services/             # Lógica de negocio (CORE)
+│   │   │   ├── priceFeed.ts      # Jupiter price integration
+│   │   │   ├── tradingStrategy.ts # Trading signals
+│   │   │   ├── riskManager.ts    # Risk management
+│   │   │   ├── tradingEngine.ts  # Trade execution
+│   │   │   └── orderManager.ts   # Order monitoring
+│   │   ├── tests/                # Test suites
+│   │   │   └── tradingSystemTest.ts
+│   │   ├── database.ts           # Database config
+│   │   └── index.ts              # Entry point
+│   └── package.json
+│
+├── src/                          # Frontend React (Puerto 5173)
+│   ├── components/               # Componentes UI
+│   ├── pages/                    # Páginas principales
+│   │   ├── Home.tsx
+│   │   ├── CreateAgent.tsx
+│   │   ├── Dashboard.tsx
+│   │   └── RealityShow.tsx
+│   ├── services/                 # API calls
+│   └── App.tsx
+│
+├── DEV_GUIDE.md                  # Guía completa de desarrollo ⭐
+├── QUICK_START.md                # Guía rápida (5 min) ⭐
+└── README.md                     # Este archivo
 ```
 
-### Key Files
-- `README_MAIN.md` - This file (main documentation)
-- `docs/DEPLOYMENT_GUIDE.md` - Complete deployment guide
-- `docs/SECURITY.md` - Security documentation
-- `scripts/deploy-mainnet.sh` - Automated deployment
+### Archivos Clave
+
+**Documentación:**
+- `DEV_GUIDE.md` - Guía completa con setup, servicios, hosting
+- `QUICK_START.md` - Inicio rápido para desarrolladores
+- `README.md` - Visión general del proyecto
+
+**Backend Core:**
+- `backend/src/services/priceFeed.ts` - Integración Jupiter
+- `backend/src/services/tradingEngine.ts` - Motor de trading
+- `backend/src/services/riskManager.ts` - Gestión de riesgo
+- `backend/src/index.ts` - Entry point del servidor
+
+**Frontend:**
+- `src/App.tsx` - Aplicación principal
+- `src/pages/CreateAgent.tsx` - Creación de agentes
+- `src/pages/RealityShow.tsx` - Stream en vivo
 
 ---
 
-## 📚 DOCUMENTATION
+## 📚 DOCUMENTACIÓN
 
-### Essential Docs (Read These)
-1. **README_MAIN.md** (this file) - Project overview
-2. **docs/DEPLOYMENT_GUIDE.md** - How to deploy to mainnet
-3. **docs/SECURITY.md** - Security implementation
+### Guías Principales
 
-### Additional Resources
-- `docs/archive/` - Old documentation (reference only)
-- `scripts/` - Deployment scripts
-- `tests/` - Test suites
+1. **QUICK_START.md** ⭐
+   - Setup en 5 minutos
+   - Comandos básicos
+   - Primera ejecución
 
----
+2. **DEV_GUIDE.md** ⭐⭐⭐
+   - Arquitectura completa del sistema
+   - Setup detallado backend y frontend
+   - Todos los servicios y APIs explicados
+   - Configuración de base de datos
+   - Testing y troubleshooting
+   - **Deployment a producción**
+   - **Dominio personalizado**
+   - **Hosting profesional (Railway, Vercel, etc.)**
+   - **RPC providers (Helius, QuickNode)**
 
-## 🛠️ TECHNICAL STACK
+3. **README.md** (este archivo)
+   - Visión general del proyecto
+   - Estado actual
+   - Enlaces a documentación
 
-### Frontend
-- Next.js 14 (App Router)
-- React 18
-- Tailwind CSS
-- Solana Wallet Adapter
-- TypeScript
+### APIs y Servicios
 
-### Backend
-- Node.js + Express
-- TypeScript
-- Solana Web3.js
-- Anchor Framework
-- AES-256-GCM encryption
-
-### Blockchain
-- Solana (Rust)
-- Anchor Framework
-- SPL Tokens
-- PDAs for state management
-
-### AI & Trading
-- Google Gemini Pro
-- Jupiter DEX Aggregator
-- Cron jobs (node-cron)
+Para detalles completos sobre cada servicio, ver **DEV_GUIDE.md**:
+- Price Feed Service (Jupiter)
+- Trading Strategy (indicadores técnicos)
+- Risk Manager (límites y validaciones)
+- Trading Engine (ejecución de órdenes)
+- Order Manager (monitoreo automático)
 
 ---
 
-## 💰 REVENUE MODEL
+## 🚀 DEPLOYMENT
 
-### Income Streams
-1. **Creation Fee**: 0.5 SOL per agent
-2. **Trading Fee**: 1% of each trade executed
-3. **Premium Plans**: (future) $99/month for advanced features
+### Setup Local (Desarrollo)
 
-### Break-even Analysis
+Ver **QUICK_START.md** para instrucción paso a paso.
+
+```bash
+# Backend
+cd backend && npm install && npm run dev
+
+# Frontend
+cd .. && npm install && npm run dev
 ```
-Deployment cost: ~15 SOL
-Revenue per agent: 0.5 SOL
 
-Break-even: 30 agents created
-Profit at 50 agents: 10 SOL
-Profit at 100 agents: 35 SOL
-Profit at 200 agents: 85 SOL
+### Deployment a Producción
+
+Ver **DEV_GUIDE.md** sección "Deployment" para:
+
+**Backend Options:**
+- Railway ($5-20/mes) - Recomendado para empezar
+- Render ($7-25/mes) - Alternativa
+- DigitalOcean ($12-48/mes) - Para escalar
+
+**Frontend:**
+- Vercel (Gratis - $20/mes) - MEJOR opción
+- Netlify (Gratis - $19/mes)
+- Cloudflare Pages (Gratis)
+
+**Database:**
+- Railway Postgres (incluida con backend)
+- Supabase (Gratis - $25/mes)
+- Neon (Postgres serverless)
+
+**RPC Solana:**
+- Devnet público (desarrollo)
+- Helius ($0-249/mes) - Recomendado producción
+- QuickNode ($9-299/mes)
+- Alchemy (Gratis - custom)
+
+### Dominio Personalizado
+
+**DEV_GUIDE.md** incluye configuración completa de:
+- Compra de dominio (Namecheap, GoDaddy, Cloudflare)
+- Configuración DNS para Vercel
+- Subdominio para API (api.tudominio.com)
+- Setup con Cloudflare (DDoS protection)
+- SSL/HTTPS automático
+
+**Ejemplo de estructura:**
 ```
-
----
-
-## 🔐 SECURITY
-
-### Implemented
-- ✅ AES-256-GCM encryption for private keys
-- ✅ PBKDF2 key derivation (100k iterations)
-- ✅ Secure key storage (.enc files)
-- ✅ No keys in logs
-- ✅ Master key in environment variables
-- ✅ 8/8 security tests passing
-
-### Production Recommendations
-- Use AWS Secrets Manager for master key
-- Consider AWS KMS for encryption
-- Enable monitoring and alerting
-- Implement automated key rotation
-
-See `docs/SECURITY.md` for full details.
+tudominio.com       → Frontend (Vercel)
+api.tudominio.com   → Backend (Railway)
+```
 
 ---
 
 ## 🧪 TESTING
 
-### Run Security Tests
+### Test del Sistema de Trading
+
 ```bash
 cd backend
-npm run test:security
-# Expected: 8/8 tests passing
+npx tsx src/tests/tradingSystemTest.ts
 ```
 
-### Test Frontend
-```bash
-# Open browser
-http://localhost:3002
+**Verifica:**
+- ✅ Price Feed (conexión Jupiter)
+- ✅ Trading Strategy (señales)
+- ✅ Risk Manager (validaciones)
+- ✅ Trading Engine (simulación)
+- ✅ Database (conexión)
 
-# Checklist:
-✓ Page loads without errors
-✓ Footer shows @nachoweb3 with gradient
-✓ Wallet connect works
-✓ Navigation between pages
-✓ Responsive on mobile
-```
+### Health Checks
 
-### Test Backend
 ```bash
+# Backend
 curl http://localhost:3001/health
-# Should return: {"status":"ok",...}
+
+# Precio de SOL
+curl http://localhost:3001/api/trading/price/So11111111111111111111111111111111111111112
 ```
 
 ---
 
-## 🚀 NEXT STEPS
+## 📊 MÉTRICAS DEL PROYECTO
 
-### If You Want to Deploy
-1. Read `docs/DEPLOYMENT_GUIDE.md`
-2. Prepare 20-25 SOL
-3. Install Solana CLI and Anchor (or let me handle it)
-4. Execute `./scripts/deploy-mainnet.sh`
-5. Test and launch
+### Código
+- Backend: 7 servicios principales
+- Frontend: 4 páginas principales
+- Database: 3 modelos (Agent, TradingOrder, VaultLending)
+- APIs: 15+ endpoints REST
+- 100% TypeScript
 
-### If You Want to Develop
-1. Explore the code
-2. Make changes
-3. Test locally
-4. Deploy when ready
-
-### If You Have Questions
-- Check `docs/` folder
-- Review code comments
-- Ask for clarification
+### Integraciones
+- Jupiter DEX (price + swap)
+- Solana Web3.js
+- Wallet Adapter
+- Sequelize ORM
 
 ---
 
-## 📊 PROJECT METRICS
+## 💡 PRÓXIMOS PASOS
 
-### Code
-- 15,000+ lines of code
-- 3 services (Frontend, Backend, Executor)
-- 2 smart contracts (Rust/Anchor)
-- 8 React components
-- 6 API endpoints
-- 100% TypeScript + Rust
-
-### Features
-- 2 AI integrations (Gemini)
-- 1 DEX integration (Jupiter)
-- 3 wallet adapters
-- AES-256-GCM encryption
-- Mobile-first design
-- Fully responsive
+1. **Lee QUICK_START.md** - Setup básico (5 min)
+2. **Explora el código** - Backend services y frontend
+3. **Lee DEV_GUIDE.md** - Documentación completa
+4. **Testea localmente** - Verifica todo funciona
+5. **Deploy a producción** - Sigue guía en DEV_GUIDE.md
 
 ---
 
-## ✨ CREDITS
+## 🔗 RECURSOS
 
-**Developed by [@nachoweb3](https://twitter.com/nachoweb3__x)**
+### Documentación Externa
+- [Solana Web3.js](https://solana-labs.github.io/solana-web3.js/)
+- [Jupiter API](https://station.jup.ag/docs/apis/swap-api)
+- [Sequelize](https://sequelize.org/docs/v6/)
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
 
-Visible in footer with purple → green gradient effect 💜→💚
+### Herramientas
+- [Solana Explorer](https://explorer.solana.com/)
+- [Jupiter Terminal](https://jup.ag/)
+- [Solana Devnet Faucet](https://faucet.solana.com/)
 
-### Technologies
+---
+
+## ✨ CRÉDITOS
+
+**Desarrollado por [@nachoweb3](https://twitter.com/nachoweb3)** 💜
+
+### Tecnologías
 - Solana - Blockchain
-- Anchor - Smart contracts
-- Next.js - Frontend
-- Gemini AI - Trading intelligence
-- Jupiter - DEX aggregation
+- Jupiter - DEX Aggregator
+- React - Frontend
+- Node.js - Backend
+- TypeScript - Language
 
 ---
 
-## 📞 SUPPORT
+## 📞 SOPORTE
 
-### Getting Help
-1. Check documentation in `docs/`
-2. Review code comments
-3. Check logs (terminal outputs)
-4. Verify on Solscan (for blockchain issues)
+### Documentación
+1. **QUICK_START.md** - Inicio rápido
+2. **DEV_GUIDE.md** - Guía completa
+3. Issues en GitHub
 
-### Resources
-- [Solana Docs](https://docs.solana.com)
-- [Anchor Book](https://book.anchor-lang.com)
-- [Next.js Docs](https://nextjs.org/docs)
-- [Gemini AI Docs](https://ai.google.dev)
-
----
-
-## 🎉 STATUS SUMMARY
-
-**Your dApp is 95% complete and fully functional!**
-
-What works now:
-- ✅ Complete UI (visible at localhost:3002)
-- ✅ Backend API (running at localhost:3001)
-- ✅ AI & DEX integrations
-- ✅ Security system
-- ✅ All code written and tested
-
-What's needed:
-- ⏳ Deploy to mainnet (~20 SOL + 1 hour)
-- ⏳ Frontend to Vercel (~15 min)
-- ⏳ Final testing (~15 min)
-
-**You're ready to launch! 🚀**
+### Troubleshooting
+Ver sección "Troubleshooting" en **DEV_GUIDE.md**:
+- Backend no inicia
+- Errores de conexión Solana
+- Database locked
+- Y más...
 
 ---
 
-## 📝 IMPORTANT FILES
+**Built with ❤️ on Solana**
 
-```bash
-README_MAIN.md                    # This file - Start here
-docs/DEPLOYMENT_GUIDE.md          # Complete deployment guide
-docs/SECURITY.md                  # Security documentation
-scripts/deploy-mainnet.sh         # Automated deployment
-scripts/initialize-mainnet.ts     # Initialize factory
-frontend/app/layout.tsx           # UI with @nachoweb3 credit
-backend/src/index.ts              # API server
-executor/src/executor.ts          # AI worker
-programs/agent-factory/src/lib.rs # Factory contract
-programs/agent-manager/src/lib.rs # Manager contract
-```
-
----
-
-**Built with ❤️ on Solana by @nachoweb3**
-
-*Last updated: 2025-01-13*
-*Status: 95% Complete - Ready for Mainnet*
+*Last updated: 2025-10-14*
+*Status: Core Trading System Complete ✅*

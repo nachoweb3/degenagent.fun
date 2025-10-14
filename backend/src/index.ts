@@ -4,8 +4,11 @@ import dotenv from 'dotenv';
 import { Connection, PublicKey } from '@solana/web3.js';
 import agentRoutes from './routes/agent';
 import olympicsRoutes from './routes/olympics';
+import tradingRoutes from './routes/trading';
+import referralRoutes from './routes/referral';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
+import { startOrderMonitoring } from './services/orderManager';
 
 dotenv.config();
 
@@ -25,6 +28,8 @@ export const connection = new Connection(
 // Routes
 app.use('/api/agent', agentRoutes);
 app.use('/api/olympics', olympicsRoutes);
+app.use('/api/trading', tradingRoutes);
+app.use('/api/referral', referralRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
@@ -53,11 +58,15 @@ async function startServer() {
     // Initialize database
     await initDatabase();
 
+    // Start order monitoring service (checks every 30 seconds)
+    startOrderMonitoring(30000);
+
     // Start listening
     app.listen(PORT, () => {
       console.log(`🚀 AGENT.FUN Backend running on port ${PORT}`);
       console.log(`📡 Connected to: ${process.env.RPC_ENDPOINT || 'devnet'}`);
       console.log(`💾 Database: SQLite (development)`);
+      console.log(`📊 Order monitoring service started`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

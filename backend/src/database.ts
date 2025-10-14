@@ -30,6 +30,8 @@ export async function initDatabase(): Promise<void> {
     await import('./models/Agent');
     await import('./models/Olympics');
     await import('./models/VaultLending');
+    await import('./models/TradingOrder');
+    await import('./models/Referral');
 
     // Sync models (creates tables if they don't exist)
     await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });

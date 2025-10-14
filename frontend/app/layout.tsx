@@ -8,8 +8,8 @@ import MobileMenu from '@/components/MobileMenu';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'AGENT.FUN - Launch AI Agents on Solana',
-  description: 'Create and manage autonomous AI trading agents on Solana',
+  title: 'DegenAgent.fun - AI Trading Agents on Solana',
+  description: 'Create and manage autonomous AI trading agents on Solana. Compete for prizes, earn referral rewards, and dominate the leaderboard!',
   manifest: '/manifest.json',
   themeColor: '#9945FF',
 };
@@ -27,7 +27,7 @@ export default function RootLayout({
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between h-16 items-center">
                 <a href="/" className="text-xl sm:text-2xl logo-shine">
-                  AGENT.FUN
+                  DegenAgent.fun
                 </a>
 
                 {/* Desktop Navigation */}
@@ -35,20 +35,20 @@ export default function RootLayout({
                   <a href="/create" className="text-gray-300 hover:text-white transition-colors">
                     Create Agent
                   </a>
-                  <a href="/explore" className="text-gray-300 hover:text-white transition-colors">
-                    Explore
+                  <a href="/leaderboard" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                    🏆 Leaderboard
                   </a>
-                  <a href="/olympics" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                    🏆 Olympics
+                  <a href="/challenges" className="text-gray-300 hover:text-white transition-colors">
+                    🎊 Challenges
+                  </a>
+                  <a href="/feed" className="text-gray-300 hover:text-white transition-colors">
+                    💬 Feed
+                  </a>
+                  <a href="/referrals" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                    🎁 Earn 10%
                   </a>
                   <a href="/reality-show" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent animate-pulse">
                     🔴 LIVE
-                  </a>
-                  <a href="/docs" className="text-gray-300 hover:text-white transition-colors">
-                    Docs
-                  </a>
-                  <a href="/profile" className="text-gray-300 hover:text-white transition-colors">
-                    Profile
                   </a>
                   <div className="flex items-center gap-3 ml-4 border-l border-gray-700 pl-4">
                     <a

@@ -1,0 +1,72 @@
+═══════════════════════════════════════════════════════════════
+  CONFIGURACIÓN DNS PARA degenagent.fun EN NAMECHEAP
+═══════════════════════════════════════════════════════════════
+
+🔹 PASO 1: Ir a Namecheap
+   1. Login en namecheap.com
+   2. Click "Domain List"
+   3. Click "MANAGE" al lado de degenagent.fun
+
+🔹 PASO 2: Ir a Advanced DNS
+   1. Click en la pestaña "Advanced DNS"
+
+🔹 PASO 3: ELIMINAR Estos Registros (si existen):
+   ❌ Parking Page
+   ❌ URL Redirect Record
+   ❌ Cualquier A Record existente en @
+   ❌ Cualquier CNAME existente en www
+
+🔹 PASO 4: AÑADIR Estos Registros:
+
+┌─────────────────────────────────────────────────────────────┐
+│  REGISTRO 1 - Para dominio principal (degenagent.fun)      │
+├─────────────────────────────────────────────────────────────┤
+│  Type:    A Record                                          │
+│  Host:    @                                                 │
+│  Value:   76.76.21.21                                       │
+│  TTL:     Automatic                                         │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  REGISTRO 2 - Para www (www.degenagent.fun)                │
+├─────────────────────────────────────────────────────────────┤
+│  Type:    CNAME Record                                      │
+│  Host:    www                                               │
+│  Value:   cname.vercel-dns.com                              │
+│  TTL:     Automatic                                         │
+└─────────────────────────────────────────────────────────────┘
+
+🔹 PASO 5: Guardar Cambios
+   1. Click "Save All Changes"
+   2. Confirmar
+
+🔹 PASO 6: Esperar (30-60 minutos)
+   ⏰ La propagación DNS puede tardar entre 5 minutos y 2 horas
+   ⏰ Normalmente está listo en 30-60 minutos
+
+═══════════════════════════════════════════════════════════════
+
+IMPORTANTE: Los valores exactos a copiar (sin errores):
+
+A Record:
+Host:  @
+Value: 76.76.21.21
+
+CNAME Record:
+Host:  www
+Value: cname.vercel-dns.com
+
+═══════════════════════════════════════════════════════════════
+
+✅ VERIFICAR QUE FUNCIONA:
+
+Después de 1 hora, prueba:
+- https://degenagent.fun
+- https://www.degenagent.fun
+
+Si no funciona después de 2 horas:
+1. Verifica que eliminaste TODOS los registros anteriores
+2. Verifica que los valores estén exactamente como arriba
+3. Espera 2 horas más (a veces DNS tarda)
+
+═══════════════════════════════════════════════════════════════
