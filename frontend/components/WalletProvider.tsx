@@ -12,7 +12,6 @@ import {
   TorusWalletAdapter,
   CoinbaseWalletAdapter,
   TrustWalletAdapter,
-  BackpackWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { clusterApiUrl } from '@solana/web3.js';
@@ -36,7 +35,6 @@ export const WalletProviderWrapper: FC<WalletProviderWrapperProps> = ({
     () => [
       // Popular desktop & mobile wallets
       new PhantomWalletAdapter(),
-      new BackpackWalletAdapter(),
       new SolflareWalletAdapter(),
       new CoinbaseWalletAdapter(),
       new TrustWalletAdapter(),
@@ -44,7 +42,8 @@ export const WalletProviderWrapper: FC<WalletProviderWrapperProps> = ({
 
       // Note: Solana Mobile Wallet Adapter automatically detects
       // and works with Solana Saga / Seeker phones via dApp browser
-      // No additional adapter needed - it's built into the phone
+      // Backpack wallet is also auto-detected on mobile
+      // No additional adapters needed - they're built into the phone
     ],
     [network]
   );
