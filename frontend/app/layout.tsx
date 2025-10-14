@@ -41,6 +41,9 @@ export default function RootLayout({
                   <a href="/olympics" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
                     🏆 Olympics
                   </a>
+                  <a href="/reality-show" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent animate-pulse">
+                    🔴 LIVE
+                  </a>
                   <a href="/docs" className="text-gray-300 hover:text-white transition-colors">
                     Docs
                   </a>
