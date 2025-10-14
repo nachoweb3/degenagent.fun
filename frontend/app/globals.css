@@ -45,3 +45,33 @@ body {
 .animate-shake {
   animation: shake 0.5s ease-in-out;
 }
+
+/* Shine animation for logo */
+@keyframes shine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.logo-shine {
+  background: linear-gradient(
+    90deg,
+    #9945FF 0%,
+    #14F195 25%,
+    #FFFFFF 50%,
+    #14F195 75%,
+    #9945FF 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px rgba(153, 69, 255, 0.5),
+               0 0 40px rgba(20, 241, 149, 0.3);
+}

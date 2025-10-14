@@ -10,8 +10,6 @@ import MatrixRain from '@/components/MatrixRain';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
-// Avatar options
-const AVATARS = ['🤖', '👾', '🎮', '🚀', '💎', '⚡', '🔥', '🌟', '🎯', '💰', '🦾', '🧠'];
 const COLOR_THEMES = [
   { name: 'Purple', from: 'from-purple-500', to: 'to-pink-500', border: 'border-purple-500' },
   { name: 'Blue', from: 'from-blue-500', to: 'to-cyan-500', border: 'border-blue-500' },
@@ -33,10 +31,11 @@ export default function CreateAgent() {
     riskTolerance: 5,
     tradingFrequency: 'medium',
     maxTradeSize: 10,
-    avatar: '🤖',
     colorTheme: 0,
   });
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -54,6 +53,11 @@ export default function CreateAgent() {
       return;
     }
 
+    if (!imagePreview) {
+      setError('Please upload an agent image');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -68,6 +72,7 @@ export default function CreateAgent() {
         riskTolerance: formData.riskTolerance,
         tradingFrequency: formData.tradingFrequency,
         maxTradeSize: formData.maxTradeSize,
+        imageData: imagePreview, // Send base64 image
       });
 
       console.log('Response:', response.data);
@@ -102,6 +107,31 @@ export default function CreateAgent() {
   };
 
   const selectedTheme = COLOR_THEMES[formData.colorTheme];
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please upload an image file (PNG, JPG, GIF)');
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image must be smaller than 5MB');
+        return;
+      }
+
+      setImageFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const Tooltip = ({ text, children }: { text: string; children: React.ReactNode }) => (
     <div className="group relative inline-block">
@@ -145,24 +175,71 @@ export default function CreateAgent() {
                 </Tooltip>
               </h3>
 
-              {/* Avatar Selection */}
+              {/* Image Upload */}
               <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Choose Avatar</label>
-                <div className="grid grid-cols-6 gap-2">
-                  {AVATARS.map((avatar) => (
-                    <button
-                      key={avatar}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, avatar })}
-                      className={`text-3xl p-3 rounded-lg border-2 transition-all hover:scale-110 ${
-                        formData.avatar === avatar
-                          ? 'border-solana-purple bg-solana-purple/20 scale-110'
-                          : 'border-gray-700 hover:border-gray-600'
-                      }`}
-                    >
-                      {avatar}
-                    </button>
-                  ))}
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                  Agent/Token Image <span className="text-red-500">*</span>
+                  <Tooltip text="Upload an image for your agent. This will be used as the agent avatar and token logo. PNG, JPG, or GIF (max 5MB).">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
+                </label>
+
+                <div className="flex flex-col sm:flex-row gap-4 items-start">
+                  {/* Preview */}
+                  <div className={`relative w-32 h-32 rounded-xl border-2 ${imagePreview ? 'border-solana-purple' : 'border-dashed border-gray-700'} bg-gray-800 flex items-center justify-center overflow-hidden`}>
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-center text-gray-500 p-4">
+                        <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p className="text-xs">No image</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Button */}
+                  <div className="flex-1">
+                    <label className="block">
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                      <div className="cursor-pointer bg-gray-800 hover:bg-gray-750 border-2 border-gray-700 hover:border-solana-purple rounded-xl p-4 transition-all text-center">
+                        <div className="flex flex-col items-center gap-2">
+                          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                          <div>
+                            <p className="text-sm font-medium text-white">Click to upload</p>
+                            <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
+                          </div>
+                        </div>
+                      </div>
+                    </label>
+                    {imageFile && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImageFile(null);
+                          setImagePreview('');
+                        }}
+                        className="mt-2 text-xs text-red-400 hover:text-red-300 flex items-center gap-1"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Remove image
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -423,7 +500,20 @@ export default function CreateAgent() {
             <div className={`relative bg-gradient-to-br ${selectedTheme.from} ${selectedTheme.to} p-[2px] rounded-xl mb-6 overflow-hidden`}>
               <div className="bg-gray-900 rounded-xl p-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="text-5xl">{formData.avatar}</div>
+                  {/* Agent Image Preview */}
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-800 border-2 border-gray-700 flex items-center justify-center flex-shrink-0">
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Agent"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    )}
+                  </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-xl font-bold truncate">
                       {formData.name || 'Agent Name'}

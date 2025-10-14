@@ -26,7 +26,7 @@ export default function RootLayout({
           <nav className="border-b border-gray-800 bg-black/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between h-16 items-center">
-                <a href="/" className="text-xl sm:text-2xl font-bold text-solana-purple">
+                <a href="/" className="text-xl sm:text-2xl logo-shine">
                   AGENT.FUN
                 </a>
 
