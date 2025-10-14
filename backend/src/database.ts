@@ -26,6 +26,11 @@ export async function initDatabase(): Promise<void> {
     await sequelize.authenticate();
     console.log('✅ Database connection established');
 
+    // Import all models AFTER sequelize is initialized
+    await import('./models/Agent');
+    await import('./models/Olympics');
+    await import('./models/VaultLending');
+
     // Sync models (creates tables if they don't exist)
     await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
     console.log('✅ Database models synchronized');

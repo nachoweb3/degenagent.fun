@@ -38,6 +38,9 @@ export class VaultPool extends Model<VaultPoolAttributes, VaultPoolCreationAttri
   public performanceFee!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  // Association
+  public readonly deposits?: VaultDeposit[];
 }
 
 VaultPool.init(
@@ -169,6 +172,9 @@ export class VaultDeposit extends Model<VaultDepositAttributes, VaultDepositCrea
   public withdrawTxSignature?: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  // Association
+  public readonly pool?: VaultPool;
 }
 
 VaultDeposit.init(
