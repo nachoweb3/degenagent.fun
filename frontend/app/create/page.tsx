@@ -10,6 +10,17 @@ import MatrixRain from '@/components/MatrixRain';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
+// Avatar options
+const AVATARS = ['🤖', '👾', '🎮', '🚀', '💎', '⚡', '🔥', '🌟', '🎯', '💰', '🦾', '🧠'];
+const COLOR_THEMES = [
+  { name: 'Purple', from: 'from-purple-500', to: 'to-pink-500', border: 'border-purple-500' },
+  { name: 'Blue', from: 'from-blue-500', to: 'to-cyan-500', border: 'border-blue-500' },
+  { name: 'Green', from: 'from-green-500', to: 'to-emerald-500', border: 'border-green-500' },
+  { name: 'Orange', from: 'from-orange-500', to: 'to-red-500', border: 'border-orange-500' },
+  { name: 'Yellow', from: 'from-yellow-500', to: 'to-orange-500', border: 'border-yellow-500' },
+  { name: 'Pink', from: 'from-pink-500', to: 'to-rose-500', border: 'border-pink-500' },
+];
+
 export default function CreateAgent() {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
@@ -22,6 +33,8 @@ export default function CreateAgent() {
     riskTolerance: 5,
     tradingFrequency: 'medium',
     maxTradeSize: 10,
+    avatar: '🤖',
+    colorTheme: 0,
   });
 
   const [loading, setLoading] = useState(false);
@@ -88,14 +101,25 @@ export default function CreateAgent() {
     }
   };
 
+  const selectedTheme = COLOR_THEMES[formData.colorTheme];
+
+  const Tooltip = ({ text, children }: { text: string; children: React.ReactNode }) => (
+    <div className="group relative inline-block">
+      {children}
+      <div className="invisible group-hover:visible absolute z-50 w-64 p-2 mt-2 text-sm text-white bg-gray-900 border border-gray-700 rounded-lg shadow-lg -left-24">
+        {text}
+      </div>
+    </div>
+  );
+
   return (
     <div className="relative min-h-screen">
       <MatrixRain />
-      <div className="relative z-10 max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-20">
       <div className="mb-6 sm:mb-8 text-center">
         <h1 className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 px-2">Launch Your AI Agent</h1>
         <p className="text-sm sm:text-base text-gray-400 px-4">
-          Create an autonomous trading agent powered by GPT-4 on Solana
+          Create an autonomous trading agent powered by AI on Solana
         </p>
       </div>
 
@@ -107,12 +131,70 @@ export default function CreateAgent() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="bg-gray-900/50 rounded-xl p-5 sm:p-8 border border-gray-800">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Form */}
+          <form onSubmit={handleSubmit} className="lg:col-span-2 bg-gray-900/50 rounded-xl p-5 sm:p-8 border border-gray-800">
           <div className="space-y-5 sm:space-y-6">
+
+            {/* Visual Customization Section */}
+            <div className="border-2 border-dashed border-gray-700 rounded-xl p-5">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                🎨 Visual Identity
+                <Tooltip text="Customize how your agent looks to make it stand out from others">
+                  <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                </Tooltip>
+              </h3>
+
+              {/* Avatar Selection */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Choose Avatar</label>
+                <div className="grid grid-cols-6 gap-2">
+                  {AVATARS.map((avatar) => (
+                    <button
+                      key={avatar}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, avatar })}
+                      className={`text-3xl p-3 rounded-lg border-2 transition-all hover:scale-110 ${
+                        formData.avatar === avatar
+                          ? 'border-solana-purple bg-solana-purple/20 scale-110'
+                          : 'border-gray-700 hover:border-gray-600'
+                      }`}
+                    >
+                      {avatar}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Color Theme */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Color Theme</label>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {COLOR_THEMES.map((theme, index) => (
+                    <button
+                      key={theme.name}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, colorTheme: index })}
+                      className={`p-3 rounded-lg border-2 transition-all hover:scale-105 ${
+                        formData.colorTheme === index
+                          ? 'border-white scale-105'
+                          : 'border-gray-700'
+                      }`}
+                    >
+                      <div className={`h-8 rounded bg-gradient-to-r ${theme.from} ${theme.to}`} />
+                      <p className="text-xs mt-1">{theme.name}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                 Agent Name <span className="text-red-500">*</span>
+                <Tooltip text="A unique name for your agent. This will be visible to all users and should be memorable.">
+                  <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                </Tooltip>
               </label>
               <input
                 type="text"
@@ -127,8 +209,11 @@ export default function CreateAgent() {
 
             {/* Symbol */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                 Token Symbol <span className="text-red-500">*</span>
+                <Tooltip text="A short ticker symbol (like BTC, ETH). This represents your agent's token on-chain.">
+                  <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                </Tooltip>
               </label>
               <input
                 type="text"
@@ -143,8 +228,11 @@ export default function CreateAgent() {
 
             {/* Purpose */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                 Agent Mission <span className="text-red-500">*</span>
+                <Tooltip text="Define your agent's trading strategy and goals. Be specific: what markets? what style? This guides the AI's decision-making.">
+                  <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                </Tooltip>
               </label>
               <textarea
                 maxLength={200}
@@ -163,8 +251,11 @@ export default function CreateAgent() {
 
               {/* Risk Tolerance */}
               <div className="mb-5">
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                   Risk Tolerance: <span className="text-solana-purple">{formData.riskTolerance}/10</span>
+                  <Tooltip text="Controls how risky trades can be. Low = safer, stable returns. High = aggressive, bigger swings. Recommended: 5-7 for balanced approach.">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
                 </label>
                 <input
                   type="range"
@@ -175,32 +266,38 @@ export default function CreateAgent() {
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-solana-purple"
                 />
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>Conservative</span>
-                  <span>Aggressive</span>
+                  <span>🛡️ Conservative</span>
+                  <span>🚀 Aggressive</span>
                 </div>
               </div>
 
               {/* Trading Frequency */}
               <div className="mb-5">
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                   Trading Frequency
+                  <Tooltip text="How often your agent makes trades. Higher frequency = more opportunities but more gas fees. Recommended: Medium for most strategies.">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
                 </label>
                 <select
                   value={formData.tradingFrequency}
                   onChange={(e) => setFormData({ ...formData, tradingFrequency: e.target.value })}
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-solana-purple focus:ring-2 focus:ring-solana-purple/20 transition-all text-base"
                 >
-                  <option value="low">Low (1-2 trades/day)</option>
-                  <option value="medium">Medium (3-5 trades/day)</option>
-                  <option value="high">High (6-10 trades/day)</option>
-                  <option value="very-high">Very High (10+ trades/day)</option>
+                  <option value="low">🐢 Low (1-2 trades/day)</option>
+                  <option value="medium">⚡ Medium (3-5 trades/day)</option>
+                  <option value="high">🔥 High (6-10 trades/day)</option>
+                  <option value="very-high">💨 Very High (10+ trades/day)</option>
                 </select>
               </div>
 
               {/* Max Trade Size */}
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                   Max Trade Size: <span className="text-solana-purple">{formData.maxTradeSize}%</span>
+                  <Tooltip text="Maximum percentage of vault funds used per trade. Lower = diversified risk. Higher = bigger positions. Recommended: 10-20% for safety.">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
                 </label>
                 <input
                   type="range"
@@ -211,42 +308,73 @@ export default function CreateAgent() {
                   onChange={(e) => setFormData({ ...formData, maxTradeSize: parseInt(e.target.value) })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-solana-purple"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Maximum % of vault balance per trade
-                </p>
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>5% (Safe)</span>
+                  <span>50% (Risky)</span>
+                </div>
               </div>
             </div>
 
-            {/* Subagent System Info */}
+            {/* Subagent System Info - Expanded */}
             <div className="border-t border-gray-700 pt-5 sm:pt-6">
               <div className="bg-gradient-to-r from-solana-purple/10 to-solana-green/10 border-2 border-solana-purple/50 rounded-xl p-5">
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 mb-4">
                   <div className="text-3xl">🤖</div>
                   <div className="flex-1">
                     <h3 className="text-lg font-bold mb-2 bg-gradient-to-r from-solana-purple to-solana-green bg-clip-text text-transparent">
-                      Powered by 3-Subagent System
+                      Powered by 3-Subagent AI System
                     </h3>
                     <p className="text-sm text-gray-300 mb-3">
-                      Your agent uses 3 specialized AI subagents working together for optimal trading:
+                      Your agent uses 3 specialized AI subagents working in coordination for intelligent, safe, and optimized trading decisions.
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="bg-black/30 rounded-lg p-3">
-                        <div className="text-xl mb-1">📊</div>
-                        <div className="text-xs font-semibold text-blue-400">Market Analyzer</div>
-                        <div className="text-xs text-gray-400 mt-1">Finds opportunities</div>
-                      </div>
-                      <div className="bg-black/30 rounded-lg p-3">
-                        <div className="text-xl mb-1">🛡️</div>
-                        <div className="text-xs font-semibold text-yellow-400">Risk Manager</div>
-                        <div className="text-xs text-gray-400 mt-1">Protects your funds</div>
-                      </div>
-                      <div className="bg-black/30 rounded-lg p-3">
-                        <div className="text-xl mb-1">⚡</div>
-                        <div className="text-xs font-semibold text-purple-400">Execution Optimizer</div>
-                        <div className="text-xs text-gray-400 mt-1">Best price execution</div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {/* Market Analyzer */}
+                  <div className="bg-black/30 border border-blue-500/30 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="text-2xl">📊</div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-blue-400 mb-1">Market Analyzer</h4>
+                        <p className="text-xs text-gray-400 leading-relaxed">
+                          Scans markets 24/7 to identify profitable opportunities. Analyzes sentiment, volume, price action, and social trends to find the best trades aligned with your agent's mission.
+                        </p>
                       </div>
                     </div>
                   </div>
+
+                  {/* Risk Manager */}
+                  <div className="bg-black/30 border border-yellow-500/30 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="text-2xl">🛡️</div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-yellow-400 mb-1">Risk Manager</h4>
+                        <p className="text-xs text-gray-400 leading-relaxed">
+                          Protects your vault by evaluating every trade for risk. Checks position size, volatility, liquidity, and past performance. Only approves trades that match your risk tolerance.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Execution Optimizer */}
+                  <div className="bg-black/30 border border-purple-500/30 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="text-2xl">⚡</div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-purple-400 mb-1">Execution Optimizer</h4>
+                        <p className="text-xs text-gray-400 leading-relaxed">
+                          Executes trades at the best possible price. Monitors slippage, gas fees, liquidity pools, and timing to maximize profits and minimize costs on every transaction.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-700">
+                  <p className="text-xs text-gray-500 text-center">
+                    ⚡ All three subagents run automatically - no configuration needed
+                  </p>
                 </div>
               </div>
             </div>
@@ -283,6 +411,111 @@ export default function CreateAgent() {
             </p>
           </div>
         </form>
+
+        {/* Right Column - Live Preview */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-6 bg-gray-900/50 rounded-xl p-6 border border-gray-800">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <span>👁️</span> Live Preview
+            </h3>
+
+            {/* Agent Card Preview */}
+            <div className={`relative bg-gradient-to-br ${selectedTheme.from} ${selectedTheme.to} p-[2px] rounded-xl mb-6 overflow-hidden`}>
+              <div className="bg-gray-900 rounded-xl p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="text-5xl">{formData.avatar}</div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xl font-bold truncate">
+                      {formData.name || 'Agent Name'}
+                    </h4>
+                    <p className="text-sm text-gray-400">
+                      ${formData.symbol || 'SYMBOL'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <p className="text-gray-500 mb-1">Mission</p>
+                    <p className="text-gray-300 text-xs leading-relaxed line-clamp-3">
+                      {formData.purpose || 'Your agent\'s trading mission will appear here...'}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-800">
+                    <div>
+                      <p className="text-gray-500 text-xs mb-1">Risk Level</p>
+                      <div className="flex items-center gap-1">
+                        {[...Array(10)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={`h-2 w-2 rounded-full ${
+                              i < formData.riskTolerance ? 'bg-solana-purple' : 'bg-gray-700'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-xs mb-1">Frequency</p>
+                      <p className="text-white text-sm capitalize">
+                        {formData.tradingFrequency.replace('-', ' ')}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-gray-800">
+                    <p className="text-gray-500 text-xs mb-2">Max Trade Size</p>
+                    <div className="w-full bg-gray-800 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full bg-gradient-to-r ${selectedTheme.from} ${selectedTheme.to} transition-all duration-300`}
+                        style={{ width: `${formData.maxTradeSize}%` }}
+                      />
+                    </div>
+                    <p className="text-right text-xs text-gray-400 mt-1">{formData.maxTradeSize}% per trade</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Preview */}
+            <div className="space-y-3 mb-6">
+              <h4 className="text-sm font-semibold text-gray-400">Initial Stats</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-800/50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500">Vault Balance</p>
+                  <p className="text-lg font-bold text-white">0 SOL</p>
+                </div>
+                <div className="bg-gray-800/50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500">Your Tokens</p>
+                  <p className="text-lg font-bold text-solana-green">1M {formData.symbol || 'TOKENS'}</p>
+                </div>
+                <div className="bg-gray-800/50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500">Total Trades</p>
+                  <p className="text-lg font-bold text-white">0</p>
+                </div>
+                <div className="bg-gray-800/50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500">ROI</p>
+                  <p className="text-lg font-bold text-gray-500">-</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Info Box */}
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+              <div className="flex gap-3">
+                <div className="text-xl">💡</div>
+                <div className="flex-1">
+                  <p className="text-xs text-blue-400 font-semibold mb-1">How it works</p>
+                  <p className="text-xs text-gray-400 leading-relaxed">
+                    After launching, users can deposit SOL to your agent's vault. The AI will trade automatically based on your settings. You earn a % of all trading profits!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       )}
       </div>
     </div>
