@@ -83,15 +83,32 @@ export default function CreateAgent() {
       const txBuffer = Buffer.from(txBase64, 'base64');
       const transaction = Transaction.from(txBuffer);
 
+      // Get recent blockhash to make transaction valid
+      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = publicKey;
+
       // Send transaction
       console.log('Sending transaction...');
-      const signature = await sendTransaction(transaction, connection);
+      const signature = await sendTransaction(transaction, connection, {
+        skipPreflight: false,
+        preflightCommitment: 'confirmed',
+        maxRetries: 3,
+      });
 
       console.log('Transaction sent:', signature);
 
-      // Wait for confirmation
+      // Wait for confirmation with longer timeout
       console.log('Waiting for confirmation...');
-      await connection.confirmTransaction(signature, 'confirmed');
+      const confirmation = await connection.confirmTransaction({
+        signature,
+        blockhash,
+        lastValidBlockHeight,
+      }, 'confirmed');
+
+      if (confirmation.value.err) {
+        throw new Error('Transaction failed: ' + JSON.stringify(confirmation.value.err));
+      }
 
       console.log('Transaction confirmed!');
 

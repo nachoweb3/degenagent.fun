@@ -34,9 +34,11 @@ export default function ReferralDashboard() {
     }
   }, [publicKey]);
 
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
+
   const fetchStats = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/referral/stats/${publicKey}`);
+      const response = await fetch(`${API_URL}/referral/stats/${publicKey}`);
       const data = await response.json();
       setStats(data);
     } catch (error) {
@@ -48,15 +50,21 @@ export default function ReferralDashboard() {
 
   const generateCode = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/referral/generate', {
+      const response = await fetch(`${API_URL}/referral/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ walletAddress: publicKey?.toBase58() })
       });
       const data = await response.json();
-      fetchStats();
+
+      if (data.success) {
+        fetchStats();
+      } else {
+        alert('Error generating referral code: ' + (data.error || 'Unknown error'));
+      }
     } catch (error) {
       console.error('Error generating code:', error);
+      alert('Failed to generate referral code. Please try again.');
     }
   };
 
@@ -71,7 +79,7 @@ export default function ReferralDashboard() {
   const claimRewards = async () => {
     setClaiming(true);
     try {
-      const response = await fetch('http://localhost:3001/api/referral/claim', {
+      const response = await fetch(`${API_URL}/referral/claim`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ walletAddress: publicKey?.toBase58() })
@@ -81,9 +89,12 @@ export default function ReferralDashboard() {
       if (data.success) {
         alert(`✅ Claimed ${data.amountClaimed} SOL!`);
         fetchStats();
+      } else {
+        alert('Error claiming rewards: ' + (data.error || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error claiming rewards:', error);
+      alert('Failed to claim rewards. Please try again.');
     } finally {
       setClaiming(false);
     }

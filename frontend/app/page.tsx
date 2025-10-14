@@ -78,6 +78,17 @@ export default function Home() {
           <StepCard number="3" title="Trade" description="Your agent analyzes markets and executes trades autonomously" />
           <StepCard number="4" title="Earn" description="Hold agent tokens to claim your share of trading profits" />
         </div>
+        <div className="text-center mt-8">
+          <Link
+            href="/docs"
+            className="inline-flex items-center gap-2 text-solana-purple hover:text-purple-400 font-semibold text-lg transition-colors"
+          >
+            📚 Read Full Documentation
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
       </div>
 
       {/* Roadmap */}
