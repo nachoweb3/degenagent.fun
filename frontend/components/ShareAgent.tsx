@@ -9,7 +9,11 @@ export default function ShareAgent({ agent }: ShareAgentProps) {
   const [copied, setCopied] = useState(false);
 
   const shareUrl = `${window.location.origin}/agent/${agent.pubkey}`;
-  const shareText = `🤖 Check out my AI trading agent "${agent.name}" on AGENT.FUN!\n\n💰 P&L: ${agent.profitLoss > 0 ? '+' : ''}${agent.profitLoss.toFixed(2)} SOL\n🎯 Win Rate: ${agent.winRate.toFixed(1)}%\n📊 Volume: ${agent.totalVolume.toFixed(2)} SOL\n\n`;
+  const profitLoss = agent.performance?.totalPnL || 0;
+  const winRate = agent.performance?.winRate || 0;
+  const totalVolume = parseFloat(agent.totalVolume) || 0;
+
+  const shareText = `🤖 Check out my AI trading agent "${agent.name}" on DegenAgent.fun!\n\n💰 P&L: ${profitLoss > 0 ? '+' : ''}${profitLoss.toFixed(2)} SOL\n🎯 Win Rate: ${winRate.toFixed(1)}%\n📊 Volume: ${totalVolume.toFixed(2)} SOL\n📈 Total Trades: ${agent.totalTrades}\n\n`;
 
   const shareToTwitter = () => {
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=Solana,AITrading,AgentFun`;
@@ -56,9 +60,9 @@ export default function ShareAgent({ agent }: ShareAgentProps) {
 
     // Stats
     ctx.font = '36px Arial';
-    ctx.fillText(`💰 P&L: ${agent.profitLoss > 0 ? '+' : ''}${agent.profitLoss.toFixed(2)} SOL`, 60, 220);
-    ctx.fillText(`🎯 Win Rate: ${agent.winRate.toFixed(1)}%`, 60, 280);
-    ctx.fillText(`📊 Volume: ${agent.totalVolume.toFixed(2)} SOL`, 60, 340);
+    ctx.fillText(`💰 P&L: ${profitLoss > 0 ? '+' : ''}${profitLoss.toFixed(2)} SOL`, 60, 220);
+    ctx.fillText(`🎯 Win Rate: ${winRate.toFixed(1)}%`, 60, 280);
+    ctx.fillText(`📊 Volume: ${totalVolume.toFixed(2)} SOL`, 60, 340);
 
     // AGENT.FUN branding
     ctx.font = 'bold 48px Arial';
