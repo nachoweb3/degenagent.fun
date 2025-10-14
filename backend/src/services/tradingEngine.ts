@@ -15,6 +15,7 @@ import {
   getTokenBalance,
   TOKENS
 } from './priceFeed';
+import { recordTradeCommission } from './commissionManager';
 
 const JUPITER_SWAP_API = 'https://quote-api.jup.ag/v6';
 
@@ -112,6 +113,16 @@ export async function executeSwap(params: SwapParams): Promise<SwapResult> {
     }
 
     console.log('Swap executed successfully:', signature);
+
+    // Record commission for the trade
+    const tradeValueInUSD = amount / 1e9; // Convert from lamports, approximate USD value
+    await recordTradeCommission(
+      agentPubkey,
+      agentPubkey, // Owner will be determined by agent lookup
+      tradeValueInUSD,
+      inputMint,
+      signature
+    );
 
     return {
       success: true,

@@ -6,6 +6,7 @@ import agentRoutes from './routes/agent';
 import olympicsRoutes from './routes/olympics';
 import tradingRoutes from './routes/trading';
 import referralRoutes from './routes/referral';
+import commissionRoutes from './routes/commission';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { startOrderMonitoring } from './services/orderManager';
@@ -30,6 +31,7 @@ app.use('/api/agent', agentRoutes);
 app.use('/api/olympics', olympicsRoutes);
 app.use('/api/trading', tradingRoutes);
 app.use('/api/referral', referralRoutes);
+app.use('/api/commission', commissionRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
