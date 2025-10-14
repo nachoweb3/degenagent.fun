@@ -87,7 +87,16 @@ export async function getAgentHandler(req: Request, res: Response) {
       return res.status(400).json({ error: 'Agent pubkey required' });
     }
 
-    const agentPubkey = new PublicKey(pubkey);
+    // Validate pubkey format
+    let agentPubkey: PublicKey;
+    try {
+      agentPubkey = new PublicKey(pubkey);
+    } catch (error) {
+      return res.status(400).json({
+        error: 'Invalid public key format',
+        details: 'Please provide a valid Solana public key'
+      });
+    }
     const agentData = await getAgentState(agentPubkey);
 
     if (!agentData) {

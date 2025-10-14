@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: degenagent-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RPC_ENDPOINT
+        value: https://api.mainnet-beta.solana.com
+      - key: PORT
+        value: 3001
+      - key: ALLOWED_ORIGINS
+        value: https://degenagent.fun,https://www.degenagent.fun
+      - key: COMMISSION_RATE
+        value: 0.5
+      - key: REFERRAL_COMMISSION_RATE
+        value: 10
+      - key: MIN_TRADE_FOR_COMMISSION
+        value: 10
+      - key: DATABASE_URL
+        fromDatabase:
+          name: degenagent-db
+          property: connectionString
+
+databases:
+  - name: degenagent-db
+    databaseName: degenagent
+    plan: free
