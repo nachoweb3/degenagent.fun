@@ -1,0 +1,219 @@
+# Solana dApp Store Publishing Configuration
+# https://docs.solanamobile.com/dapp-publishing/prepare
+
+name: DegenAgent.fun
+publisher:
+  name: DegenAgent Team
+  website: https://degenagent.fun
+  email: support@degenagent.fun
+
+app:
+  name: DegenAgent.fun
+  package: fun.degenagent.app
+
+  # App Details
+  category: FINANCE
+
+  # URLs
+  url: https://degenagent.fun
+  license_url: https://degenagent.fun/terms
+  privacy_policy_url: https://degenagent.fun/privacy
+
+  # Social Links
+  telegram_url: https://t.me/agentfun
+  twitter_url: https://twitter.com/degenagent_fun
+  discord_url: https://discord.gg/agentfun
+  github_url: https://github.com/degenagent/agent-fun
+
+  # Media Assets
+  media:
+    - purpose: icon
+      uri: ./assets/icon-512.png
+      width: 512
+      height: 512
+      mime: image/png
+      label: App Icon
+    - purpose: banner
+      uri: ./assets/banner-1200x600.png
+      width: 1200
+      height: 600
+      mime: image/png
+      label: Banner Graphic
+    - purpose: feature_graphic
+      uri: ./assets/feature-1200x1200.png
+      width: 1200
+      height: 1200
+      mime: image/png
+      label: Feature Graphic
+
+# Store Listing
+store_listing:
+  # English (default)
+  en-US:
+    summary: >
+      Create AI trading agents that operate 24/7 on Solana blockchain
+
+    description: >
+      DegenAgent.fun is a revolutionary platform that allows you to create and manage
+      autonomous AI trading agents on Solana. Powered by GPT-4, your agents analyze
+      markets, execute trades, and generate profits while you sleep.
+
+      KEY FEATURES:
+      🤖 AI-Powered Trading - GPT-4 analyzes market sentiment and makes intelligent decisions
+      ⚡ Fully Autonomous - Your agent operates 24/7 without manual intervention
+      🔒 Secure & Transparent - All trades executed on-chain with full transparency
+      💰 Tokenized Ownership - Each agent has its own SPL token with revenue sharing
+      📈 Jupiter Integration - Best-in-class DEX aggregation for optimal prices
+      📱 Mobile Ready - Optimized for Solana Saga and Seeker devices
+
+      HOW IT WORKS:
+      1. Create - Define your agent's trading mission and risk tolerance
+      2. Fund - Deposit SOL into your agent's vault
+      3. Trade - AI analyzes markets and executes trades automatically
+      4. Earn - Hold agent tokens to receive trading profits
+
+      MONETIZATION:
+      • Direct trading profits from successful trades
+      • Passive income from agent token holdings
+      • Referral rewards (10% commission per referral)
+      • Daily challenges with SOL rewards
+
+      FEATURES:
+      ✅ 3-Subagent AI System (Market Analyzer, Risk Manager, Execution Optimizer)
+      ✅ Risk management with stop-loss and position limits
+      ✅ Real-time portfolio tracking
+      ✅ Social trading features and leaderboards
+      ✅ Referral system with passive income
+      ✅ Live trading stream (Reality Show)
+
+      SECURITY:
+      • Non-custodial wallets (you control your funds)
+      • HD wallets with encrypted private keys
+      • On-chain transparency
+      • Audited smart contracts
+
+      Join thousands of traders using AI to maximize their DeFi returns on Solana!
+
+    keywords:
+      - Solana
+      - DeFi
+      - AI Trading
+      - Trading Bot
+      - Crypto
+      - Autonomous Agent
+      - Jupiter
+      - Memecoin
+      - GPT-4
+      - Passive Income
+
+  # Spanish
+  es-ES:
+    summary: >
+      Crea agentes de trading con IA que operan 24/7 en Solana
+
+    description: >
+      DegenAgent.fun es una plataforma revolucionaria que te permite crear y gestionar
+      agentes de trading con IA autónomos en Solana. Impulsados por GPT-4, tus agentes
+      analizan mercados, ejecutan trades y generan ganancias mientras duermes.
+
+      CARACTERÍSTICAS PRINCIPALES:
+      🤖 Trading con IA - GPT-4 analiza el sentimiento del mercado y toma decisiones inteligentes
+      ⚡ Totalmente Autónomo - Tu agente opera 24/7 sin intervención manual
+      🔒 Seguro y Transparente - Todos los trades ejecutados on-chain con total transparencia
+      💰 Propiedad Tokenizada - Cada agente tiene su propio token SPL con reparto de ingresos
+      📈 Integración con Jupiter - Agregación DEX de primera clase para precios óptimos
+      📱 Listo para Móvil - Optimizado para dispositivos Solana Saga y Seeker
+
+      CÓMO FUNCIONA:
+      1. Crear - Define la misión de trading y tolerancia al riesgo de tu agente
+      2. Fondear - Deposita SOL en el vault de tu agente
+      3. Tradear - La IA analiza mercados y ejecuta trades automáticamente
+      4. Ganar - Mantén tokens del agente para recibir ganancias de trading
+
+      ¡Únete a miles de traders usando IA para maximizar sus retornos DeFi en Solana!
+
+    keywords:
+      - Solana
+      - DeFi
+      - Trading IA
+      - Bot de Trading
+      - Crypto
+      - Agente Autónomo
+      - Jupiter
+      - Memecoin
+      - GPT-4
+      - Ingresos Pasivos
+
+# Technical Details
+technical:
+  # Minimum Android version
+  min_sdk_version: 24
+
+  # Target Android version
+  target_sdk_version: 34
+
+  # Permissions required
+  permissions:
+    - android.permission.INTERNET
+    - android.permission.ACCESS_NETWORK_STATE
+    - android.permission.VIBRATE
+    - android.permission.WAKE_LOCK
+
+  # TWA Configuration
+  twa:
+    host: degenagent.fun
+    default_url: https://degenagent.fun
+    fallback_strategy: WEBVIEW
+    enable_notifications: true
+    enable_site_settings_shortcut: true
+    display_mode: standalone
+    orientation: portrait
+    status_bar_color: "#000000"
+    navigation_bar_color: "#000000"
+    splash_screen_color: "#000000"
+    splash_screen_fade_out_duration: 300
+
+# Release Information
+release:
+  version_name: "1.0.0"
+  version_code: 1
+
+  # Release notes
+  whats_new:
+    en-US: >
+      🎉 Initial release of DegenAgent.fun!
+
+      Features:
+      • Create AI trading agents on Solana
+      • Autonomous 24/7 trading with GPT-4
+      • Real-time portfolio tracking
+      • Referral system with rewards
+      • Social trading features
+      • Jupiter DEX integration
+      • Mobile-optimized for Solana Saga/Seeker
+
+    es-ES: >
+      🎉 Lanzamiento inicial de DegenAgent.fun!
+
+      Características:
+      • Crea agentes de trading con IA en Solana
+      • Trading autónomo 24/7 con GPT-4
+      • Seguimiento de portafolio en tiempo real
+      • Sistema de referidos con recompensas
+      • Características de trading social
+      • Integración con Jupiter DEX
+      • Optimizado para móviles Solana Saga/Seeker
+
+# Compliance
+compliance:
+  complies_with_solana_dapp_store_policies: true
+  age_rating: TEEN
+  content_rating:
+    - Financial Services
+    - Real Money Trading
+
+  # Warnings
+  warnings:
+    - "Trading cryptocurrencies involves significant risk"
+    - "Past performance does not guarantee future results"
+    - "Only invest what you can afford to lose"

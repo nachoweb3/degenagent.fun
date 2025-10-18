@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { Transaction } from '@solana/web3.js';
+import { Transaction, Keypair } from '@solana/web3.js';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import MatrixRain from '@/components/MatrixRain';
@@ -77,18 +77,24 @@ export default function CreateAgent() {
 
       console.log('Response:', response.data);
 
-      const { transaction: txBase64, agentPubkey } = response.data;
+      const { transaction: txBase64, agentPubkey, tokenMintKeypair } = response.data;
 
       // Deserialize transaction
       const txBuffer = Buffer.from(txBase64, 'base64');
       const transaction = Transaction.from(txBuffer);
 
-      // Get recent blockhash to make transaction valid
+      // Recreate token mint keypair from response
+      const tokenMint = Keypair.fromSecretKey(new Uint8Array(tokenMintKeypair.secretKey));
+
+      // Get fresh blockhash
       const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
       transaction.recentBlockhash = blockhash;
       transaction.feePayer = publicKey;
 
-      // Send transaction
+      // Sign with token mint keypair first
+      transaction.partialSign(tokenMint);
+
+      // Send transaction (wallet will add its signature)
       console.log('Sending transaction...');
       const signature = await sendTransaction(transaction, connection, {
         skipPreflight: false,

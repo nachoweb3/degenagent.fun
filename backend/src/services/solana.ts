@@ -113,21 +113,29 @@ export async function createAgent(
   console.log('Vault PDA:', vault.toString());
   console.log('Token Mint:', tokenMint.publicKey.toString());
 
-  // Serialize transaction
-  transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+  // Get latest blockhash
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
   transaction.feePayer = creator;
-  transaction.partialSign(tokenMint);
 
+  // Serialize transaction WITHOUT signing (frontend will sign everything)
   const serialized = transaction.serialize({
     requireAllSignatures: false,
     verifySignatures: false
   }).toString('base64');
 
+  // Return token mint secret key so frontend can sign
+  const tokenMintKeypair = {
+    publicKey: tokenMint.publicKey.toString(),
+    secretKey: Array.from(tokenMint.secretKey)
+  };
+
   return {
     agentPubkey: agentState.toString(),
     tokenMint: tokenMint.publicKey.toString(),
     vault: vault.toString(),
-    transaction: serialized
+    transaction: serialized,
+    tokenMintKeypair
   };
 }
 

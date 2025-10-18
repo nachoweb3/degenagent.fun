@@ -17,6 +17,8 @@ import {
   saveAgentKeypair,
   getAgentKeypair
 } from '../services/keyManager';
+import Agent from '../models/Agent';
+import crypto from 'crypto';
 
 export async function createAgentHandler(req: Request, res: Response) {
   try {
@@ -61,12 +63,45 @@ export async function createAgentHandler(req: Request, res: Response) {
     // Save agent private key securely
     await saveAgentKeypair(agentWallet.publicKey.toString(), agentWallet.secretKey);
 
+    // Generate onchain ID
+    const onchainId = crypto.randomBytes(16).toString('hex');
+
+    // Save agent to database
+    const agent = await Agent.create({
+      onchainId,
+      name,
+      purpose,
+      owner: creatorWallet,
+      walletAddress: agentWallet.publicKey.toString(),
+      encryptedPrivateKey: 'encrypted', // Already saved via keyManager
+      tokenMint: result.tokenMint,
+      status: 'active',
+      balance: '0',
+      tradingEnabled: true,
+      aiModel: 'gemini-pro',
+      riskLevel: riskTolerance === 1 || riskTolerance === 2 || riskTolerance === 3 ? 'low' : 
+                 riskTolerance >= 8 ? 'high' : 'medium',
+      riskTolerance: riskTolerance || 5,
+      tradingFrequency: tradingFrequency || 'medium',
+      maxTradeSize: maxTradeSize || 10,
+      useSubagents: true,
+      totalTrades: 0,
+      successfulTrades: 0,
+      totalVolume: '0',
+      totalRevenue: '0',
+      totalProfit: '0'
+    });
+
+    console.log(`✅ Agent saved to database: ${agent.id}`);
+
     res.json({
       success: true,
+      agentId: agent.id,
       agentPubkey: result.agentPubkey,
       agentWallet: agentWallet.publicKey.toString(),
       tokenMint: result.tokenMint,
       transaction: result.transaction,
+      tokenMintKeypair: result.tokenMintKeypair, // Send keypair to frontend
       message: 'Agent created successfully. Sign and send the transaction.'
     });
 

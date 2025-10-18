@@ -1,0 +1,81 @@
+publisher:
+  name: DegenAgent Team
+  website: https://degenagent.fun
+  privacy_policy_url: https://degenagent.fun/privacy
+
+app:
+  id: fun.degenagent.app
+
+release:
+  version: "1.0.0"
+  minimum_android_sdk_version: 24
+
+  catalog:
+    en-US:
+      name: DegenAgent.fun
+      short_description: Create AI trading agents that operate 24/7 on Solana blockchain
+      long_description: |
+        DegenAgent.fun is a revolutionary platform that allows you to create and manage
+        autonomous AI trading agents on Solana. Powered by GPT-4, your agents analyze
+        markets, execute trades, and generate profits while you sleep.
+
+        KEY FEATURES:
+        🤖 AI-Powered Trading - GPT-4 analyzes market sentiment and makes intelligent decisions
+        ⚡ Fully Autonomous - Your agent operates 24/7 without manual intervention
+        🔒 Secure & Transparent - All trades executed on-chain with full transparency
+        💰 Tokenized Ownership - Each agent has its own SPL token with revenue sharing
+        📈 Jupiter Integration - Best-in-class DEX aggregation for optimal prices
+        📱 Mobile Ready - Optimized for Solana Saga and Seeker devices
+
+        HOW IT WORKS:
+        1. Create - Define your agent's trading mission and risk tolerance
+        2. Fund - Deposit SOL into your agent's vault
+        3. Trade - AI analyzes markets and executes trades automatically
+        4. Earn - Hold agent tokens to receive trading profits
+
+        MONETIZATION:
+        • Direct trading profits from successful trades
+        • Passive income from agent token holdings
+        • Referral rewards (10% commission per referral)
+        • Daily challenges with SOL rewards
+
+        FEATURES:
+        ✅ 3-Subagent AI System (Market Analyzer, Risk Manager, Execution Optimizer)
+        ✅ Risk management with stop-loss and position limits
+        ✅ Real-time portfolio tracking
+        ✅ Social trading features and leaderboards
+        ✅ Referral system with passive income
+        ✅ Live trading stream (Reality Show)
+
+        SECURITY:
+        • Non-custodial wallets (you control your funds)
+        • HD wallets with encrypted private keys
+        • On-chain transparency
+        • Audited smart contracts
+
+        Join thousands of traders using AI to maximize their DeFi returns on Solana!
+      new_in_version: |
+        🎉 Initial release of DegenAgent.fun!
+
+        Features:
+        • Create AI trading agents on Solana
+        • Autonomous 24/7 trading with GPT-4
+        • Real-time portfolio tracking
+        • Referral system with rewards
+        • Social trading features
+        • Jupiter DEX integration
+        • Mobile-optimized for Solana Saga/Seeker
+
+  media:
+    - purpose: icon
+      uri: ./assets/icon-512.png
+      sha256: "8b193ce45422b577584940c81f21bbb742caface6e8a570ab79409253ccb3ada"
+    - purpose: banner
+      uri: ./assets/banner-1200x600.png
+      sha256: "d1e57ce24b904f74452842cfd0f55caab30c547da2cdc1126baa3536526a0691"
+    - purpose: feature_graphic
+      uri: ./assets/feature-1200x1200.png
+      sha256: "abe488c4df7df3284fd86b571bc911b719fa7a232d8f9af3fe2414c28a4fd3fc"
+
+  apk:
+    file: ./build/app-release-signed.apk
