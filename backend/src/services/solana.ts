@@ -203,25 +203,33 @@ export async function depositFunds(
 }
 
 export async function getAllActiveAgents() {
-  // For MVP, return mock data
-  // In production, use getProgramAccounts with filters
+  try {
+    // Import Agent model dynamically to avoid circular dependency
+    const Agent = require('../models/Agent').default;
 
-  const mockAgents = [
-    {
-      pubkey: 'Agent1111111111111111111111111111111111111',
-      name: 'MemeKing',
-      purpose: 'Trade trending memecoins',
-      totalTrades: 42,
-      totalVolume: 156.5
-    },
-    {
-      pubkey: 'Agent2222222222222222222222222222222222222',
-      name: 'DiamondHands',
-      purpose: 'Long-term memecoin holds',
-      totalTrades: 12,
-      totalVolume: 89.3
-    }
-  ];
+    // Fetch all agents from database
+    const agents = await Agent.findAll({
+      where: {
+        status: 'active'
+      },
+      order: [['createdAt', 'DESC']]
+    });
 
-  return mockAgents;
+    // Map to expected format
+    return agents.map((agent: any) => ({
+      id: agent.id,
+      pubkey: agent.walletAddress,
+      name: agent.name,
+      purpose: agent.purpose,
+      tokenMint: agent.tokenMint,
+      totalTrades: agent.totalTrades || 0,
+      successfulTrades: agent.successfulTrades || 0,
+      totalVolume: parseFloat(agent.totalVolume) || 0,
+      totalProfit: agent.totalProfit || '0',
+      createdAt: agent.createdAt
+    }));
+  } catch (error) {
+    console.error('Error fetching agents from database:', error);
+    return [];
+  }
 }
