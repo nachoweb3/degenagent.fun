@@ -39,7 +39,7 @@ export default function Home() {
   const fetchAgents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BACKEND_API}/agent/list`);
+      const response = await axios.get(`${BACKEND_API}/agent/all`);
       const agentList = response.data.agents || [];
       setAgents(agentList);
 
