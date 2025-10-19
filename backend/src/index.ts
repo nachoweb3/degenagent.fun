@@ -10,6 +10,7 @@ import commissionRoutes from './routes/commission';
 import feedRoutes from './routes/feed';
 import stakingRoutes from './routes/staking';
 import vaultsRoutes from './routes/vaults';
+import bondingCurveRoutes from './routes/bondingCurve';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { startOrderMonitoring } from './services/orderManager';
@@ -55,6 +56,7 @@ app.use('/api/commission', commissionRoutes);
 app.use('/api/feed', feedRoutes);
 app.use('/api/staking', stakingRoutes);
 app.use('/api/vaults', vaultsRoutes);
+app.use('/api/bonding-curve', bondingCurveRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

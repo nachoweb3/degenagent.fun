@@ -18,6 +18,7 @@ import {
   getAgentKeypair
 } from '../services/keyManager';
 import Agent from '../models/Agent';
+import BondingCurve from '../models/BondingCurve';
 import crypto from 'crypto';
 
 export async function createAgentHandler(req: Request, res: Response) {
@@ -93,6 +94,16 @@ export async function createAgentHandler(req: Request, res: Response) {
     });
 
     console.log(`✅ Agent saved to database: ${agent.id}`);
+
+    // Initialize bonding curve for the agent
+    await BondingCurve.create({
+      agentId: agent.id,
+      tokenMint: result.tokenMint,
+      tokensSold: '0',
+      totalValueLocked: '0',
+      graduated: false,
+    });
+    console.log(`✅ Bonding curve initialized for agent: ${agent.id}`);
 
     res.json({
       success: true,
