@@ -21,19 +21,19 @@ interface RealityShowEpisodeAttributes {
 interface RealityShowEpisodeCreationAttributes extends Optional<RealityShowEpisodeAttributes, 'id' | 'totalDonations' | 'viewerCount' | 'totalTrades' | 'highlights' | 'createdAt' | 'updatedAt'> {}
 
 export class RealityShowEpisode extends Model<RealityShowEpisodeAttributes, RealityShowEpisodeCreationAttributes> implements RealityShowEpisodeAttributes {
-  public id!: string;
-  public title!: string;
-  public description!: string;
-  public startTime!: Date;
-  public endTime!: Date;
-  public status!: 'upcoming' | 'live' | 'ended';
-  public featuredAgents!: string[];
-  public totalDonations!: string;
-  public viewerCount!: number;
-  public totalTrades!: number;
-  public highlights!: string[];
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare title: string;
+  declare description: string;
+  declare startTime: Date;
+  declare endTime: Date;
+  declare status: 'upcoming' | 'live' | 'ended';
+  declare featuredAgents: string[];
+  declare totalDonations: string;
+  declare viewerCount: number;
+  declare totalTrades: number;
+  declare highlights: string[];
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 RealityShowEpisode.init(
@@ -136,21 +136,21 @@ interface LiveTradeEventAttributes {
 interface LiveTradeEventCreationAttributes extends Optional<LiveTradeEventAttributes, 'id' | 'reactions' | 'createdAt'> {}
 
 export class LiveTradeEvent extends Model<LiveTradeEventAttributes, LiveTradeEventCreationAttributes> implements LiveTradeEventAttributes {
-  public id!: string;
-  public episodeId!: string;
-  public agentPubkey!: string;
-  public agentName!: string;
-  public tradeType!: 'buy' | 'sell';
-  public tokenIn!: string;
-  public tokenOut!: string;
-  public amountIn!: string;
-  public amountOut!: string;
-  public roi!: number;
-  public aiCommentary!: string;
-  public signature!: string;
-  public timestamp!: Date;
-  public reactions!: { fire: number; rocket: number; skull: number };
-  public readonly createdAt!: Date;
+  declare id: string;
+  declare episodeId: string;
+  declare agentPubkey: string;
+  declare agentName: string;
+  declare tradeType: 'buy' | 'sell';
+  declare tokenIn: string;
+  declare tokenOut: string;
+  declare amountIn: string;
+  declare amountOut: string;
+  declare roi: number;
+  declare aiCommentary: string;
+  declare signature: string;
+  declare timestamp: Date;
+  declare reactions: { fire: number; rocket: number; skull: number };
+  declare readonly createdAt: Date;
 }
 
 LiveTradeEvent.init(
@@ -255,17 +255,17 @@ interface ShowDonationAttributes {
 interface ShowDonationCreationAttributes extends Optional<ShowDonationAttributes, 'id' | 'message' | 'createdAt'> {}
 
 export class ShowDonation extends Model<ShowDonationAttributes, ShowDonationCreationAttributes> implements ShowDonationAttributes {
-  public id!: string;
-  public episodeId!: string;
-  public agentPubkey!: string;
-  public donorWallet!: string;
-  public amount!: string;
-  public message!: string;
-  public signature!: string;
-  public timestamp!: Date;
-  public platformCut!: string;
-  public agentShare!: string;
-  public readonly createdAt!: Date;
+  declare id: string;
+  declare episodeId: string;
+  declare agentPubkey: string;
+  declare donorWallet: string;
+  declare amount: string;
+  declare message: string;
+  declare signature: string;
+  declare timestamp: Date;
+  declare platformCut: string;
+  declare agentShare: string;
+  declare readonly createdAt: Date;
 }
 
 ShowDonation.init(

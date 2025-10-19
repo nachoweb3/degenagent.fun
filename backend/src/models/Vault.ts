@@ -27,26 +27,26 @@ interface VaultAttributes {
 interface VaultCreationAttributes extends Optional<VaultAttributes, 'id' | 'agentId' | 'totalValueLocked' | 'totalDepositors' | 'status' | 'createdAt' | 'updatedAt'> {}
 
 class Vault extends Model<VaultAttributes, VaultCreationAttributes> implements VaultAttributes {
-  public id!: string;
-  public name!: string;
-  public description!: string;
-  public agentId?: string;
-  public strategy!: 'conservative' | 'balanced' | 'aggressive';
-  public currentAPY!: number;
-  public historicalAPY!: number;
-  public totalValueLocked!: string;
-  public minDeposit!: string;
-  public maxCapacity!: string;
-  public depositFee!: number;
-  public withdrawalFee!: number;
-  public performanceFee!: number;
-  public lockPeriod!: number;
-  public autoCompound!: boolean;
-  public status!: 'active' | 'paused' | 'closed';
-  public riskLevel!: number;
-  public totalDepositors!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare name: string;
+  declare description: string;
+  declare agentId?: string;
+  declare strategy: 'conservative' | 'balanced' | 'aggressive';
+  declare currentAPY: number;
+  declare historicalAPY: number;
+  declare totalValueLocked: string;
+  declare minDeposit: string;
+  declare maxCapacity: string;
+  declare depositFee: number;
+  declare withdrawalFee: number;
+  declare performanceFee: number;
+  declare lockPeriod: number;
+  declare autoCompound: boolean;
+  declare status: 'active' | 'paused' | 'closed';
+  declare riskLevel: number;
+  declare totalDepositors: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Vault.init(

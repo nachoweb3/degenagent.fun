@@ -21,20 +21,20 @@ interface StakeAttributes {
 interface StakeCreationAttributes extends Optional<StakeAttributes, 'id' | 'endTime' | 'rewardsClaimed' | 'createdAt' | 'updatedAt'> {}
 
 class Stake extends Model<StakeAttributes, StakeCreationAttributes> implements StakeAttributes {
-  public id!: string;
-  public userWallet!: string;
-  public agentId!: string;
-  public amount!: string;
-  public tokenType!: 'SOL' | 'AGENT_TOKEN';
-  public startTime!: Date;
-  public endTime?: Date;
-  public status!: 'active' | 'unstaking' | 'completed';
-  public rewardsClaimed!: string;
-  public apy!: number;
-  public lockPeriod!: number;
-  public autoCompound!: boolean;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare userWallet: string;
+  declare agentId: string;
+  declare amount: string;
+  declare tokenType: 'SOL' | 'AGENT_TOKEN';
+  declare startTime: Date;
+  declare endTime?: Date;
+  declare status: 'active' | 'unstaking' | 'completed';
+  declare rewardsClaimed: string;
+  declare apy: number;
+  declare lockPeriod: number;
+  declare autoCompound: boolean;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Stake.init(

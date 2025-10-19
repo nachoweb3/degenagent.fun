@@ -16,15 +16,15 @@ interface ReferralAttributes {
 interface ReferralCreationAttributes extends Optional<ReferralAttributes, 'id' | 'rewardsClaimed' | 'agentsCreated' | 'totalVolume' | 'createdAt' | 'claimedAt'> {}
 
 class Referral extends Model<ReferralAttributes, ReferralCreationAttributes> implements ReferralAttributes {
-  public id!: string;
-  public referrerAddress!: string;
-  public referredAddress!: string;
-  public referralCode!: string;
-  public rewardsClaimed!: number;
-  public agentsCreated!: number;
-  public totalVolume!: number;
-  public readonly createdAt!: Date;
-  public claimedAt?: Date;
+  declare id: string;
+  declare referrerAddress: string;
+  declare referredAddress: string;
+  declare referralCode: string;
+  declare rewardsClaimed: number;
+  declare agentsCreated: number;
+  declare totalVolume: number;
+  declare readonly createdAt: Date;
+  declare claimedAt?: Date;
 }
 
 Referral.init(

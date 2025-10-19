@@ -24,22 +24,22 @@ interface TradingOrderAttributes {
 interface TradingOrderCreationAttributes extends Optional<TradingOrderAttributes, 'id' | 'executedPrice' | 'executedAmount' | 'executedTxSignature' | 'executedAt' | 'expiresAt' | 'createdAt' | 'updatedAt'> {}
 
 export class TradingOrder extends Model<TradingOrderAttributes, TradingOrderCreationAttributes> implements TradingOrderAttributes {
-  public id!: string;
-  public agentId!: string;
-  public agentPubkey!: string;
-  public tokenMint!: string;
-  public orderType!: 'stop_loss' | 'take_profit' | 'limit_buy' | 'limit_sell';
-  public entryPrice!: number;
-  public triggerPrice!: number;
-  public amount!: number;
-  public status!: 'active' | 'triggered' | 'executed' | 'cancelled' | 'expired';
-  public executedPrice?: number;
-  public executedAmount?: number;
-  public executedTxSignature?: string;
-  public executedAt?: Date;
-  public expiresAt?: Date;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare agentId: string;
+  declare agentPubkey: string;
+  declare tokenMint: string;
+  declare orderType: 'stop_loss' | 'take_profit' | 'limit_buy' | 'limit_sell';
+  declare entryPrice: number;
+  declare triggerPrice: number;
+  declare amount: number;
+  declare status: 'active' | 'triggered' | 'executed' | 'cancelled' | 'expired';
+  declare executedPrice?: number;
+  declare executedAmount?: number;
+  declare executedTxSignature?: string;
+  declare executedAt?: Date;
+  declare expiresAt?: Date;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 TradingOrder.init(
@@ -153,21 +153,21 @@ interface TradeHistoryAttributes {
 interface TradeHistoryCreationAttributes extends Optional<TradeHistoryAttributes, 'id' | 'error' | 'orderId' | 'createdAt'> {}
 
 export class TradeHistory extends Model<TradeHistoryAttributes, TradeHistoryCreationAttributes> implements TradeHistoryAttributes {
-  public id!: string;
-  public agentId!: string;
-  public agentPubkey!: string;
-  public tradeType!: 'buy' | 'sell' | 'swap';
-  public inputMint!: string;
-  public outputMint!: string;
-  public inputAmount!: number;
-  public outputAmount!: number;
-  public price!: number;
-  public priceImpact!: number;
-  public txSignature!: string;
-  public success!: boolean;
-  public error?: string;
-  public orderId?: string;
-  public readonly createdAt!: Date;
+  declare id: string;
+  declare agentId: string;
+  declare agentPubkey: string;
+  declare tradeType: 'buy' | 'sell' | 'swap';
+  declare inputMint: string;
+  declare outputMint: string;
+  declare inputAmount: number;
+  declare outputAmount: number;
+  declare price: number;
+  declare priceImpact: number;
+  declare txSignature: string;
+  declare success: boolean;
+  declare error?: string;
+  declare orderId?: string;
+  declare readonly createdAt: Date;
 }
 
 TradeHistory.init(

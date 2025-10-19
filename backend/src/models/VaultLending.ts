@@ -23,24 +23,24 @@ interface VaultPoolAttributes {
 interface VaultPoolCreationAttributes extends Optional<VaultPoolAttributes, 'id' | 'totalDeposits' | 'totalShares' | 'currentValue' | 'apy' | 'totalProfit' | 'totalLosses' | 'status' | 'createdAt' | 'updatedAt'> {}
 
 export class VaultPool extends Model<VaultPoolAttributes, VaultPoolCreationAttributes> implements VaultPoolAttributes {
-  public id!: string;
-  public agentId!: string;
-  public agentPubkey!: string;
-  public totalDeposits!: string;
-  public totalShares!: string;
-  public currentValue!: string;
-  public apy!: number;
-  public totalProfit!: string;
-  public totalLosses!: string;
-  public status!: 'active' | 'paused' | 'closed';
-  public minDeposit!: string;
-  public lockPeriod!: number;
-  public performanceFee!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare agentId: string;
+  declare agentPubkey: string;
+  declare totalDeposits: string;
+  declare totalShares: string;
+  declare currentValue: string;
+  declare apy: number;
+  declare totalProfit: string;
+  declare totalLosses: string;
+  declare status: 'active' | 'paused' | 'closed';
+  declare minDeposit: string;
+  declare lockPeriod: number;
+  declare performanceFee: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   // Association
-  public readonly deposits?: VaultDeposit[];
+  declare readonly deposits?: VaultDeposit[];
 }
 
 VaultPool.init(
@@ -157,24 +157,24 @@ interface VaultDepositAttributes {
 interface VaultDepositCreationAttributes extends Optional<VaultDepositAttributes, 'id' | 'currentValue' | 'totalYield' | 'status' | 'withdrawnAt' | 'withdrawTxSignature' | 'createdAt' | 'updatedAt'> {}
 
 export class VaultDeposit extends Model<VaultDepositAttributes, VaultDepositCreationAttributes> implements VaultDepositAttributes {
-  public id!: string;
-  public vaultPoolId!: string;
-  public userWallet!: string;
-  public depositAmount!: string;
-  public sharesReceived!: string;
-  public depositTxSignature!: string;
-  public depositDate!: Date;
-  public lockedUntil!: Date;
-  public currentValue!: string;
-  public totalYield!: string;
-  public status!: 'active' | 'withdrawn';
-  public withdrawnAt?: Date;
-  public withdrawTxSignature?: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare vaultPoolId: string;
+  declare userWallet: string;
+  declare depositAmount: string;
+  declare sharesReceived: string;
+  declare depositTxSignature: string;
+  declare depositDate: Date;
+  declare lockedUntil: Date;
+  declare currentValue: string;
+  declare totalYield: string;
+  declare status: 'active' | 'withdrawn';
+  declare withdrawnAt?: Date;
+  declare withdrawTxSignature?: string;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   // Association
-  public readonly pool?: VaultPool;
+  declare readonly pool?: VaultPool;
 }
 
 VaultDeposit.init(

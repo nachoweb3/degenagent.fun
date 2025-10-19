@@ -17,16 +17,16 @@ interface CommissionAttributes {
 interface CommissionCreationAttributes extends Optional<CommissionAttributes, 'id' | 'claimed' | 'createdAt'> {}
 
 class Commission extends Model<CommissionAttributes, CommissionCreationAttributes> implements CommissionAttributes {
-  public id!: string;
-  public agentPubkey!: string;
-  public ownerAddress!: string;
-  public tradeAmount!: number;
-  public commissionRate!: number;
-  public commissionAmount!: number;
-  public tokenMint!: string;
-  public transactionSignature!: string;
-  public claimed!: boolean;
-  public readonly createdAt!: Date;
+  declare id: string;
+  declare agentPubkey: string;
+  declare ownerAddress: string;
+  declare tradeAmount: number;
+  declare commissionRate: number;
+  declare commissionAmount: number;
+  declare tokenMint: string;
+  declare transactionSignature: string;
+  declare claimed: boolean;
+  declare readonly createdAt: Date;
 }
 
 Commission.init(

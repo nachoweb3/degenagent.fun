@@ -27,25 +27,25 @@ interface TradeAttributes {
 interface TradeCreationAttributes extends Optional<TradeAttributes, 'id' | 'errorMessage' | 'aiReasoning' | 'marketConditions' | 'profitLoss' | 'createdAt' | 'updatedAt'> {}
 
 class Trade extends Model<TradeAttributes, TradeCreationAttributes> implements TradeAttributes {
-  public id!: string;
-  public agentId!: string;
-  public type!: 'buy' | 'sell';
-  public tokenIn!: string;
-  public tokenOut!: string;
-  public amountIn!: string;
-  public amountOut!: string;
-  public priceImpact!: string;
-  public slippage!: string;
-  public fee!: string;
-  public signature!: string;
-  public status!: 'pending' | 'success' | 'failed';
-  public errorMessage?: string;
-  public aiReasoning?: string;
-  public marketConditions?: string;
-  public profitLoss?: string;
-  public executionTime!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare agentId: string;
+  declare type: 'buy' | 'sell';
+  declare tokenIn: string;
+  declare tokenOut: string;
+  declare amountIn: string;
+  declare amountOut: string;
+  declare priceImpact: string;
+  declare slippage: string;
+  declare fee: string;
+  declare signature: string;
+  declare status: 'pending' | 'success' | 'failed';
+  declare errorMessage?: string;
+  declare aiReasoning?: string;
+  declare marketConditions?: string;
+  declare profitLoss?: string;
+  declare executionTime: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Trade.init(

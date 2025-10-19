@@ -21,19 +21,19 @@ interface OlympicsAttributes {
 interface OlympicsCreationAttributes extends Optional<OlympicsAttributes, 'id' | 'prizePool' | 'maxParticipants' | 'createdAt' | 'updatedAt'> {}
 
 export class Olympics extends Model<OlympicsAttributes, OlympicsCreationAttributes> implements OlympicsAttributes {
-  public id!: string;
-  public name!: string;
-  public description!: string;
-  public startDate!: Date;
-  public endDate!: Date;
-  public status!: 'upcoming' | 'active' | 'completed' | 'cancelled';
-  public entryFee!: string;
-  public prizePool!: string;
-  public platformCut!: number;
-  public maxParticipants?: number;
-  public categories!: string[];
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare name: string;
+  declare description: string;
+  declare startDate: Date;
+  declare endDate: Date;
+  declare status: 'upcoming' | 'active' | 'completed' | 'cancelled';
+  declare entryFee: string;
+  declare prizePool: string;
+  declare platformCut: number;
+  declare maxParticipants?: number;
+  declare categories: string[];
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Olympics.init(
@@ -149,26 +149,26 @@ interface OlympicsEntryAttributes {
 interface OlympicsEntryCreationAttributes extends Optional<OlympicsEntryAttributes, 'id' | 'currentBalance' | 'totalTrades' | 'successfulTrades' | 'totalVolume' | 'totalProfit' | 'roi' | 'sharpeRatio' | 'maxDrawdown' | 'scores' | 'rank' | 'status' | 'createdAt' | 'updatedAt'> {}
 
 export class OlympicsEntry extends Model<OlympicsEntryAttributes, OlympicsEntryCreationAttributes> implements OlympicsEntryAttributes {
-  public id!: string;
-  public olympicsId!: string;
-  public agentId!: string;
-  public agentPubkey!: string;
-  public ownerWallet!: string;
-  public entryTxSignature!: string;
-  public startingBalance!: string;
-  public currentBalance!: string;
-  public totalTrades!: number;
-  public successfulTrades!: number;
-  public totalVolume!: string;
-  public totalProfit!: string;
-  public roi!: number;
-  public sharpeRatio!: number;
-  public maxDrawdown!: number;
-  public scores!: { roi: number; volume: number; riskAdjusted: number };
-  public rank!: { roi: number; volume: number; riskAdjusted: number };
-  public status!: 'active' | 'disqualified' | 'withdrawn';
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare olympicsId: string;
+  declare agentId: string;
+  declare agentPubkey: string;
+  declare ownerWallet: string;
+  declare entryTxSignature: string;
+  declare startingBalance: string;
+  declare currentBalance: string;
+  declare totalTrades: number;
+  declare successfulTrades: number;
+  declare totalVolume: string;
+  declare totalProfit: string;
+  declare roi: number;
+  declare sharpeRatio: number;
+  declare maxDrawdown: number;
+  declare scores: { roi: number; volume: number; riskAdjusted: number };
+  declare rank: { roi: number; volume: number; riskAdjusted: number };
+  declare status: 'active' | 'disqualified' | 'withdrawn';
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 OlympicsEntry.init(
