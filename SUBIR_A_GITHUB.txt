@@ -1,0 +1,41 @@
+PROBLEMA: GitHub no permite push desde línea de comandos
+
+SOLUCIONES RÁPIDAS:
+
+=== OPCIÓN 1: GitHub Desktop (MÁS FÁCIL) ===
+
+1. Descarga GitHub Desktop: https://desktop.github.com/
+2. Abre GitHub Desktop
+3. File → Add Local Repository
+4. Selecciona: C:\Users\Usuario\Desktop\Agent.fun
+5. Click "Publish repository"
+6. Nombre: degenagent.fun
+7. ¡Listo! Sube todo automáticamente
+
+=== OPCIÓN 2: Subir Archivos Manualmente ===
+
+1. Ve a: https://github.com/nachoweb3/degenagent.fun
+2. Click "uploading an existing file"
+3. Arrastra toda la carpeta Agent.fun
+4. Commit changes
+
+=== OPCIÓN 3: Deploy DIRECTO a Render (SIN GITHUB) ===
+
+NO NECESITAS GITHUB para deployar. Puedes hacerlo ahora:
+
+1. Ve a: https://dashboard.render.com/
+2. New + → Web Service
+3. "Deploy without Git repository"
+4. Sube la carpeta backend (comprimida en .zip)
+5. Configura y deploy
+
+El frontend YA ESTÁ en Vercel funcionando.
+
+=== LO MÁS RÁPIDO: Deploy directo sin Git ===
+
+PASOS:
+1. Comprime carpeta "backend" a backend.zip
+2. Render → New → Web Service → Upload ZIP
+3. Listo en 10 minutos
+
+¿Qué opción prefieres?
