@@ -19,10 +19,11 @@ export async function generateReferralCode(req: Request, res: Response) {
     });
 
     if (existing) {
+      const baseUrl = process.env.FRONTEND_URL || 'https://degenagent.fun';
       return res.json({
         success: true,
         referralCode: existing.referralCode,
-        referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}?ref=${existing.referralCode}`,
+        referralUrl: `${baseUrl}?ref=${existing.referralCode}`,
         stats: {
           totalReferrals: await Referral.count({ where: { referralCode: existing.referralCode } }),
           rewardsClaimed: existing.rewardsClaimed || 0,
@@ -42,10 +43,11 @@ export async function generateReferralCode(req: Request, res: Response) {
       referralCode: code,
     });
 
+    const baseUrl = process.env.FRONTEND_URL || 'https://degenagent.fun';
     res.json({
       success: true,
       referralCode: code,
-      referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}?ref=${code}`,
+      referralUrl: `${baseUrl}?ref=${code}`,
       stats: {
         totalReferrals: 0,
         rewardsClaimed: 0,
@@ -157,10 +159,11 @@ export async function getReferralStats(req: Request, res: Response) {
     // Assuming 0.5 SOL per agent creation
     const pendingRewards = agentsCreated * 0.5 * 0.1 - rewardsClaimed;
 
+    const baseUrl = process.env.FRONTEND_URL || 'https://degenagent.fun';
     res.json({
       hasCode: true,
       referralCode: userRef.referralCode,
-      referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}?ref=${userRef.referralCode}`,
+      referralUrl: `${baseUrl}?ref=${userRef.referralCode}`,
       stats: {
         totalReferrals,
         activeReferrals,
