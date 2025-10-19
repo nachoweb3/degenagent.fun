@@ -139,17 +139,20 @@ npm run dev
 - APY Vaults system (3 tiers)
 - Token staking with dynamic APY
 - Auto-compounding rewards
+- **Bonding curve token system (Pump.fun style)**
+- Token marketplace homepage
 
 ### 🔄 In Progress
 - Production deployment (Render + Vercel)
-- Platform token ($AGENT) design
-- Agent marketplace
+- Buy/sell interface for bonding curve
+- Agent marketplace features
 
 ### 📅 Next (Month 1-2)
-- Bonding curve token launch
+- Platform token ($AGENT) design
 - Agent-to-agent commerce
 - Multi-agent swarms
 - DAO governance
+- Raydium graduation automation
 
 ### 🔮 Future (Month 3-6)
 - Mobile apps (iOS/Android)
