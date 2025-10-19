@@ -122,14 +122,19 @@ export default function BondingCurveTrading({ agentId }: { agentId: string }) {
         await connection.confirmTransaction(signature, 'confirmed');
 
         // Confirm with backend
-        await axios.post(`${BACKEND_API}/bonding-curve/confirm-buy`, {
+        const confirmResponse = await axios.post(`${BACKEND_API}/bonding-curve/confirm-buy`, {
           agentId,
           amount: parseFloat(amount),
           signature,
           buyerWallet: publicKey.toString(),
         });
 
-        alert(`Successfully bought ${amount} tokens!`);
+        // Check if graduation happened
+        if (confirmResponse.data.graduation?.success) {
+          alert(`🎉 GRADUATION! This token has completed its bonding curve and graduated to Raydium DEX!\n\nPool Created: ${confirmResponse.data.graduation.data.poolId}`);
+        } else {
+          alert(`Successfully bought ${amount} tokens!`);
+        }
       } else {
         // Sell functionality (similar to buy)
         alert('Sell functionality coming soon!');

@@ -276,6 +276,16 @@ export const confirmBuy = async (req: Request, res: Response) => {
     // Check if should graduate
     const stats = getBondingCurveStats(newTokensSold);
 
+    // Auto-graduate if eligible
+    const { autoGraduateIfEligible } = require('../services/raydiumGraduation');
+    let graduationResult = null;
+    if (stats.canGraduate) {
+      graduationResult = await autoGraduateIfEligible(agentId);
+      if (graduationResult.success) {
+        console.log('🎓 Agent graduated to Raydium!', graduationResult.data);
+      }
+    }
+
     res.json({
       success: true,
       message: 'Purchase confirmed',
@@ -284,6 +294,7 @@ export const confirmBuy = async (req: Request, res: Response) => {
         totalValueLocked: newTVL,
         stats,
       },
+      graduation: graduationResult,
     });
   } catch (error: any) {
     console.error('Error confirming buy:', error);
