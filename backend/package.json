@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "prebuild": "rm -rf dist",
+    "clean": "node scripts/clean.js",
+    "prebuild": "npm run clean",
     "build": "tsc",
     "start": "node dist/index.js",
     "test:security": "tsx src/tests/keySecurityTest.ts",
