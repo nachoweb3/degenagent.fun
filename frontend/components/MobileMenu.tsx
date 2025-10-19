@@ -2,22 +2,29 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { publicKey, disconnect } = useWallet();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const menuItems = [
-    { href: '/', label: 'Home' },
-    { href: '/create', label: 'Create Agent' },
+    { href: '/', label: '🏠 Home' },
+    { href: '/explore', label: '🔍 Explore' },
+    { href: '/marketplace', label: '🛒 Marketplace' },
     { href: '/vaults', label: '💰 Vaults' },
     { href: '/leaderboard', label: '🏆 Leaderboard' },
-    { href: '/challenges', label: '🎊 Challenges' },
-    { href: '/feed', label: '💬 Feed' },
-    { href: '/referrals', label: '🎁 Earn 10%' },
-    { href: '/reality-show', label: '🔴 LIVE Show' },
+    { href: '/create', label: '➕ Create Agent', highlight: true },
   ];
+
+  const profileItems = publicKey ? [
+    { href: '/profile', label: '👤 My Profile' },
+    { href: '/analytics', label: '📊 Analytics' },
+    { href: '/referrals', label: '🎁 Referrals' },
+  ] : [];
 
   return (
     <>
@@ -56,27 +63,77 @@ export default function MobileMenu() {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-b from-gray-900 via-gray-900 to-black border-l-2 border-solana-purple shadow-2xl shadow-solana-purple/20 transform transition-transform duration-300 ease-in-out z-[110] md:hidden ${
+        className={`fixed top-0 right-0 h-full w-80 bg-black border-l border-purple-600/30 shadow-2xl transform transition-transform duration-300 ease-in-out z-[110] md:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <nav className="flex flex-col pt-20 px-6">
+        {/* Header with Wallet */}
+        <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 p-6 border-b border-gray-800">
+          <div className="mb-4">
+            <WalletMultiButton className="!w-full !bg-gradient-to-r !from-purple-600 !to-pink-600 hover:!from-purple-700 hover:!to-pink-700 !text-sm" />
+          </div>
+          {publicKey && (
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-xl">
+                {publicKey.toString().slice(0, 2).toUpperCase()}
+              </div>
+              <p className="text-xs text-gray-400 font-mono">
+                {publicKey.toString().slice(0, 4)}...{publicKey.toString().slice(-4)}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Main Navigation */}
+        <nav className="flex flex-col px-4 py-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
+          <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-2">Navigation</p>
           {menuItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={toggleMenu}
-              className="py-4 text-lg text-gray-300 hover:text-white border-b border-gray-800 transition-colors"
+              className={`py-3 px-4 rounded-lg text-base transition-colors mb-1 ${
+                item.highlight
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+              }`}
             >
               {item.label}
             </Link>
           ))}
+
+          {/* Profile Section */}
+          {profileItems.length > 0 && (
+            <>
+              <div className="border-t border-gray-800 my-4"></div>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-2">Profile</p>
+              {profileItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={toggleMenu}
+                  className="py-3 px-4 rounded-lg text-base text-gray-300 hover:bg-gray-800 hover:text-white transition-colors mb-1"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <button
+                onClick={() => {
+                  disconnect();
+                  toggleMenu();
+                }}
+                className="py-3 px-4 rounded-lg text-base text-red-400 hover:bg-gray-800 transition-colors mb-1 text-left w-full"
+              >
+                🚪 Disconnect Wallet
+              </button>
+            </>
+          )}
         </nav>
 
-        {/* Social links in mobile menu */}
-        <div className="absolute bottom-8 left-6 right-6">
-          <p className="text-sm text-gray-500 mb-4">Connect with us</p>
-          <div className="flex gap-4">
+        {/* Social Footer */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gray-900/50 backdrop-blur-sm p-4 border-t border-gray-800">
+          <p className="text-xs text-gray-500 mb-3 text-center">Follow Us</p>
+          <div className="flex justify-center gap-6">
             <a
               href="https://twitter.com/nachoweb3"
               target="_blank"
