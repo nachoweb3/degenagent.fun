@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { createChart, IChartApi, ISeriesApi, ColorType, CandlestickSeriesPartialOptions } from 'lightweight-charts';
 import axios from 'axios';
+import { useAgentWebSocket } from '../hooks/useWebSocket';
+import LiveIndicator from './LiveIndicator';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -47,6 +49,9 @@ export default function PriceChart({ agentId }: PriceChartProps) {
   const [candles, setCandles] = useState<CandleData[]>([]);
   const [stats, setStats] = useState<ChartStats | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // WebSocket integration for real-time updates
+  const { isConnected, priceData } = useAgentWebSocket(agentId);
 
   // Initialize chart
   useEffect(() => {
@@ -105,9 +110,21 @@ export default function PriceChart({ agentId }: PriceChartProps) {
   // Fetch chart data
   useEffect(() => {
     fetchChartData();
-    const interval = setInterval(fetchChartData, 30000); // Refresh every 30s
+    // Reduce polling frequency since we have WebSocket updates
+    const interval = setInterval(fetchChartData, 60000); // Refresh every 60s (backup)
     return () => clearInterval(interval);
   }, [agentId, timeframe]);
+
+  // Update stats from WebSocket price data
+  useEffect(() => {
+    if (priceData && priceData.currentPrice !== undefined) {
+      setStats(prev => prev ? {
+        ...prev,
+        currentPrice: priceData.currentPrice,
+        marketCap: priceData.marketCap || prev.marketCap,
+      } : null);
+    }
+  }, [priceData]);
 
   // Update chart when data changes
   useEffect(() => {
@@ -163,6 +180,11 @@ export default function PriceChart({ agentId }: PriceChartProps) {
     <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
       {/* Stats Header */}
       <div className="p-4 sm:p-6 border-b border-gray-700">
+        {/* Live Indicator */}
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-white">Price Chart</h3>
+          <LiveIndicator size="sm" />
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Current Price */}
           <div>

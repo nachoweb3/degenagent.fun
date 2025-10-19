@@ -10,6 +10,7 @@ import {
   getBondingCurveStats,
   BONDING_CURVE_CONFIG,
 } from '../services/bondingCurve';
+import { websocketService } from '../index';
 
 const connection = new Connection(
   process.env.RPC_ENDPOINT || 'https://api.devnet.solana.com',
@@ -255,7 +256,7 @@ export const confirmBuy = async (req: Request, res: Response) => {
     });
 
     // Record trade
-    await BondingCurveTrade.create({
+    const trade = await BondingCurveTrade.create({
       bondingCurveId: bondingCurve.id,
       agentId,
       trader: buyerWallet,
@@ -276,6 +277,28 @@ export const confirmBuy = async (req: Request, res: Response) => {
     // Check if should graduate
     const stats = getBondingCurveStats(newTokensSold);
 
+    // Emit WebSocket event for trade execution
+    websocketService.emitTradeExecuted(agentId, {
+      id: trade.id,
+      agentId,
+      type: 'buy',
+      trader: buyerWallet,
+      tokenAmount: amount.toString(),
+      solAmount: quote.cost.toString(),
+      pricePerToken: quote.pricePerToken.toString(),
+      createdAt: trade.createdAt,
+    });
+
+    // Emit WebSocket event for price update
+    websocketService.emitPriceUpdate(agentId, {
+      agentId,
+      currentPrice: quote.newPrice,
+      tokensSold: newTokensSold,
+      totalValueLocked: newTVL,
+      marketCap: stats.currentPrice * BONDING_CURVE_CONFIG.TOTAL_SUPPLY,
+      timestamp: new Date().toISOString(),
+    });
+
     // Auto-graduate if eligible
     const { autoGraduateIfEligible } = require('../services/raydiumGraduation');
     let graduationResult = null;
@@ -283,6 +306,13 @@ export const confirmBuy = async (req: Request, res: Response) => {
       graduationResult = await autoGraduateIfEligible(agentId);
       if (graduationResult.success) {
         console.log('🎓 Agent graduated to Raydium!', graduationResult.data);
+
+        // Emit WebSocket event for graduation
+        websocketService.emitGraduation(agentId, {
+          agentId,
+          poolId: graduationResult.data.poolId,
+          timestamp: new Date().toISOString(),
+        });
       }
     }
 

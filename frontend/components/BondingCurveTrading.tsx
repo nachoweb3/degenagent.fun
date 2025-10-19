@@ -5,6 +5,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { Transaction } from '@solana/web3.js';
 import axios from 'axios';
+import BondingCurveChart from './BondingCurveChart';
+import { useAgentWebSocket } from '../hooks/useWebSocket';
+import LiveIndicator from './LiveIndicator';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -45,6 +48,42 @@ export default function BondingCurveTrading({ agentId }: { agentId: string }) {
   const [quote, setQuote] = useState<any>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [trading, setTrading] = useState(false);
+
+  // WebSocket integration for live updates
+  const { isConnected, trades, priceData, graduation } = useAgentWebSocket(agentId);
+
+  // Update recent trades from WebSocket
+  useEffect(() => {
+    if (trades.length > 0) {
+      setRecentTrades(prev => {
+        const newTrades = [...trades, ...prev];
+        // Remove duplicates and limit to 10
+        const uniqueTrades = Array.from(new Map(newTrades.map(t => [t.id, t])).values());
+        return uniqueTrades.slice(0, 10);
+      });
+    }
+  }, [trades]);
+
+  // Update price data from WebSocket
+  useEffect(() => {
+    if (priceData && bondingCurve) {
+      setBondingCurve(prev => prev ? {
+        ...prev,
+        stats: {
+          ...prev.stats,
+          currentPrice: priceData.currentPrice || prev.stats.currentPrice,
+        }
+      } : null);
+    }
+  }, [priceData]);
+
+  // Handle graduation event
+  useEffect(() => {
+    if (graduation) {
+      alert(`🎉 GRADUATION! This token has completed its bonding curve and graduated to Raydium DEX!\n\nPool Created: ${graduation.poolId}`);
+      fetchBondingCurve(); // Refresh data
+    }
+  }, [graduation]);
 
   useEffect(() => {
     fetchBondingCurve();
@@ -211,7 +250,10 @@ export default function BondingCurveTrading({ agentId }: { agentId: string }) {
     <div className="space-y-6">
       {/* Bonding Curve Stats */}
       <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-xl font-bold text-white mb-4">Bonding Curve</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-white">Bonding Curve</h3>
+          <LiveIndicator size="sm" />
+        </div>
 
         {/* Progress Bar */}
         <div className="mb-6">
@@ -250,6 +292,15 @@ export default function BondingCurveTrading({ agentId }: { agentId: string }) {
           </div>
         </div>
       </div>
+
+      {/* Bonding Curve Chart */}
+      <BondingCurveChart
+        currentPrice={stats.currentPrice}
+        tokensSold={stats.tokensSold}
+        totalSupply={stats.tokensSold + stats.tokensRemaining}
+        marketCap={stats.currentPrice * (stats.tokensSold + stats.tokensRemaining)}
+        progress={stats.progress}
+      />
 
       {/* Trading Interface */}
       <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">

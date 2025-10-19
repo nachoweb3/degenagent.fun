@@ -99,4 +99,11 @@ BondingCurve.init(
   }
 );
 
+// Set up associations (will be imported in other models)
+export function setupBondingCurveAssociations() {
+  const Agent = require('./Agent').default;
+  BondingCurve.belongsTo(Agent, { foreignKey: 'agentId', as: 'agent' });
+  Agent.hasOne(BondingCurve, { foreignKey: 'agentId', as: 'bondingCurve' });
+}
+
 export default BondingCurve;

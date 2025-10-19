@@ -6,7 +6,7 @@ import {
   SystemProgram,
   LAMPORTS_PER_SOL
 } from '@solana/web3.js';
-import { connection } from '../index';
+import { connection, websocketService } from '../index';
 import {
   createAgent,
   getAgentState,
@@ -112,6 +112,17 @@ export async function createAgentHandler(req: Request, res: Response) {
       await generateSyntheticCandles(agent.id, timeframe);
     }
     console.log(`✅ Initial candles generated for agent: ${agent.id}`);
+
+    // Emit WebSocket event for new agent
+    websocketService.emitNewAgent({
+      id: agent.id,
+      name: agent.name,
+      symbol: symbol,
+      purpose: agent.purpose,
+      tokenMint: result.tokenMint,
+      creatorWallet: creatorWallet,
+      timestamp: new Date().toISOString(),
+    });
 
     res.json({
       success: true,

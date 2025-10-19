@@ -17,10 +17,17 @@ interface Agent {
   totalVolume: number;
   status?: string;
   createdAt?: string;
+  performance?: {
+    roi?: number;
+    winRate?: number;
+  };
+  marketCap?: number;
+  strategy?: string;
 }
 
-type SortOption = 'volume' | 'trades' | 'recent' | 'balance';
+type SortOption = 'volume' | 'trades' | 'recent' | 'balance' | 'trending' | 'performance' | 'oldest';
 type FilterOption = 'all' | 'active' | 'inactive';
+type StrategyFilter = 'all' | 'technical' | 'arbitrage' | 'dca' | 'momentum' | 'custom';
 
 export default function Explore() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -29,6 +36,10 @@ export default function Explore() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('volume');
   const [filterBy, setFilterBy] = useState<FilterOption>('all');
+  const [strategyFilter, setStrategyFilter] = useState<StrategyFilter>('all');
+  const [marketCapRange, setMarketCapRange] = useState<[number, number]>([0, 10000000]);
+  const [performanceRating, setPerformanceRating] = useState<number>(0);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   useEffect(() => {
     fetchAgents();
@@ -36,7 +47,7 @@ export default function Explore() {
 
   useEffect(() => {
     filterAndSortAgents();
-  }, [agents, searchQuery, sortBy, filterBy]);
+  }, [agents, searchQuery, sortBy, filterBy, strategyFilter, marketCapRange, performanceRating]);
 
   const fetchAgents = async () => {
     try {
@@ -52,18 +63,43 @@ export default function Explore() {
   const filterAndSortAgents = () => {
     let filtered = [...agents];
 
-    // Apply search filter
+    // Apply search filter (name, symbol, purpose, or creator)
     if (searchQuery) {
+      const query = searchQuery.toLowerCase();
       filtered = filtered.filter(agent =>
-        agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        agent.symbol?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        agent.purpose.toLowerCase().includes(searchQuery.toLowerCase())
+        agent.name.toLowerCase().includes(query) ||
+        agent.symbol?.toLowerCase().includes(query) ||
+        agent.purpose.toLowerCase().includes(query)
       );
     }
 
     // Apply status filter
     if (filterBy !== 'all') {
       filtered = filtered.filter(agent => agent.status === filterBy);
+    }
+
+    // Apply strategy filter
+    if (strategyFilter !== 'all') {
+      filtered = filtered.filter(agent => agent.strategy === strategyFilter);
+    }
+
+    // Apply market cap range filter
+    if (marketCapRange[0] > 0 || marketCapRange[1] < 10000000) {
+      filtered = filtered.filter(agent => {
+        const cap = agent.marketCap || 0;
+        return cap >= marketCapRange[0] && cap <= marketCapRange[1];
+      });
+    }
+
+    // Apply performance rating filter
+    if (performanceRating > 0) {
+      filtered = filtered.filter(agent => {
+        const roi = agent.performance?.roi || 0;
+        if (performanceRating === 1) return roi > 0; // Profitable
+        if (performanceRating === 2) return roi > 10; // Good
+        if (performanceRating === 3) return roi > 25; // Excellent
+        return true;
+      });
     }
 
     // Apply sorting
@@ -77,6 +113,15 @@ export default function Explore() {
           return (b.balance || 0) - (a.balance || 0);
         case 'recent':
           return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+        case 'oldest':
+          return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+        case 'performance':
+          return (b.performance?.roi || 0) - (a.performance?.roi || 0);
+        case 'trending':
+          // Trending based on recent volume and performance
+          const aScore = (a.totalVolume * 0.5) + ((a.performance?.roi || 0) * 100);
+          const bScore = (b.totalVolume * 0.5) + ((b.performance?.roi || 0) * 100);
+          return bScore - aScore;
         default:
           return 0;
       }
@@ -84,6 +129,18 @@ export default function Explore() {
 
     setFilteredAgents(filtered);
   };
+
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setFilterBy('all');
+    setStrategyFilter('all');
+    setMarketCapRange([0, 10000000]);
+    setPerformanceRating(0);
+    setSortBy('volume');
+  };
+
+  const hasActiveFilters = searchQuery || filterBy !== 'all' || strategyFilter !== 'all' ||
+    marketCapRange[0] > 0 || marketCapRange[1] < 10000000 || performanceRating > 0;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -146,10 +203,13 @@ export default function Explore() {
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               className="w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg focus:outline-none focus:border-solana-purple"
             >
+              <option value="trending">🔥 Trending</option>
+              <option value="performance">📈 Top Performers</option>
               <option value="volume">💰 Highest Volume</option>
               <option value="trades">📊 Most Trades</option>
               <option value="balance">💎 Highest Balance</option>
-              <option value="recent">🆕 Most Recent</option>
+              <option value="recent">🆕 Newest</option>
+              <option value="oldest">📅 Oldest</option>
             </select>
           </div>
 
@@ -162,14 +222,107 @@ export default function Explore() {
               className="w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg focus:outline-none focus:border-solana-purple"
             >
               <option value="all">All Agents</option>
-              <option value="active">✅ Active Only</option>
-              <option value="inactive">⏸️ Inactive Only</option>
+              <option value="active">Active Only</option>
+              <option value="inactive">Inactive Only</option>
             </select>
+          </div>
+
+          {/* Advanced Filters Toggle */}
+          <div className="flex-1">
+            <label className="block text-sm text-gray-400 mb-2">&nbsp;</label>
+            <button
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className={`w-full px-4 py-2 border rounded-lg transition-colors ${
+                showAdvancedFilters
+                  ? 'bg-solana-purple border-solana-purple text-white'
+                  : 'bg-gray-900/50 border-gray-800 text-gray-300 hover:border-solana-purple'
+              }`}
+            >
+              {showAdvancedFilters ? '🔍 Hide Filters' : '🔍 Advanced Filters'}
+            </button>
           </div>
         </div>
 
+        {/* Advanced Filters Panel */}
+        {showAdvancedFilters && (
+          <div className="bg-gray-900/70 border border-gray-800 rounded-xl p-4 space-y-4 animate-slideDown">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Strategy Filter */}
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">Strategy Type</label>
+                <select
+                  value={strategyFilter}
+                  onChange={(e) => setStrategyFilter(e.target.value as StrategyFilter)}
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg focus:outline-none focus:border-solana-purple"
+                >
+                  <option value="all">All Strategies</option>
+                  <option value="technical">Technical Analysis</option>
+                  <option value="arbitrage">Arbitrage</option>
+                  <option value="dca">DCA (Dollar Cost Average)</option>
+                  <option value="momentum">Momentum Trading</option>
+                  <option value="custom">Custom Strategy</option>
+                </select>
+              </div>
+
+              {/* Performance Rating */}
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">Performance Rating</label>
+                <select
+                  value={performanceRating}
+                  onChange={(e) => setPerformanceRating(Number(e.target.value))}
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg focus:outline-none focus:border-solana-purple"
+                >
+                  <option value="0">All Performance Levels</option>
+                  <option value="1">Profitable (ROI &gt; 0%)</option>
+                  <option value="2">Good (ROI &gt; 10%)</option>
+                  <option value="3">Excellent (ROI &gt; 25%)</option>
+                </select>
+              </div>
+
+              {/* Market Cap Range */}
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">
+                  Market Cap: ${marketCapRange[0].toLocaleString()} - ${marketCapRange[1].toLocaleString()}
+                </label>
+                <div className="space-y-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max="10000000"
+                    step="100000"
+                    value={marketCapRange[0]}
+                    onChange={(e) => setMarketCapRange([Number(e.target.value), marketCapRange[1]])}
+                    className="w-full"
+                  />
+                  <input
+                    type="range"
+                    min="0"
+                    max="10000000"
+                    step="100000"
+                    value={marketCapRange[1]}
+                    onChange={(e) => setMarketCapRange([marketCapRange[0], Number(e.target.value)])}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Clear Filters Button */}
+            {hasActiveFilters && (
+              <div className="flex justify-end">
+                <button
+                  onClick={clearAllFilters}
+                  className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Active Filters Display */}
-        {(searchQuery || filterBy !== 'all') && (
+        {hasActiveFilters && (
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm text-gray-400">Active filters:</span>
             {searchQuery && (
@@ -184,8 +337,42 @@ export default function Explore() {
                 <button onClick={() => setFilterBy('all')} className="hover:text-white">×</button>
               </span>
             )}
+            {strategyFilter !== 'all' && (
+              <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                Strategy: {strategyFilter}
+                <button onClick={() => setStrategyFilter('all')} className="hover:text-white">×</button>
+              </span>
+            )}
+            {performanceRating > 0 && (
+              <span className="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                Performance: {performanceRating === 1 ? 'Profitable' : performanceRating === 2 ? 'Good' : 'Excellent'}
+                <button onClick={() => setPerformanceRating(0)} className="hover:text-white">×</button>
+              </span>
+            )}
+            {(marketCapRange[0] > 0 || marketCapRange[1] < 10000000) && (
+              <span className="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                Market Cap: ${marketCapRange[0].toLocaleString()} - ${marketCapRange[1].toLocaleString()}
+                <button onClick={() => setMarketCapRange([0, 10000000])} className="hover:text-white">×</button>
+              </span>
+            )}
           </div>
         )}
+
+        <style jsx>{`
+          @keyframes slideDown {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-slideDown {
+            animation: slideDown 0.3s ease-out;
+          }
+        `}</style>
       </div>
 
       {/* Results */}
