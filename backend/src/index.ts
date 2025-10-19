@@ -13,6 +13,7 @@ import vaultsRoutes from './routes/vaults';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { startOrderMonitoring } from './services/orderManager';
+import Vault from './models/Vault';
 
 dotenv.config();
 
@@ -76,11 +77,87 @@ app.get('/health', async (req, res) => {
 // Error handler
 app.use(errorHandler);
 
+// Initialize seed vaults if none exist
+async function initializeVaults() {
+  try {
+    const vaultCount = await Vault.count();
+    if (vaultCount === 0) {
+      console.log('📦 No vaults found, creating seed vaults...');
+      const seedVaults = [
+        {
+          name: 'Conservative SOL Vault',
+          description: 'Low-risk vault focused on stable returns through conservative trading strategies',
+          strategy: 'conservative' as const,
+          currentAPY: 12,
+          historicalAPY: 11.5,
+          minDeposit: '0.5',
+          maxCapacity: '5000',
+          totalValueLocked: '0',
+          depositFee: 0,
+          withdrawalFee: 0.5,
+          performanceFee: 5,
+          lockPeriod: 0,
+          autoCompound: true,
+          riskLevel: 3,
+          status: 'active',
+          totalDepositors: 0,
+        },
+        {
+          name: 'Balanced Growth Vault',
+          description: 'Medium-risk vault balancing growth and stability with diversified strategies',
+          strategy: 'balanced' as const,
+          currentAPY: 25,
+          historicalAPY: 23,
+          minDeposit: '1',
+          maxCapacity: '10000',
+          totalValueLocked: '0',
+          depositFee: 0,
+          withdrawalFee: 0.5,
+          performanceFee: 10,
+          lockPeriod: 30,
+          autoCompound: true,
+          riskLevel: 5,
+          status: 'active',
+          totalDepositors: 0,
+        },
+        {
+          name: 'Aggressive Alpha Vault',
+          description: 'High-risk vault seeking maximum returns through aggressive trading strategies',
+          strategy: 'aggressive' as const,
+          currentAPY: 50,
+          historicalAPY: 45,
+          minDeposit: '2',
+          maxCapacity: '3000',
+          totalValueLocked: '0',
+          depositFee: 0,
+          withdrawalFee: 1,
+          performanceFee: 20,
+          lockPeriod: 90,
+          autoCompound: true,
+          riskLevel: 9,
+          status: 'active',
+          totalDepositors: 0,
+        },
+      ];
+
+      await Vault.bulkCreate(seedVaults);
+      console.log('✅ Seed vaults created successfully');
+    } else {
+      console.log(`✅ Found ${vaultCount} existing vaults`);
+    }
+  } catch (error) {
+    console.error('⚠️ Error initializing vaults:', error);
+  }
+}
+
 // Initialize database and start server
 async function startServer() {
   try {
     // Initialize database
     await initDatabase();
+
+    // Initialize vaults
+    await initializeVaults();
 
     // Start order monitoring service (checks every 30 seconds)
     startOrderMonitoring(30000);
