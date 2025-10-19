@@ -10,6 +10,7 @@ import BondingCurveTrading from '@/components/BondingCurveTrading';
 import PriceChart from '@/components/PriceChart';
 import AgentAvatar from '@/components/AgentAvatar';
 import CodeEditor from '@/components/CodeEditor';
+import TechnicalIndicators from '@/components/TechnicalIndicators';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -39,7 +40,7 @@ export default function AgentDashboard() {
   const [depositing, setDepositing] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<'overview' | 'trade' | 'code'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'trade' | 'indicators' | 'code'>('overview');
 
   useEffect(() => {
     fetchAgentData();
@@ -214,6 +215,16 @@ export default function AgentDashboard() {
             💰 Trade
           </button>
           <button
+            onClick={() => setActiveTab('indicators')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'indicators'
+                ? 'text-blue-400 border-b-2 border-blue-400'
+                : 'text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            📈 Indicators
+          </button>
+          <button
             onClick={() => setActiveTab('code')}
             className={`px-6 py-3 font-semibold transition ${
               activeTab === 'code'
@@ -241,6 +252,15 @@ export default function AgentDashboard() {
           {/* Bonding Curve Trading */}
           <div className="mb-6 sm:mb-8">
             <BondingCurveTrading agentId={pubkey} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'indicators' && (
+        <>
+          {/* Technical Indicators */}
+          <div className="mb-6 sm:mb-8">
+            <TechnicalIndicators agentId={pubkey} />
           </div>
         </>
       )}

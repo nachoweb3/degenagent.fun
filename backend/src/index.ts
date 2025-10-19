@@ -16,6 +16,7 @@ import graduationRoutes from './routes/graduation';
 import strategyRoutes from './routes/strategy';
 import marketplaceRoutes from './routes/marketplace';
 import analyticsRoutes from './routes/analytics';
+import indicatorsRoutes from './routes/indicators';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { logger, requestLogger, errorLogger } from './utils/logger';
@@ -71,6 +72,7 @@ app.use('/api/graduation', graduationRoutes);
 app.use('/api/strategy', strategyRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/indicators', indicatorsRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
