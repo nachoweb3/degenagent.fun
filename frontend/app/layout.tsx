@@ -47,6 +47,9 @@ export default function RootLayout({
                   <a href="/vaults" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
                     💰 Vaults
                   </a>
+                  <a href="/copy-trading" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                    📋 Copy Trading
+                  </a>
                   <a href="/leaderboard" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
                     🏆 Leaderboard
                   </a>

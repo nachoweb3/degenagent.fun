@@ -9,6 +9,7 @@ import axios from 'axios';
 import BondingCurveTrading from '@/components/BondingCurveTrading';
 import PriceChart from '@/components/PriceChart';
 import AgentAvatar from '@/components/AgentAvatar';
+import CodeEditor from '@/components/CodeEditor';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -38,6 +39,7 @@ export default function AgentDashboard() {
   const [depositing, setDepositing] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<'overview' | 'trade' | 'code'>('overview');
 
   useEffect(() => {
     fetchAgentData();
@@ -188,15 +190,69 @@ export default function AgentDashboard() {
         <StatCard label="Win Rate" value="N/A" />
       </div>
 
-      {/* Price Chart */}
-      <div className="mb-6 sm:mb-8">
-        <PriceChart agentId={pubkey} />
+      {/* Tab Navigation */}
+      <div className="mb-6">
+        <div className="flex gap-2 border-b border-gray-700">
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'overview'
+                ? 'text-purple-400 border-b-2 border-purple-400'
+                : 'text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            📊 Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('trade')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'trade'
+                ? 'text-green-400 border-b-2 border-green-400'
+                : 'text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            💰 Trade
+          </button>
+          <button
+            onClick={() => setActiveTab('code')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'code'
+                ? 'text-pink-400 border-b-2 border-pink-400'
+                : 'text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            ⚡ Custom Code
+          </button>
+        </div>
       </div>
 
-      {/* Bonding Curve Trading */}
-      <div className="mb-6 sm:mb-8">
-        <BondingCurveTrading agentId={pubkey} />
-      </div>
+      {/* Tab Content */}
+      {activeTab === 'overview' && (
+        <>
+          {/* Price Chart */}
+          <div className="mb-6 sm:mb-8">
+            <PriceChart agentId={pubkey} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'trade' && (
+        <>
+          {/* Bonding Curve Trading */}
+          <div className="mb-6 sm:mb-8">
+            <BondingCurveTrading agentId={pubkey} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'code' && (
+        <>
+          {/* Code Editor */}
+          <div className="mb-6 sm:mb-8">
+            <CodeEditor agentId={pubkey} />
+          </div>
+        </>
+      )}
 
       {/* Actions - Mobile First */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
