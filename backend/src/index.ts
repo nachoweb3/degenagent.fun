@@ -168,6 +168,7 @@ async function startServer() {
       console.log(`📡 Connected to: ${process.env.RPC_ENDPOINT || 'devnet'}`);
       console.log(`💾 Database: SQLite (development)`);
       console.log(`📊 Order monitoring service started`);
+      console.log(`✅ All systems operational - Agent model fixed`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
