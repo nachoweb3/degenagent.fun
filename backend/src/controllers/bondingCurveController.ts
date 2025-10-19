@@ -267,6 +267,12 @@ export const confirmBuy = async (req: Request, res: Response) => {
       transactionSignature: signature,
     });
 
+    // Update candles after trade
+    const { updateCandlesAfterTrade } = require('../services/priceCandles');
+    updateCandlesAfterTrade(agentId).catch((err: any) => {
+      console.error('Error updating candles:', err);
+    });
+
     // Check if should graduate
     const stats = getBondingCurveStats(newTokensSold);
 

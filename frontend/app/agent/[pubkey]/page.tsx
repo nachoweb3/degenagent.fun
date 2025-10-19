@@ -7,6 +7,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import axios from 'axios';
 import BondingCurveTrading from '@/components/BondingCurveTrading';
+import PriceChart from '@/components/PriceChart';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -160,6 +161,11 @@ export default function AgentDashboard() {
         <StatCard label="Total Trades" value={agent.totalTrades} />
         <StatCard label="Total Volume" value={`$${agent.totalVolume}`} />
         <StatCard label="Win Rate" value="N/A" />
+      </div>
+
+      {/* Price Chart */}
+      <div className="mb-6 sm:mb-8">
+        <PriceChart agentId={pubkey} />
       </div>
 
       {/* Bonding Curve Trading */}
