@@ -141,11 +141,14 @@ npm run dev
 - Auto-compounding rewards
 - **Bonding curve token system (Pump.fun style)**
 - Token marketplace homepage
+- **Japanese candlestick charts with OHLCV data**
+- Buy/sell interface for bonding curve
+- Real-time price charts with multiple timeframes
 
 ### 🔄 In Progress
 - Production deployment (Render + Vercel)
-- Buy/sell interface for bonding curve
 - Agent marketplace features
+- Chart optimization and advanced indicators
 
 ### 📅 Next (Month 1-2)
 - Platform token ($AGENT) design
