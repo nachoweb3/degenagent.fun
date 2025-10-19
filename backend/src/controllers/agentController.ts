@@ -105,6 +105,14 @@ export async function createAgentHandler(req: Request, res: Response) {
     });
     console.log(`✅ Bonding curve initialized for agent: ${agent.id}`);
 
+    // Generate initial synthetic candles for all timeframes
+    const { generateSyntheticCandles } = require('../services/priceCandles');
+    const timeframes: Array<'1m' | '5m' | '15m' | '1h' | '4h' | '1d'> = ['1m', '5m', '15m', '1h', '4h', '1d'];
+    for (const timeframe of timeframes) {
+      await generateSyntheticCandles(agent.id, timeframe);
+    }
+    console.log(`✅ Initial candles generated for agent: ${agent.id}`);
+
     res.json({
       success: true,
       agentId: agent.id,

@@ -149,12 +149,33 @@ export default function AgentDashboard() {
           </span>
         </div>
         <p className="text-gray-400 text-sm sm:text-lg mb-4">{agent.purpose}</p>
+
+        {/* Token Contract Address - Prominent Display */}
+        <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/50 rounded-xl p-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex-1">
+              <div className="text-xs text-gray-400 mb-1">Token Contract Address (CA)</div>
+              <div className="flex items-center gap-2">
+                <code className="text-white font-mono text-sm bg-black/30 px-3 py-2 rounded flex-1 break-all">
+                  {agent.tokenMint}
+                </code>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(agent.tokenMint);
+                    alert('Token CA copied to clipboard!');
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap transition"
+                >
+                  📋 Copy CA
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs sm:text-sm">
           <div className="text-gray-500 break-all">
             Agent: <span className="text-gray-400 font-mono">{shortenAddress(agent.agentWallet)}</span>
-          </div>
-          <div className="text-gray-500 break-all">
-            Token: <span className="text-gray-400 font-mono">{shortenAddress(agent.tokenMint)}</span>
           </div>
         </div>
       </div>
