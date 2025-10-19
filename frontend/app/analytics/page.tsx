@@ -89,9 +89,9 @@ export default function AnalyticsPage() {
           ],
         },
         vaults: {
-          totalDeposits: vaults.reduce((sum, v) => sum + parseFloat(v.totalValueLocked || '0'), 0).toString(),
-          totalDepositors: vaults.reduce((sum, v) => sum + (v.totalDepositors || 0), 0),
-          averageAPY: vaults.reduce((sum, v) => sum + (v.currentAPY || 0), 0) / (vaults.length || 1),
+          totalDeposits: vaults.reduce((sum: number, v: any) => sum + parseFloat(v.totalValueLocked || '0'), 0).toString(),
+          totalDepositors: vaults.reduce((sum: number, v: any) => sum + (v.totalDepositors || 0), 0),
+          averageAPY: vaults.reduce((sum: number, v: any) => sum + (v.currentAPY || 0), 0) / (vaults.length || 1),
         },
         recent: {
           latestAgents: agents.slice(0, 5),
