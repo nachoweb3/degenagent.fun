@@ -15,8 +15,10 @@ import chartRoutes from './routes/chart';
 import graduationRoutes from './routes/graduation';
 import strategyRoutes from './routes/strategy';
 import marketplaceRoutes from './routes/marketplace';
+import analyticsRoutes from './routes/analytics';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
+import { logger, requestLogger, errorLogger } from './utils/logger';
 import { startOrderMonitoring } from './services/orderManager';
 import Vault from './models/Vault';
 
@@ -45,6 +47,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Request logging middleware
+app.use(requestLogger);
+
 // Solana connection
 export const connection = new Connection(
   process.env.RPC_ENDPOINT || 'https://api.devnet.solana.com',
@@ -65,6 +70,7 @@ app.use('/api/chart', chartRoutes);
 app.use('/api/graduation', graduationRoutes);
 app.use('/api/strategy', strategyRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
@@ -84,7 +90,8 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// Error handler
+// Error logging and handler
+app.use(errorLogger);
 app.use(errorHandler);
 
 // Initialize seed vaults if none exist
@@ -174,11 +181,22 @@ async function startServer() {
 
     // Start listening
     app.listen(PORT, () => {
+      logger.info('SYSTEM', '🚀 AGENT.FUN Backend running', { port: PORT });
+      logger.info('SYSTEM', '📡 Connected to Solana', { network: process.env.RPC_ENDPOINT || 'devnet' });
+      logger.info('SYSTEM', '💾 Database initialized');
+      logger.info('SYSTEM', '📊 Order monitoring service started');
+      logger.info('SYSTEM', '✅ All systems operational');
+
       console.log(`🚀 AGENT.FUN Backend running on port ${PORT}`);
       console.log(`📡 Connected to: ${process.env.RPC_ENDPOINT || 'devnet'}`);
       console.log(`💾 Database: SQLite (development)`);
       console.log(`📊 Order monitoring service started`);
-      console.log(`✅ All systems operational - Agent model fixed`);
+      console.log(`✅ All systems operational`);
+
+      // Schedule log cleanup (daily)
+      setInterval(() => {
+        logger.cleanupOldLogs();
+      }, 24 * 60 * 60 * 1000);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
