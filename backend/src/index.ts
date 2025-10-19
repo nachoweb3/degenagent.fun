@@ -13,6 +13,8 @@ import vaultsRoutes from './routes/vaults';
 import bondingCurveRoutes from './routes/bondingCurve';
 import chartRoutes from './routes/chart';
 import graduationRoutes from './routes/graduation';
+import strategyRoutes from './routes/strategy';
+import marketplaceRoutes from './routes/marketplace';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { startOrderMonitoring } from './services/orderManager';
@@ -61,6 +63,8 @@ app.use('/api/vaults', vaultsRoutes);
 app.use('/api/bonding-curve', bondingCurveRoutes);
 app.use('/api/chart', chartRoutes);
 app.use('/api/graduation', graduationRoutes);
+app.use('/api/strategy', strategyRoutes);
+app.use('/api/marketplace', marketplaceRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
