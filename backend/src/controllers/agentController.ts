@@ -102,6 +102,8 @@ export async function createAgentHandler(req: Request, res: Response) {
       tokenMint: result.tokenMint,
       transaction: result.transaction,
       tokenMintKeypair: result.tokenMintKeypair, // Send keypair to frontend
+      blockhash: result.blockhash,
+      lastValidBlockHeight: result.lastValidBlockHeight,
       message: 'Agent created successfully. Sign and send the transaction.'
     });
 

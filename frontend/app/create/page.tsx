@@ -77,7 +77,7 @@ export default function CreateAgent() {
 
       console.log('Response:', response.data);
 
-      const { transaction: txBase64, agentPubkey, tokenMintKeypair } = response.data;
+      const { transaction: txBase64, agentPubkey, tokenMintKeypair, blockhash, lastValidBlockHeight } = response.data;
 
       // Deserialize transaction
       const txBuffer = Buffer.from(txBase64, 'base64');
@@ -86,9 +86,7 @@ export default function CreateAgent() {
       // Recreate token mint keypair from response
       const tokenMint = Keypair.fromSecretKey(new Uint8Array(tokenMintKeypair.secretKey));
 
-      // Get fresh blockhash
-      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
-      transaction.recentBlockhash = blockhash;
+      // Use blockhash from backend (already set in transaction)
       transaction.feePayer = publicKey;
 
       // Sign with token mint keypair first
