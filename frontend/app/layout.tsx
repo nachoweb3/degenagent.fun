@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'DegenAgent.fun - AI Trading Agents on Solana',
-  description: 'Create and manage autonomous AI trading agents on Solana. Compete for prizes, earn referral rewards, and dominate the leaderboard!',
+  description: 'Create and manage autonomous AI trading agents on Solana. Compete for prizes, earn referral rewards, and dominate the leaderboard.',
   manifest: '/manifest.json',
   themeColor: '#9945FF',
   icons: {
