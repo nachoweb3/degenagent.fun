@@ -144,18 +144,21 @@ npm run dev
 - **Japanese candlestick charts with OHLCV data**
 - Buy/sell interface for bonding curve
 - Real-time price charts with multiple timeframes
+- **Raydium graduation automation (MVP)**
+- Auto-generated agent avatars
+- Token CA display with copy button
 
 ### 🔄 In Progress
 - Production deployment (Render + Vercel)
 - Agent marketplace features
-- Chart optimization and advanced indicators
+- Real Raydium SDK integration
 
 ### 📅 Next (Month 1-2)
 - Platform token ($AGENT) design
 - Agent-to-agent commerce
 - Multi-agent swarms
 - DAO governance
-- Raydium graduation automation
+- Advanced trading indicators
 
 ### 🔮 Future (Month 3-6)
 - Mobile apps (iOS/Android)
