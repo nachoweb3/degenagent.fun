@@ -44,6 +44,9 @@ export default function RootLayout({
                   <a href="/create" className="text-gray-300 hover:text-white transition-colors">
                     Create Agent
                   </a>
+                  <a href="/marketplace" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">
+                    🛒 Marketplace
+                  </a>
                   <a href="/vaults" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
                     💰 Vaults
                   </a>

@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import typescript from 'react-syntax-highlighter/dist/esm/languages/hljs/typescript';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 SyntaxHighlighter.registerLanguage('typescript', typescript);
+
+const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
 
 interface CodeEditorProps {
   agentId: string;
@@ -61,60 +64,116 @@ export default function CodeEditor({ agentId, initialCode, onSave }: CodeEditorP
   const [code, setCode] = useState(initialCode || DEFAULT_STRATEGY_TEMPLATE);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [testResult, setTestResult] = useState<string>('');
+  const [testing, setTesting] = useState(false);
+  const [backtesting, setBacktesting] = useState(false);
+  const [testResult, setTestResult] = useState<any>(null);
+  const [backtestResult, setBacktestResult] = useState<any>(null);
+
+  // Load existing strategy on mount
+  useEffect(() => {
+    loadStrategy();
+  }, [agentId]);
+
+  const loadStrategy = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_API}/strategy/${agentId}`);
+      if (response.data.success) {
+        setCode(response.data.strategy.code);
+      }
+    } catch (error) {
+      console.log('No existing strategy found, using template');
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Validate TypeScript syntax
-      const isValid = validateCode(code);
-      if (!isValid) {
-        alert('⚠️ Code has syntax errors. Please fix before saving.');
-        setSaving(false);
-        return;
-      }
-
       // Save to backend
-      if (onSave) {
-        await onSave(code);
-      }
+      const response = await axios.post(`${BACKEND_API}/strategy/save`, {
+        agentId,
+        name: 'Custom Strategy',
+        description: 'User-defined trading strategy',
+        code,
+      });
 
-      alert('✅ Strategy saved! Your agent will use this code on next trade.');
-      setIsEditing(false);
+      if (response.data.success) {
+        alert('✅ Strategy saved! Your agent will use this code on next trade.');
+        setIsEditing(false);
+
+        // Call optional callback
+        if (onSave) {
+          await onSave(code);
+        }
+      }
     } catch (error: any) {
-      alert('❌ Failed to save: ' + error.message);
+      const details = error.response?.data?.details || [];
+      const errorMsg = details.length > 0
+        ? `Validation errors:\n${details.join('\n')}`
+        : error.response?.data?.error || error.message;
+      alert('❌ Failed to save:\n' + errorMsg);
     } finally {
       setSaving(false);
     }
   };
 
-  const validateCode = (code: string): boolean => {
-    // Basic validation - check for required functions
-    const hasShouldbuy = code.includes('function shouldBuy');
-    const hasShouldSell = code.includes('function shouldSell');
-    const hasCalculatePositionSize = code.includes('function calculatePositionSize');
-
-    return hasShouldbuy && hasShouldSell && hasCalculatePositionSize;
-  };
-
-  const testStrategy = () => {
-    const mockMarket = {
-      price: 0.5,
-      volume24h: 150000,
-      priceChange24h: -7.5,
-      liquidity: 50000,
-    };
+  const testStrategy = async () => {
+    setTesting(true);
+    setTestResult(null);
 
     try {
-      // This is mock - in production would run in sandboxed environment
-      setTestResult(`🧪 Test Results:
-Market: $${mockMarket.price} | Vol: ${mockMarket.volume24h} | Change: ${mockMarket.priceChange24h}%
+      const response = await axios.post(`${BACKEND_API}/strategy/test`, {
+        code,
+        marketData: {
+          price: 0.5,
+          volume24h: 150000,
+          priceChange24h: -7.5,
+          liquidity: 50000,
+        },
+      });
 
-Your strategy would: EVALUATE ON SERVER SIDE
-
-Note: Actual execution runs in secure sandbox on backend.`);
+      if (response.data.success && !response.data.result.error) {
+        setTestResult({
+          success: true,
+          shouldBuy: response.data.result.shouldBuy,
+          shouldSell: response.data.result.shouldSell,
+          positionSize: response.data.result.positionSize,
+          market: response.data.result.market,
+        });
+      } else {
+        setTestResult({
+          success: false,
+          error: response.data.result.error || 'Unknown error',
+        });
+      }
     } catch (error: any) {
-      setTestResult(`❌ Error: ${error.message}`);
+      setTestResult({
+        success: false,
+        error: error.response?.data?.error || error.message,
+      });
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const runBacktest = async () => {
+    setBacktesting(true);
+    setBacktestResult(null);
+
+    try {
+      const response = await axios.post(`${BACKEND_API}/strategy/backtest`, {
+        agentId,
+        code,
+      });
+
+      if (response.data.success) {
+        setBacktestResult(response.data.results);
+      }
+    } catch (error: any) {
+      setBacktestResult({
+        error: error.response?.data?.error || error.message,
+      });
+    } finally {
+      setBacktesting(false);
     }
   };
 
@@ -197,9 +256,17 @@ Note: Actual execution runs in secure sandbox on backend.`);
             <div className="flex gap-3">
               <button
                 onClick={testStrategy}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition"
+                disabled={testing}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition disabled:opacity-50"
               >
-                🧪 Test Strategy
+                {testing ? '🔄 Testing...' : '🧪 Test Strategy'}
+              </button>
+              <button
+                onClick={runBacktest}
+                disabled={backtesting}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition disabled:opacity-50"
+              >
+                {backtesting ? '🔄 Backtesting...' : '📊 Backtest'}
               </button>
               <button
                 onClick={() => setCode(DEFAULT_STRATEGY_TEMPLATE)}
@@ -209,9 +276,99 @@ Note: Actual execution runs in secure sandbox on backend.`);
               </button>
             </div>
 
+            {/* Test Results */}
             {testResult && (
-              <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-                <pre className="text-sm text-gray-300 whitespace-pre-wrap">{testResult}</pre>
+              <div className={`rounded-lg p-4 border ${testResult.success ? 'bg-green-900/20 border-green-600/50' : 'bg-red-900/20 border-red-600/50'}`}>
+                {testResult.success ? (
+                  <div>
+                    <h4 className="font-bold text-green-400 mb-3">✅ Test Results</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Market Price:</span>
+                        <span className="text-white">${testResult.market.price}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Volume 24h:</span>
+                        <span className="text-white">{testResult.market.volume24h.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Price Change:</span>
+                        <span className={testResult.market.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}>
+                          {testResult.market.priceChange24h.toFixed(2)}%
+                        </span>
+                      </div>
+                      <div className="border-t border-gray-700 pt-2 mt-2">
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Should Buy:</span>
+                          <span className={testResult.shouldBuy ? 'text-green-400 font-bold' : 'text-gray-500'}>
+                            {testResult.shouldBuy ? 'YES ✓' : 'NO'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Should Sell:</span>
+                          <span className={testResult.shouldSell ? 'text-red-400 font-bold' : 'text-gray-500'}>
+                            {testResult.shouldSell ? 'YES ✓' : 'NO'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Position Size:</span>
+                          <span className="text-purple-400 font-bold">{testResult.positionSize.toFixed(4)} SOL</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <h4 className="font-bold text-red-400 mb-2">❌ Test Failed</h4>
+                    <p className="text-sm text-red-300">{testResult.error}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Backtest Results */}
+            {backtestResult && (
+              <div className={`rounded-lg p-4 border ${backtestResult.error ? 'bg-red-900/20 border-red-600/50' : 'bg-purple-900/20 border-purple-600/50'}`}>
+                {backtestResult.error ? (
+                  <div>
+                    <h4 className="font-bold text-red-400 mb-2">❌ Backtest Failed</h4>
+                    <p className="text-sm text-red-300">{backtestResult.error}</p>
+                  </div>
+                ) : (
+                  <div>
+                    <h4 className="font-bold text-purple-400 mb-3">📊 Backtest Results (100 periods)</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <div className="text-gray-400 mb-1">Total Trades</div>
+                        <div className="text-2xl font-bold text-white">{backtestResult.totalTrades}</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-400 mb-1">Win Rate</div>
+                        <div className="text-2xl font-bold text-green-400">{backtestResult.winRate.toFixed(1)}%</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-400 mb-1">Total Return</div>
+                        <div className={`text-2xl font-bold ${backtestResult.totalReturn >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {backtestResult.totalReturn >= 0 ? '+' : ''}{backtestResult.totalReturn.toFixed(2)}%
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-gray-400 mb-1">Wins</div>
+                        <div className="text-xl font-bold text-green-400">{backtestResult.wins}</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-400 mb-1">Losses</div>
+                        <div className="text-xl font-bold text-red-400">{backtestResult.losses}</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-400 mb-1">Avg Return/Trade</div>
+                        <div className={`text-xl font-bold ${backtestResult.avgReturn >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {backtestResult.avgReturn.toFixed(2)}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
