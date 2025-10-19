@@ -20,13 +20,14 @@ export async function generateReferralCode(req: Request, res: Response) {
 
     if (existing) {
       return res.json({
+        success: true,
         referralCode: existing.referralCode,
-        referralUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}?ref=${existing.referralCode}`,
+        referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}?ref=${existing.referralCode}`,
         stats: {
           totalReferrals: await Referral.count({ where: { referralCode: existing.referralCode } }),
-          rewardsClaimed: existing.rewardsClaimed,
-          agentsCreated: existing.agentsCreated,
-          totalVolume: existing.totalVolume,
+          rewardsClaimed: existing.rewardsClaimed || 0,
+          agentsCreated: existing.agentsCreated || 0,
+          totalVolume: existing.totalVolume || 0,
         }
       });
     }
@@ -42,8 +43,9 @@ export async function generateReferralCode(req: Request, res: Response) {
     });
 
     res.json({
+      success: true,
       referralCode: code,
-      referralUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}?ref=${code}`,
+      referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}?ref=${code}`,
       stats: {
         totalReferrals: 0,
         rewardsClaimed: 0,
@@ -146,10 +148,10 @@ export async function getReferralStats(req: Request, res: Response) {
 
     // Calculate stats
     const totalReferrals = referrals.length;
-    const activeReferrals = referrals.filter(r => r.agentsCreated > 0).length;
-    const rewardsClaimed = referrals.reduce((sum, r) => sum + r.rewardsClaimed, 0);
-    const agentsCreated = referrals.reduce((sum, r) => sum + r.agentsCreated, 0);
-    const totalVolume = referrals.reduce((sum, r) => sum + r.totalVolume, 0);
+    const activeReferrals = referrals.filter(r => (r.agentsCreated || 0) > 0).length;
+    const rewardsClaimed = referrals.reduce((sum, r) => sum + (r.rewardsClaimed || 0), 0);
+    const agentsCreated = referrals.reduce((sum, r) => sum + (r.agentsCreated || 0), 0);
+    const totalVolume = referrals.reduce((sum, r) => sum + (r.totalVolume || 0), 0);
 
     // Calculate pending rewards (10% of creation fees)
     // Assuming 0.5 SOL per agent creation
@@ -158,7 +160,7 @@ export async function getReferralStats(req: Request, res: Response) {
     res.json({
       hasCode: true,
       referralCode: userRef.referralCode,
-      referralUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}?ref=${userRef.referralCode}`,
+      referralUrl: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}?ref=${userRef.referralCode}`,
       stats: {
         totalReferrals,
         activeReferrals,
@@ -169,8 +171,8 @@ export async function getReferralStats(req: Request, res: Response) {
       },
       referrals: referrals.map(r => ({
         address: r.referredAddress.slice(0, 8) + '...',
-        agentsCreated: r.agentsCreated,
-        volume: r.totalVolume,
+        agentsCreated: r.agentsCreated || 0,
+        volume: r.totalVolume || 0,
         createdAt: r.createdAt,
       }))
     });
