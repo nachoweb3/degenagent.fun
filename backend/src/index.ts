@@ -99,7 +99,7 @@ async function initializeVaults() {
           lockPeriod: 0,
           autoCompound: true,
           riskLevel: 3,
-          status: 'active',
+          status: 'active' as const,
           totalDepositors: 0,
         },
         {
@@ -117,7 +117,7 @@ async function initializeVaults() {
           lockPeriod: 30,
           autoCompound: true,
           riskLevel: 5,
-          status: 'active',
+          status: 'active' as const,
           totalDepositors: 0,
         },
         {
@@ -135,7 +135,7 @@ async function initializeVaults() {
           lockPeriod: 90,
           autoCompound: true,
           riskLevel: 9,
-          status: 'active',
+          status: 'active' as const,
           totalDepositors: 0,
         },
       ];
