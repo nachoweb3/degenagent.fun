@@ -17,10 +17,12 @@ import strategyRoutes from './routes/strategy';
 import marketplaceRoutes from './routes/marketplace';
 import analyticsRoutes from './routes/analytics';
 import indicatorsRoutes from './routes/indicators';
+import performanceRoutes from './routes/performance';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { logger, requestLogger, errorLogger } from './utils/logger';
 import { startOrderMonitoring } from './services/orderManager';
+import { schedulePerformanceUpdates } from './services/performanceTracker';
 import Vault from './models/Vault';
 
 dotenv.config();
@@ -73,6 +75,7 @@ app.use('/api/strategy', strategyRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/indicators', indicatorsRoutes);
+app.use('/api/performance', performanceRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
@@ -181,18 +184,29 @@ async function startServer() {
     // Start order monitoring service (checks every 30 seconds)
     startOrderMonitoring(30000);
 
+    // Start performance tracking service (updates every 5 minutes)
+    setInterval(() => {
+      schedulePerformanceUpdates();
+    }, 5 * 60 * 1000);
+    // Run initial performance update after 30 seconds
+    setTimeout(() => {
+      schedulePerformanceUpdates();
+    }, 30000);
+
     // Start listening
     app.listen(PORT, () => {
       logger.info('SYSTEM', '🚀 AGENT.FUN Backend running', { port: PORT });
       logger.info('SYSTEM', '📡 Connected to Solana', { network: process.env.RPC_ENDPOINT || 'devnet' });
       logger.info('SYSTEM', '💾 Database initialized');
       logger.info('SYSTEM', '📊 Order monitoring service started');
+      logger.info('SYSTEM', '📈 Performance tracking service started');
       logger.info('SYSTEM', '✅ All systems operational');
 
       console.log(`🚀 AGENT.FUN Backend running on port ${PORT}`);
       console.log(`📡 Connected to: ${process.env.RPC_ENDPOINT || 'devnet'}`);
       console.log(`💾 Database: SQLite (development)`);
       console.log(`📊 Order monitoring service started`);
+      console.log(`📈 Performance tracking service started`);
       console.log(`✅ All systems operational`);
 
       // Schedule log cleanup (daily)
