@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
+import AgentAvatar from '@/components/AgentAvatar';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -208,7 +209,12 @@ export default function Home() {
                   className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-all cursor-pointer hover:shadow-xl hover:shadow-purple-500/20 transform hover:scale-105"
                 >
                   <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 p-4 border-b border-gray-700">
-                    <h3 className="text-lg sm:text-xl font-bold text-white truncate">{agent.name}</h3>
+                    <div className="flex items-center gap-3 mb-2">
+                      <AgentAvatar name={agent.name} size="md" />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg sm:text-xl font-bold text-white truncate">{agent.name}</h3>
+                      </div>
+                    </div>
                     <p className="text-gray-400 text-xs sm:text-sm truncate">{agent.purpose}</p>
                   </div>
 

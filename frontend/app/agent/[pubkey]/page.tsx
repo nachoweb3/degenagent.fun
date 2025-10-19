@@ -8,6 +8,7 @@ import { Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import axios from 'axios';
 import BondingCurveTrading from '@/components/BondingCurveTrading';
 import PriceChart from '@/components/PriceChart';
+import AgentAvatar from '@/components/AgentAvatar';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -135,7 +136,10 @@ export default function AgentDashboard() {
       {/* Header - Mobile Optimized */}
       <div className="mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
-          <h1 className="text-2xl sm:text-4xl font-bold">{agent.name}</h1>
+          <div className="flex items-center gap-4">
+            <AgentAvatar name={agent.name} size="xl" />
+            <h1 className="text-2xl sm:text-4xl font-bold">{agent.name}</h1>
+          </div>
           <span className={`px-4 py-2 rounded-full text-sm font-semibold w-fit ${
             agent.status === 'Active'
               ? 'bg-green-500/20 text-green-500 shadow-lg shadow-green-500/20'
