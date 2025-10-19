@@ -1,0 +1,47 @@
+===========================================
+COMANDOS PARA COPIAR Y PEGAR
+===========================================
+
+PASO 1: Deploy Backend
+-----------------------
+cd c:\Users\Usuario\Desktop\Agent.fun\backend
+railway login
+railway init
+railway up
+railway domain
+
+
+PASO 2: Copiar URL
+-------------------
+(Copia la URL que aparece, ejemplo: agent-fun-production.up.railway.app)
+
+
+PASO 3: Editar Frontend
+------------------------
+Abrir: c:\Users\Usuario\Desktop\Agent.fun\frontend\.env.production
+
+Cambiar NEXT_PUBLIC_BACKEND_API a:
+https://TU-URL-RAILWAY/api
+
+
+PASO 4: Redeploy Frontend
+--------------------------
+cd c:\Users\Usuario\Desktop\Agent.fun\frontend
+vercel --prod
+
+
+PASO 5: Verificar
+------------------
+cd c:\Users\Usuario\Desktop\Agent.fun
+node check-production.js
+
+
+PASO 6: Probar
+---------------
+Abrir: https://www.degenagent.fun/create
+Crear agente
+
+
+===========================================
+LISTO!
+===========================================

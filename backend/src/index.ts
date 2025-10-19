@@ -17,12 +17,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-const allowedOrigins = [
-  'https://degenagent.fun',
-  'https://www.degenagent.fun',
-  'http://localhost:3000',
-  'http://localhost:5173'
-];
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
+  .split(',')
+  .map(origin => origin.trim());
 
 app.use(cors({
   origin: (origin, callback) => {
