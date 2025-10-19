@@ -11,6 +11,7 @@ import PriceChart from '@/components/PriceChart';
 import AgentAvatar from '@/components/AgentAvatar';
 import CodeEditor from '@/components/CodeEditor';
 import TechnicalIndicators from '@/components/TechnicalIndicators';
+import PerformanceMetrics from '@/components/PerformanceMetrics';
 
 const BACKEND_API = process.env.NEXT_PUBLIC_BACKEND_API || 'http://localhost:3001/api';
 
@@ -40,7 +41,7 @@ export default function AgentDashboard() {
   const [depositing, setDepositing] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<'overview' | 'trade' | 'indicators' | 'code'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'trade' | 'indicators' | 'performance' | 'code'>('overview');
 
   useEffect(() => {
     fetchAgentData();
@@ -225,6 +226,16 @@ export default function AgentDashboard() {
             📈 Indicators
           </button>
           <button
+            onClick={() => setActiveTab('performance')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'performance'
+                ? 'text-yellow-400 border-b-2 border-yellow-400'
+                : 'text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            🏆 Performance
+          </button>
+          <button
             onClick={() => setActiveTab('code')}
             className={`px-6 py-3 font-semibold transition ${
               activeTab === 'code'
@@ -261,6 +272,15 @@ export default function AgentDashboard() {
           {/* Technical Indicators */}
           <div className="mb-6 sm:mb-8">
             <TechnicalIndicators agentId={pubkey} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'performance' && (
+        <>
+          {/* Performance Metrics */}
+          <div className="mb-6 sm:mb-8">
+            <PerformanceMetrics agentId={pubkey} />
           </div>
         </>
       )}
