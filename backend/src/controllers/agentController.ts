@@ -124,14 +124,44 @@ export async function getAgentHandler(req: Request, res: Response) {
       return res.status(400).json({ error: 'Agent pubkey required' });
     }
 
-    // Validate pubkey format
+    // Try to find agent in database first (by ID or wallet address)
+    const dbAgent = await Agent.findOne({
+      where: {
+        [require('sequelize').Op.or]: [
+          { id: pubkey },
+          { walletAddress: pubkey }
+        ]
+      }
+    });
+
+    if (dbAgent) {
+      // Return from database
+      return res.json({
+        id: dbAgent.id,
+        pubkey: dbAgent.walletAddress,
+        name: dbAgent.name,
+        purpose: dbAgent.purpose,
+        tokenMint: dbAgent.tokenMint,
+        agentWallet: dbAgent.walletAddress,
+        vaultBalance: parseFloat(dbAgent.balance) || 0,
+        totalTrades: dbAgent.totalTrades,
+        totalVolume: dbAgent.totalVolume,
+        totalProfit: dbAgent.totalProfit,
+        status: dbAgent.status === 'active' ? 'Active' : 'Paused',
+        riskLevel: dbAgent.riskLevel,
+        aiModel: dbAgent.aiModel,
+        recentTrades: []
+      });
+    }
+
+    // Fallback to on-chain lookup
     let agentPubkey: PublicKey;
     try {
       agentPubkey = new PublicKey(pubkey);
     } catch (error) {
-      return res.status(400).json({
-        error: 'Invalid public key format',
-        details: 'Please provide a valid Solana public key'
+      return res.status(404).json({
+        error: 'Agent not found',
+        details: 'No agent found with this ID or public key'
       });
     }
     const agentData = await getAgentState(agentPubkey);

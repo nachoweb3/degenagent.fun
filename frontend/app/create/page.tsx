@@ -77,7 +77,7 @@ export default function CreateAgent() {
 
       console.log('Response:', response.data);
 
-      const { transaction: txBase64, agentPubkey, tokenMintKeypair, blockhash, lastValidBlockHeight } = response.data;
+      const { transaction: txBase64, agentId, agentPubkey, tokenMintKeypair, blockhash, lastValidBlockHeight } = response.data;
 
       // Deserialize transaction
       const txBuffer = Buffer.from(txBase64, 'base64');
@@ -116,8 +116,8 @@ export default function CreateAgent() {
 
       console.log('Transaction confirmed!');
 
-      // Redirect to agent page
-      router.push(`/agent/${agentPubkey}`);
+      // Redirect to agent page using database ID
+      router.push(`/agent/${agentId}`);
 
     } catch (err: any) {
       console.error('Error creating agent:', err);
