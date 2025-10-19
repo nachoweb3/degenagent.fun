@@ -113,8 +113,8 @@ export async function createAgent(
   console.log('Vault PDA:', vault.toString());
   console.log('Token Mint:', tokenMint.publicKey.toString());
 
-  // Get latest blockhash
-  const { blockhash } = await connection.getLatestBlockhash();
+  // Get latest blockhash with finalized commitment
+  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
   transaction.recentBlockhash = blockhash;
   transaction.feePayer = creator;
 
@@ -135,7 +135,9 @@ export async function createAgent(
     tokenMint: tokenMint.publicKey.toString(),
     vault: vault.toString(),
     transaction: serialized,
-    tokenMintKeypair
+    tokenMintKeypair,
+    blockhash,
+    lastValidBlockHeight
   };
 }
 
