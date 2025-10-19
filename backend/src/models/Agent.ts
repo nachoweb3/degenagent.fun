@@ -32,31 +32,31 @@ interface AgentAttributes {
 interface AgentCreationAttributes extends Optional<AgentAttributes, 'id' | 'tokenMint' | 'totalTrades' | 'successfulTrades' | 'totalVolume' | 'totalRevenue' | 'totalProfit' | 'lastTradeAt' | 'createdAt' | 'updatedAt'> {}
 
 class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements AgentAttributes {
-  public id!: string;
-  public onchainId!: string;
-  public name!: string;
-  public purpose!: string;
-  public owner!: string;
-  public walletAddress!: string;
-  public encryptedPrivateKey!: string;
-  public tokenMint?: string;
-  public status!: 'active' | 'paused' | 'stopped';
-  public balance!: string;
-  public tradingEnabled!: boolean;
-  public aiModel!: string;
-  public riskLevel!: 'low' | 'medium' | 'high';
-  public riskTolerance!: number;
-  public tradingFrequency!: string;
-  public maxTradeSize!: number;
-  public useSubagents!: boolean;
-  public totalTrades!: number;
-  public successfulTrades!: number;
-  public totalVolume!: string;
-  public totalRevenue!: string;
-  public totalProfit!: string;
-  public lastTradeAt?: Date;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: string;
+  declare onchainId: string;
+  declare name: string;
+  declare purpose: string;
+  declare owner: string;
+  declare walletAddress: string;
+  declare encryptedPrivateKey: string;
+  declare tokenMint?: string;
+  declare status: 'active' | 'paused' | 'stopped';
+  declare balance: string;
+  declare tradingEnabled: boolean;
+  declare aiModel: string;
+  declare riskLevel: 'low' | 'medium' | 'high';
+  declare riskTolerance: number;
+  declare tradingFrequency: string;
+  declare maxTradeSize: number;
+  declare useSubagents: boolean;
+  declare totalTrades: number;
+  declare successfulTrades: number;
+  declare totalVolume: string;
+  declare totalRevenue: string;
+  declare totalProfit: string;
+  declare lastTradeAt?: Date;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Agent.init(
