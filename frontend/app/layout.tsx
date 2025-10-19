@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   description: 'Create and manage autonomous AI trading agents on Solana. Compete for prizes, earn referral rewards, and dominate the leaderboard!',
   manifest: '/manifest.json',
   themeColor: '#9945FF',
+  icons: {
+    icon: [
+      { url: '/logo.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: '/icon-192.png',
+  },
 };
 
 export default function RootLayout({
@@ -21,12 +29,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
       <body className={inter.className}>
         <WalletProviderWrapper>
           <nav className="border-b border-gray-800 bg-black/50 backdrop-blur-sm">
