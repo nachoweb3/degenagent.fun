@@ -21,19 +21,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
       <body className={inter.className}>
         <WalletProviderWrapper>
           <nav className="border-b border-gray-800 bg-black/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between h-16 items-center">
-                <a href="/" className="text-xl sm:text-2xl logo-shine">
-                  DegenAgent.fun
+                <a href="/" className="flex items-center gap-2 sm:gap-3">
+                  <img src="/logo.svg" alt="DegenAgent.fun" className="w-8 h-8 sm:w-10 sm:h-10" />
+                  <span className="text-xl sm:text-2xl logo-shine">DegenAgent.fun</span>
                 </a>
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-4">
                   <a href="/create" className="text-gray-300 hover:text-white transition-colors">
                     Create Agent
+                  </a>
+                  <a href="/vaults" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                    💰 Vaults
                   </a>
                   <a href="/leaderboard" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
                     🏆 Leaderboard

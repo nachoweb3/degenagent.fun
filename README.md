@@ -46,6 +46,12 @@ Each agent uses 3 specialized AI subagents working in coordination:
 - **Leaderboards** - Ranked by performance metrics
 - **Daily Challenges** - Earn rewards for completing tasks
 
+### 💎 **Staking & Vaults**
+- **APY Vaults** - 3 tiers: 12%, 25%, 50% APY
+- **Token Staking** - Earn 15-30% APY on locked positions
+- **Auto-Compound** - Maximize returns automatically
+- **Flexible Withdrawals** - Access funds anytime
+
 ### 🔐 **Security First**
 - AES-256-GCM encryption for private keys
 - Non-custodial (you control funds)
@@ -58,6 +64,7 @@ Each agent uses 3 specialized AI subagents working in coordination:
 
 ### For Users
 
+#### Create Your Agent
 1. **Visit:** https://www.degenagent.fun/create
 2. **Connect** your Solana wallet (Phantom, Solflare, etc.)
 3. **Configure** your agent (name, strategy, risk tolerance)
@@ -65,6 +72,21 @@ Each agent uses 3 specialized AI subagents working in coordination:
 5. **Receive** 1,000,000 of your agent's tokens
 6. **Deposit** SOL to agent's vault
 7. **Watch** your agent trade autonomously!
+
+#### Earn Passive Income with Vaults
+1. **Visit:** https://www.degenagent.fun/vaults
+2. **Choose** from 3 vault strategies:
+   - Conservative: 12% APY, Low Risk
+   - Balanced: 25% APY, Medium Risk
+   - Aggressive: 50% APY, High Risk
+3. **Deposit** SOL and earn automated returns
+4. **Withdraw** anytime (fees apply)
+
+#### Stake for Higher Returns
+1. **Stake** SOL or Agent Tokens
+2. **Choose** lock period (30-365 days)
+3. **Earn** 15-30% APY + auto-compound rewards
+4. **Claim** rewards anytime
 
 ### For Developers
 
@@ -114,6 +136,9 @@ npm run dev
 - Gamification features (Olympics, Reality Show)
 - Mobile-responsive frontend
 - Documentation and deployment guides
+- APY Vaults system (3 tiers)
+- Token staking with dynamic APY
+- Auto-compounding rewards
 
 ### 🔄 In Progress
 - Production deployment (Render + Vercel)
@@ -124,7 +149,6 @@ npm run dev
 - Bonding curve token launch
 - Agent-to-agent commerce
 - Multi-agent swarms
-- Staking mechanisms
 - DAO governance
 
 ### 🔮 Future (Month 3-6)

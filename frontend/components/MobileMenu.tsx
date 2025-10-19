@@ -11,11 +11,12 @@ export default function MobileMenu() {
   const menuItems = [
     { href: '/', label: 'Home' },
     { href: '/create', label: 'Create Agent' },
-    { href: '/explore', label: 'Explore' },
-    { href: '/olympics', label: '🏆 Olympics' },
+    { href: '/vaults', label: '💰 Vaults' },
+    { href: '/leaderboard', label: '🏆 Leaderboard' },
+    { href: '/challenges', label: '🎊 Challenges' },
+    { href: '/feed', label: '💬 Feed' },
+    { href: '/referrals', label: '🎁 Earn 10%' },
     { href: '/reality-show', label: '🔴 LIVE Show' },
-    { href: '/docs', label: 'Docs' },
-    { href: '/profile', label: 'Profile' },
   ];
 
   return (
