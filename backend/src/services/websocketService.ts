@@ -299,6 +299,13 @@ class WebSocketService {
     this.broadcast('activities', 'king_change', newKing);
   }
 
+  emitSubagentActivity(activity: any) {
+    this.broadcast('subagents', 'subagent_activity', activity);
+    if (activity.agentId) {
+      this.broadcast(`agent:${activity.agentId}`, 'subagent_activity', activity);
+    }
+  }
+
   emitOlympicsUpdate(data: any) {
     this.broadcast('olympics', 'olympics_update', data);
   }

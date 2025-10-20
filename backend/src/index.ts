@@ -20,6 +20,7 @@ import analyticsRoutes from './routes/analytics';
 import indicatorsRoutes from './routes/indicators';
 import performanceRoutes from './routes/performance';
 import kingOfTheHillRoutes from './routes/kingOfTheHill';
+import subagentRoutes from './routes/subagent';
 import { errorHandler } from './middleware/errorHandler';
 import { initDatabase } from './database';
 import { logger, requestLogger, errorLogger } from './utils/logger';
@@ -84,6 +85,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/indicators', indicatorsRoutes);
 app.use('/api/performance', performanceRoutes);
 app.use('/api/king-of-the-hill', kingOfTheHillRoutes);
+app.use('/api/subagent', subagentRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
