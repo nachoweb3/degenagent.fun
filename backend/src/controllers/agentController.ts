@@ -20,6 +20,7 @@ import {
 import Agent from '../models/Agent';
 import BondingCurve from '../models/BondingCurve';
 import crypto from 'crypto';
+import { createTokenForAgent, needsTokenCreation, getTokenCreationCost } from '../services/lazyTokenCreation';
 
 export async function createAgentHandler(req: Request, res: Response) {
   try {
@@ -33,7 +34,8 @@ export async function createAgentHandler(req: Request, res: Response) {
       maxTradeSize,
       website,
       telegram,
-      twitter
+      twitter,
+      lazyMode // NEW: if true, skip token creation (FREE agent creation!)
     } = req.body;
 
     // Validation
@@ -54,15 +56,34 @@ export async function createAgentHandler(req: Request, res: Response) {
 
     console.log(`Creating agent for creator: ${creatorWallet}`);
     console.log(`Generated agent wallet: ${agentWallet.publicKey.toString()}`);
+    console.log(`Lazy mode: ${lazyMode ? 'YES (FREE)' : 'NO (create token now)'}`);
 
-    // Create agent transaction
-    const result = await createAgent(
-      new PublicKey(creatorWallet),
-      name,
-      symbol,
-      purpose,
-      agentWallet.publicKey
-    );
+    let result: any;
+
+    // OPTIMIZATION: Lazy mode = FREE agent creation!
+    if (lazyMode) {
+      // Skip token creation, will be created on first deposit
+      result = {
+        agentPubkey: agentWallet.publicKey.toString(),
+        tokenMint: 'pending', // Will be created later
+        vault: 'pending',
+        transaction: null, // No transaction needed!
+        tokenMintKeypair: null,
+        blockhash: null,
+        lastValidBlockHeight: null
+      };
+      console.log('✅ FREE agent creation (lazy mode)');
+    } else {
+      // Create agent transaction with token mint (normal mode)
+      result = await createAgent(
+        new PublicKey(creatorWallet),
+        name,
+        symbol,
+        purpose,
+        agentWallet.publicKey
+      );
+      console.log('💰 Standard agent creation (~0.0025 SOL)');
+    }
 
     // Save agent private key securely
     await saveAgentKeypair(agentWallet.publicKey.toString(), agentWallet.secretKey);
@@ -311,6 +332,91 @@ export async function getTreasuryWallet(req: Request, res: Response) {
     console.error('Error getting treasury wallet:', error);
     res.status(500).json({
       error: 'Failed to get treasury wallet',
+      details: error.message
+    });
+  }
+}
+
+export async function createTokenHandler(req: Request, res: Response) {
+  try {
+    const { agentId } = req.params;
+    const { creatorWallet } = req.body;
+
+    if (!creatorWallet) {
+      return res.status(400).json({
+        error: 'Missing required field: creatorWallet'
+      });
+    }
+
+    // Find agent in database
+    const agent = await Agent.findByPk(agentId);
+
+    if (!agent) {
+      return res.status(404).json({
+        error: 'Agent not found'
+      });
+    }
+
+    // Check if agent already has a token
+    if (agent.tokenMint && agent.tokenMint !== 'pending') {
+      return res.status(400).json({
+        error: 'Agent already has a token mint',
+        tokenMint: agent.tokenMint
+      });
+    }
+
+    // Get symbol from agent name (or use default)
+    const symbol = agent.name.substring(0, 10).toUpperCase().replace(/\s/g, '');
+
+    // Create token
+    const result = await createTokenForAgent(
+      new PublicKey(creatorWallet),
+      agentId,
+      symbol
+    );
+
+    // Get cost estimate
+    const cost = await getTokenCreationCost();
+
+    console.log(`✅ Token created for agent ${agentId}: ${result.tokenMint}`);
+
+    res.json({
+      success: true,
+      agentId: agent.id,
+      tokenMint: result.tokenMint,
+      transaction: result.transaction,
+      tokenMintKeypair: result.tokenMintKeypair,
+      blockhash: result.blockhash,
+      lastValidBlockHeight: result.lastValidBlockHeight,
+      estimatedCost: cost,
+      message: `Token creation ready. Cost: ~${cost.toFixed(4)} SOL. Sign and send the transaction.`
+    });
+
+  } catch (error: any) {
+    console.error('Error creating token:', error);
+    res.status(500).json({
+      error: 'Failed to create token',
+      details: error.message
+    });
+  }
+}
+
+export async function getTokenCreationCostHandler(req: Request, res: Response) {
+  try {
+    const cost = await getTokenCreationCost();
+
+    res.json({
+      success: true,
+      cost,
+      costFormatted: `${cost.toFixed(4)} SOL`,
+      costUSD: `~$${(cost * 200).toFixed(2)} USD @ $200/SOL`,
+      message: 'Estimated cost for creating agent token'
+    });
+
+  } catch (error: any) {
+    console.error('Error getting token creation cost:', error);
+    res.status(500).json({
+      error: 'Failed to get token creation cost',
       details: error.message
     });
   }

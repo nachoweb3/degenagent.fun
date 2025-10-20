@@ -4,7 +4,9 @@ import {
   getAgentHandler,
   depositFundsHandler,
   getAllAgentsHandler,
-  getTreasuryWallet
+  getTreasuryWallet,
+  createTokenHandler,
+  getTokenCreationCostHandler
 } from '../controllers/agentController';
 import { rateLimitPresets } from '../middleware/rateLimiter';
 
@@ -16,7 +18,11 @@ router.post('/create', rateLimitPresets.agentCreation, createAgentHandler);
 // Read operations with loose rate limiting
 router.get('/all', rateLimitPresets.loose, getAllAgentsHandler);
 router.get('/treasury', rateLimitPresets.loose, getTreasuryWallet);
+router.get('/token-cost', rateLimitPresets.loose, getTokenCreationCostHandler);
 router.get('/:pubkey', rateLimitPresets.loose, getAgentHandler);
+
+// Token creation for lazy agents (moderate rate limiting)
+router.post('/:agentId/create-token', rateLimitPresets.moderate, createTokenHandler);
 
 // Deposit with moderate rate limiting
 router.post('/:pubkey/deposit', rateLimitPresets.moderate, depositFundsHandler);

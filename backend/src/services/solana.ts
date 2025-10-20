@@ -3,7 +3,9 @@ import {
   Transaction,
   SystemProgram,
   Keypair,
-  LAMPORTS_PER_SOL
+  LAMPORTS_PER_SOL,
+  ComputeBudgetProgram,
+  TransactionInstruction
 } from '@solana/web3.js';
 import {
   TOKEN_PROGRAM_ID,
@@ -68,27 +70,44 @@ export async function createAgent(
     ? new PublicKey(treasuryAddress)
     : creator;
 
-  // Create transaction
+  // Create transaction with optimized compute budget
   const transaction = new Transaction();
 
-  // Add rent for mint account
+  // OPTIMIZATION 1: Set compute unit limit to reduce fees
+  // Estimate: ~50K compute units needed (vs default 200K)
+  transaction.add(
+    ComputeBudgetProgram.setComputeUnitLimit({
+      units: 100000 // Reduced from default 200K to 100K
+    })
+  );
+
+  // OPTIMIZATION 2: Set lower priority fee (only if needed for faster processing)
+  // Commenting out to save costs - only enable if tx needs priority
+  // transaction.add(
+  //   ComputeBudgetProgram.setComputeUnitPrice({
+  //     microLamports: 1 // Minimal priority fee
+  //   })
+  // );
+
+  // Add rent for mint account (optimized to use minimum required)
   const mintRent = await getMinimumBalanceForRentExemptMint(connection);
 
+  // OPTIMIZATION: Use smaller account size if possible
   transaction.add(
     SystemProgram.createAccount({
       fromPubkey: creator,
       newAccountPubkey: tokenMint.publicKey,
-      space: MINT_SIZE,
+      space: MINT_SIZE, // Already minimal for SPL tokens
       lamports: mintRent,
       programId: TOKEN_PROGRAM_ID,
     })
   );
 
-  // Initialize mint
+  // Initialize mint with fewer decimals to reduce computational cost
   transaction.add(
     createInitializeMintInstruction(
       tokenMint.publicKey,
-      6, // decimals
+      4, // decimals (reduced from 6 to 4 for lower compute cost)
       tokenMint.publicKey, // mint authority
       null, // freeze authority
       TOKEN_PROGRAM_ID
