@@ -51,6 +51,9 @@ export default function RootLayout({
                   <a href="/vaults" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
                     💰 Vaults
                   </a>
+                  <a href="/subagents" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                    🤖 Subagents
+                  </a>
                   <a href="/leaderboard" className="text-gray-300 hover:text-white transition-colors font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
                     🏆 Leaderboard
                   </a>

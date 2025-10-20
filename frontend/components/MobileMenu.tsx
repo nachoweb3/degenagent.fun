@@ -18,6 +18,7 @@ export default function MobileMenu() {
     { href: '/explore', label: '🔍 Explore' },
     { href: '/marketplace', label: '🛒 Marketplace' },
     { href: '/vaults', label: '💰 Vaults' },
+    { href: '/subagents', label: '🤖 Subagents' },
     { href: '/leaderboard', label: '🏆 Leaderboard' },
     { href: '/create', label: '➕ Create Agent', highlight: true },
   ];
