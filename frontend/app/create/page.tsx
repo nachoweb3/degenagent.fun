@@ -35,6 +35,7 @@ export default function CreateAgent() {
     website: '',
     telegram: '',
     twitter: '',
+    lazyMode: true, // NEW: default to FREE mode!
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -79,12 +80,22 @@ export default function CreateAgent() {
         website: formData.website || undefined,
         telegram: formData.telegram || undefined,
         twitter: formData.twitter || undefined,
+        lazyMode: formData.lazyMode, // NEW: send lazy mode flag
       });
 
       console.log('Response:', response.data);
 
       const { transaction: txBase64, agentId, agentPubkey, tokenMintKeypair, blockhash, lastValidBlockHeight } = response.data;
 
+      // If lazy mode, no transaction needed - redirect immediately!
+      if (formData.lazyMode) {
+        console.log('✅ FREE agent created (lazy mode)! No transaction needed.');
+        // Redirect to agent page using database ID
+        router.push(`/agent/${agentId}`);
+        return;
+      }
+
+      // Standard mode: process transaction
       // Deserialize transaction
       const txBuffer = Buffer.from(txBase64, 'base64');
       const transaction = Transaction.from(txBuffer);
@@ -542,6 +553,133 @@ export default function CreateAgent() {
               </div>
             </div>
 
+            {/* Creation Mode Selector */}
+            <div className="border-t border-gray-700 pt-5 sm:pt-6">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                💰 Creation Mode
+                <Tooltip text="Choose between FREE instant creation (pay later when you add funds) or standard creation with token ready immediately">
+                  <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                </Tooltip>
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* FREE Mode (Lazy) */}
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, lazyMode: true })}
+                  className={`relative p-5 rounded-xl border-2 transition-all text-left ${
+                    formData.lazyMode
+                      ? 'border-green-500 bg-green-500/10 shadow-lg shadow-green-500/20'
+                      : 'border-gray-700 bg-gray-800/50 hover:border-green-500/50'
+                  }`}
+                >
+                  {formData.lazyMode && (
+                    <div className="absolute top-2 right-2">
+                      <svg className="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-3xl">🎁</span>
+                    <div>
+                      <h4 className="font-bold text-lg text-green-400">FREE Mode</h4>
+                      <p className="text-xs text-gray-400">Recommended for new users</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-green-400">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-bold">0 SOL upfront</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>Instant creation</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>Pay only when funding</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-3 pt-3 border-t border-gray-700">
+                    Token created when you first deposit funds (~0.0025 SOL / $0.50)
+                  </p>
+                </button>
+
+                {/* Standard Mode */}
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, lazyMode: false })}
+                  className={`relative p-5 rounded-xl border-2 transition-all text-left ${
+                    !formData.lazyMode
+                      ? 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/20'
+                      : 'border-gray-700 bg-gray-800/50 hover:border-purple-500/50'
+                  }`}
+                >
+                  {!formData.lazyMode && (
+                    <div className="absolute top-2 right-2">
+                      <svg className="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-3xl">⚡</span>
+                    <div>
+                      <h4 className="font-bold text-lg text-purple-400">Standard Mode</h4>
+                      <p className="text-xs text-gray-400">Token ready immediately</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-purple-400">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-bold">~0.0025 SOL (~$0.50)</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>Token created now</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>More professional</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-3 pt-3 border-t border-gray-700">
+                    29% cheaper than original cost (was 0.0035 SOL / $0.70)
+                  </p>
+                </button>
+              </div>
+
+              {/* Cost Savings Info */}
+              <div className="mt-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-lg p-4">
+                <div className="flex gap-3">
+                  <div className="text-2xl">💡</div>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-green-400 mb-1">Cost Optimized!</p>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      {formData.lazyMode ? (
+                        <>Create your agent <span className="text-green-400 font-bold">completely FREE</span> now. Only pay (~$0.50) when you're ready to add funds and start trading!</>
+                      ) : (
+                        <>Standard mode costs only <span className="text-purple-400 font-bold">$0.50</span> (29% cheaper than before!) and your token is ready immediately.</>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Error */}
             {error && (
               <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-xl text-sm sm:text-base animate-shake">
@@ -553,7 +691,11 @@ export default function CreateAgent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-solana-purple hover:bg-purple-700 active:scale-95 disabled:bg-gray-700 disabled:cursor-not-allowed disabled:transform-none text-white font-bold py-4 sm:py-5 px-8 rounded-xl text-base sm:text-lg transition-all shadow-lg hover:shadow-xl touch-manipulation min-h-[56px]"
+              className={`w-full ${
+                formData.lazyMode
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
+                  : 'bg-solana-purple hover:bg-purple-700'
+              } active:scale-95 disabled:bg-gray-700 disabled:cursor-not-allowed disabled:transform-none text-white font-bold py-4 sm:py-5 px-8 rounded-xl text-base sm:text-lg transition-all shadow-lg hover:shadow-xl touch-manipulation min-h-[56px]`}
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -563,14 +705,23 @@ export default function CreateAgent() {
                   </svg>
                   Creating Agent...
                 </span>
+              ) : formData.lazyMode ? (
+                <span className="flex items-center justify-center gap-2">
+                  🎁 Create Agent FREE (Pay Later)
+                </span>
               ) : (
-                'Launch Agent (0.1 SOL)'
+                <span className="flex items-center justify-center gap-2">
+                  ⚡ Launch Agent (~0.0025 SOL)
+                </span>
               )}
             </button>
 
             <p className="text-xs sm:text-sm text-gray-500 text-center px-2">
-              By creating an agent, you agree to pay the 0.1 SOL creation fee.
-              You will receive 1,000,000 tokens of your agent.
+              {formData.lazyMode ? (
+                <>No upfront cost! Token will be created when you first deposit funds (~$0.50). You'll receive 1,000,000 tokens.</>
+              ) : (
+                <>You'll pay ~0.0025 SOL (~$0.50) now and receive 1,000,000 tokens immediately.</>
+              )}
             </p>
           </div>
         </form>
