@@ -534,6 +534,7 @@ function AgentCard({ agent }: { agent: AgentWithImage }) {
             </svg>
           </span>
         </div>
+        </div>
       </div>
     </Link>
   );
