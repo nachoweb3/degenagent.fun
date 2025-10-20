@@ -30,7 +30,10 @@ export async function createAgentHandler(req: Request, res: Response) {
       creatorWallet,
       riskTolerance,
       tradingFrequency,
-      maxTradeSize
+      maxTradeSize,
+      website,
+      telegram,
+      twitter
     } = req.body;
 
     // Validation
@@ -80,7 +83,7 @@ export async function createAgentHandler(req: Request, res: Response) {
       balance: '0',
       tradingEnabled: true,
       aiModel: 'gemini-pro',
-      riskLevel: riskTolerance === 1 || riskTolerance === 2 || riskTolerance === 3 ? 'low' : 
+      riskLevel: riskTolerance === 1 || riskTolerance === 2 || riskTolerance === 3 ? 'low' :
                  riskTolerance >= 8 ? 'high' : 'medium',
       riskTolerance: riskTolerance || 5,
       tradingFrequency: tradingFrequency || 'medium',
@@ -90,7 +93,10 @@ export async function createAgentHandler(req: Request, res: Response) {
       successfulTrades: 0,
       totalVolume: '0',
       totalRevenue: '0',
-      totalProfit: '0'
+      totalProfit: '0',
+      website: website || undefined,
+      telegram: telegram || undefined,
+      twitter: twitter || undefined
     });
 
     console.log(`✅ Agent saved to database: ${agent.id}`);

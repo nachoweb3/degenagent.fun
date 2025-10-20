@@ -32,6 +32,9 @@ export default function CreateAgent() {
     tradingFrequency: 'medium',
     maxTradeSize: 10,
     colorTheme: 0,
+    website: '',
+    telegram: '',
+    twitter: '',
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -73,6 +76,9 @@ export default function CreateAgent() {
         tradingFrequency: formData.tradingFrequency,
         maxTradeSize: formData.maxTradeSize,
         imageData: imagePreview, // Send base64 image
+        website: formData.website || undefined,
+        telegram: formData.telegram || undefined,
+        twitter: formData.twitter || undefined,
       });
 
       console.log('Response:', response.data);
@@ -341,6 +347,65 @@ export default function CreateAgent() {
                 onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
               />
               <p className="text-xs sm:text-sm text-gray-500 mt-1">{formData.purpose.length}/200 characters</p>
+            </div>
+
+            {/* Social Links (Optional) */}
+            <div className="border-t border-gray-700 pt-5 sm:pt-6">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                Social Links
+                <span className="text-xs text-gray-500 font-normal">(Optional)</span>
+              </h3>
+
+              {/* Website */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                  🌐 Website
+                  <Tooltip text="Your agent's official website or landing page">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://youragent.com"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-solana-purple focus:ring-2 focus:ring-solana-purple/20 transition-all text-base"
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                />
+              </div>
+
+              {/* Telegram */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                  📱 Telegram
+                  <Tooltip text="Telegram group/channel username (with or without @)">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
+                </label>
+                <input
+                  type="text"
+                  placeholder="@youragent or t.me/youragent"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-solana-purple focus:ring-2 focus:ring-solana-purple/20 transition-all text-base"
+                  value={formData.telegram}
+                  onChange={(e) => setFormData({ ...formData, telegram: e.target.value })}
+                />
+              </div>
+
+              {/* Twitter/X */}
+              <div>
+                <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                  𝕏 Twitter/X
+                  <Tooltip text="Twitter/X username (with or without @)">
+                    <span className="text-gray-500 text-sm cursor-help">ⓘ</span>
+                  </Tooltip>
+                </label>
+                <input
+                  type="text"
+                  placeholder="@youragent or x.com/youragent"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-solana-purple focus:ring-2 focus:ring-solana-purple/20 transition-all text-base"
+                  value={formData.twitter}
+                  onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+                />
+              </div>
             </div>
 
             {/* Advanced Options */}

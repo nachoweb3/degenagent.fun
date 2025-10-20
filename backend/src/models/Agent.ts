@@ -25,11 +25,15 @@ interface AgentAttributes {
   totalRevenue: string;
   totalProfit: string;
   lastTradeAt?: Date;
+  // Social links
+  website?: string;
+  telegram?: string;
+  twitter?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-interface AgentCreationAttributes extends Optional<AgentAttributes, 'id' | 'tokenMint' | 'totalTrades' | 'successfulTrades' | 'totalVolume' | 'totalRevenue' | 'totalProfit' | 'lastTradeAt' | 'createdAt' | 'updatedAt'> {}
+interface AgentCreationAttributes extends Optional<AgentAttributes, 'id' | 'tokenMint' | 'totalTrades' | 'successfulTrades' | 'totalVolume' | 'totalRevenue' | 'totalProfit' | 'lastTradeAt' | 'website' | 'telegram' | 'twitter' | 'createdAt' | 'updatedAt'> {}
 
 class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements AgentAttributes {
   declare id: string;
@@ -55,6 +59,9 @@ class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements A
   declare totalRevenue: string;
   declare totalProfit: string;
   declare lastTradeAt?: Date;
+  declare website?: string;
+  declare telegram?: string;
+  declare twitter?: string;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 }
@@ -182,6 +189,21 @@ Agent.init(
     lastTradeAt: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    website: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: 'Agent website URL',
+    },
+    telegram: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: 'Telegram handle or URL',
+    },
+    twitter: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: 'Twitter/X handle or URL',
     },
     createdAt: {
       type: DataTypes.DATE,
