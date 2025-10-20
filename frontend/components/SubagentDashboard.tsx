@@ -30,7 +30,8 @@ export default function SubagentDashboard({ agentId }: { agentId?: string }) {
   const [stats, setStats] = useState<SubagentStats | null>(null);
   const [currentPhase, setCurrentPhase] = useState<string>('idle');
 
-  const { lastMessage, isConnected } = useWebSocket();
+  const channels = agentId ? [`agent:${agentId}`, 'subagents'] : ['subagents'];
+  const { isConnected, subscribe } = useWebSocket({ channels });
 
   // Fetch stats on mount
   useEffect(() => {
@@ -55,21 +56,28 @@ export default function SubagentDashboard({ agentId }: { agentId?: string }) {
 
   // Handle WebSocket messages
   useEffect(() => {
-    if (lastMessage?.type === 'subagent_activity') {
-      const activity = lastMessage.data as SubagentActivity;
+    const handleSubagentActivity = (message: any) => {
+      if (message.type === 'subagent_activity') {
+        const activity = message.data as SubagentActivity;
 
-      // Filter by agentId if specified
-      if (!agentId || activity.agentId === agentId) {
-        setActivities(prev => [...prev.slice(-9), activity]); // Keep last 10
-        setCurrentPhase(activity.phase);
+        // Filter by agentId if specified
+        if (!agentId || activity.agentId === agentId) {
+          setActivities(prev => [...prev.slice(-9), activity]); // Keep last 10
+          setCurrentPhase(activity.phase);
 
-        // Refresh stats when cycle completes
-        if (activity.phase === 'complete') {
-          setTimeout(fetchStats, 1000);
+          // Refresh stats when cycle completes
+          if (activity.phase === 'complete') {
+            setTimeout(fetchStats, 1000);
+          }
         }
       }
-    }
-  }, [lastMessage, agentId]);
+    };
+
+    // Subscribe to each channel
+    channels.forEach(channel => {
+      subscribe(channel, handleSubagentActivity);
+    });
+  }, [agentId, subscribe]);
 
   const getPhaseIcon = (phase: string) => {
     switch (phase) {
