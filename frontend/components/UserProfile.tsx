@@ -29,7 +29,7 @@ export default function UserProfile() {
   const shortAddress = `${publicKey.toString().slice(0, 4)}...${publicKey.toString().slice(-4)}`;
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative z-50" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-700"
@@ -49,7 +49,7 @@ export default function UserProfile() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-gray-900 rounded-lg shadow-xl border border-gray-800 overflow-hidden z-50">
+        <div className="absolute right-0 mt-2 w-64 bg-gray-900 rounded-lg shadow-xl border border-gray-800 overflow-hidden z-[9999]">
           {/* Profile Header */}
           <div className="px-4 py-3 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-b border-gray-800">
             <div className="flex items-center gap-3">
