@@ -1,0 +1,71 @@
+headersOrigin = "inline"
+redirectsOrigin = "inline"
+
+[functions]
+
+[functions."*"]
+
+[[plugins]]
+origin = "config"
+package = "@netlify/plugin-nextjs"
+
+[plugins.inputs]
+
+[build]
+publish = "C:\\Users\\Usuario\\Desktop\\Agent.fun\\frontend\\.next"
+publishOrigin = "config"
+commandOrigin = "config"
+base = "C:\\Users\\Usuario\\Desktop\\Agent.fun\\frontend"
+command = "npm run build"
+
+[build.environment]
+NEXT_PUBLIC_BACKEND_API = "https://degenagent-backend.onrender.com/api"
+NEXT_PUBLIC_RPC_ENDPOINT = "https://mainnet.helius-rpc.com/?api-key=0609d375-ac29-4da3-be17-5ab640679dd8"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[headers]]
+for = "/_next/static/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[redirects]]
+from = "/_next/image"
+to = "/.netlify/images?url=:url&w=:width&q=:quality"
+status = 200.0
+force = false
+
+[redirects.query]
+url = ":url"
+w = ":width"
+q = ":quality"
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/_ipx/*"
+to = "/.netlify/images?url=:url&w=:width&q=:quality"
+status = 200.0
+force = false
+
+[redirects.query]
+url = ":url"
+w = ":width"
+q = ":quality"
+
+[redirects.conditions]
+
+[redirects.headers]
