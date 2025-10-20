@@ -11,6 +11,12 @@ export default function UserProfile() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Debug logging
+  useEffect(() => {
+    console.log('[UserProfile DEBUG] publicKey:', publicKey?.toString());
+    console.log('[UserProfile DEBUG] isOpen:', isOpen);
+  }, [publicKey, isOpen]);
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -31,7 +37,10 @@ export default function UserProfile() {
   return (
     <div className="relative z-50" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          console.log('[UserProfile DEBUG] Button clicked! Current isOpen:', isOpen);
+          setIsOpen(!isOpen);
+        }}
         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-700"
       >
         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold">

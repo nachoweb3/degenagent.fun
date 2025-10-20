@@ -26,16 +26,36 @@ interface BondingCurveStats {
   totalValueLocked: number;
 }
 
+interface Particle {
+  left: string;
+  top: string;
+  animationDelay: string;
+  animationDuration: string;
+}
+
 export default function Home() {
   const router = useRouter();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [bondingCurves, setBondingCurves] = useState<Record<string, BondingCurveStats>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'trending' | 'new' | 'graduating'>('trending');
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     fetchAgents();
   }, [filter]);
+
+  // Generate particles only on client to avoid hydration mismatch
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 20 }, () => ({
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 5}s`,
+        animationDuration: `${10 + Math.random() * 20}s`
+      }))
+    );
+  }, []);
 
   const fetchAgents = async () => {
     try {
@@ -102,15 +122,15 @@ export default function Home() {
 
         {/* Floating Particles */}
         <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
+          {particles.map((particle, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-purple-400 rounded-full animate-float"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${10 + Math.random() * 20}s`
+                left: particle.left,
+                top: particle.top,
+                animationDelay: particle.animationDelay,
+                animationDuration: particle.animationDuration
               }}
             ></div>
           ))}
