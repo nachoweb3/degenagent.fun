@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -9,7 +9,16 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 export default function MobileMenu() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { publicKey, disconnect } = useWallet();
+  const { publicKey, disconnect, connected, wallet } = useWallet();
+
+  // Debug logging
+  useEffect(() => {
+    console.log('[MobileMenu] Wallet state:', {
+      connected,
+      hasPublicKey: !!publicKey,
+      walletName: wallet?.adapter?.name
+    });
+  }, [connected, publicKey, wallet]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 

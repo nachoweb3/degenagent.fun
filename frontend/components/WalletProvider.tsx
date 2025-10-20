@@ -23,34 +23,49 @@ interface WalletProviderWrapperProps {
 export const WalletProviderWrapper: FC<WalletProviderWrapperProps> = ({
   children,
 }) => {
-  // Use production network
-  const network = (process.env.NEXT_PUBLIC_NETWORK === 'mainnet-beta')
-    ? WalletAdapterNetwork.Mainnet
-    : WalletAdapterNetwork.Devnet;
+  // Use production network - FIXED: Always use mainnet-beta
+  const network = WalletAdapterNetwork.Mainnet;
 
-  const endpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || clusterApiUrl(network);
+  // RPC endpoint with fallback
+  const endpoint = useMemo(() => {
+    const rpcUrl = process.env.NEXT_PUBLIC_RPC_ENDPOINT;
+    console.log('[WalletProvider] Using RPC:', rpcUrl ? 'Custom Helius' : 'Default cluster');
+    return rpcUrl || clusterApiUrl(network);
+  }, [network]);
 
   // Wallet configuration with mobile support
   const wallets = useMemo(
-    () => [
-      // Popular desktop & mobile wallets
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
-      new CoinbaseWalletAdapter(),
-      new TrustWalletAdapter(),
-      new TorusWalletAdapter(),
+    () => {
+      console.log('[WalletProvider] Initializing wallet adapters...');
+      return [
+        // Popular desktop & mobile wallets
+        new PhantomWalletAdapter(),
+        new SolflareWalletAdapter(),
+        new CoinbaseWalletAdapter(),
+        new TrustWalletAdapter(),
+        new TorusWalletAdapter(),
 
-      // Note: Solana Mobile Wallet Adapter automatically detects
-      // and works with Solana Saga / Seeker phones via dApp browser
-      // Backpack wallet is also auto-detected on mobile
-      // No additional adapters needed - they're built into the phone
-    ],
-    [network]
+        // Note: Solana Mobile Wallet Adapter automatically detects
+        // and works with Solana Saga / Seeker phones via dApp browser
+        // Backpack wallet is also auto-detected on mobile
+        // No additional adapters needed - they're built into the phone
+      ];
+    },
+    []
   );
+
+  const onError = useMemo(
+    () => (error: any) => {
+      console.error('[WalletProvider] Error:', error);
+    },
+    []
+  );
+
+  console.log('[WalletProvider] Rendering with', wallets.length, 'wallet adapters');
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
+      <WalletProvider wallets={wallets} autoConnect onError={onError}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
