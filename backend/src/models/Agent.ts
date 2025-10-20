@@ -5,6 +5,8 @@ interface AgentAttributes {
   id: string;
   onchainId: string; // References blockchain registry
   name: string;
+  symbol?: string; // Token symbol
+  imageUrl?: string; // Agent image
   purpose: string;
   owner: string; // Solana public key
   walletAddress: string; // Generated wallet for trading
@@ -33,12 +35,14 @@ interface AgentAttributes {
   updatedAt: Date;
 }
 
-interface AgentCreationAttributes extends Optional<AgentAttributes, 'id' | 'tokenMint' | 'totalTrades' | 'successfulTrades' | 'totalVolume' | 'totalRevenue' | 'totalProfit' | 'lastTradeAt' | 'website' | 'telegram' | 'twitter' | 'createdAt' | 'updatedAt'> {}
+interface AgentCreationAttributes extends Optional<AgentAttributes, 'id' | 'symbol' | 'imageUrl' | 'tokenMint' | 'totalTrades' | 'successfulTrades' | 'totalVolume' | 'totalRevenue' | 'totalProfit' | 'lastTradeAt' | 'website' | 'telegram' | 'twitter' | 'createdAt' | 'updatedAt'> {}
 
 class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements AgentAttributes {
   declare id: string;
   declare onchainId: string;
   declare name: string;
+  declare symbol?: string;
+  declare imageUrl?: string;
   declare purpose: string;
   declare owner: string;
   declare walletAddress: string;
@@ -82,6 +86,16 @@ Agent.init(
     name: {
       type: DataTypes.STRING(64),
       allowNull: false,
+    },
+    symbol: {
+      type: DataTypes.STRING(10),
+      allowNull: true,
+      comment: 'Token symbol',
+    },
+    imageUrl: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      comment: 'Agent image (base64 or URL)',
     },
     purpose: {
       type: DataTypes.TEXT,

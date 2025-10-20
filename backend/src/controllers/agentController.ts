@@ -32,6 +32,7 @@ export async function createAgentHandler(req: Request, res: Response) {
       riskTolerance,
       tradingFrequency,
       maxTradeSize,
+      imageData, // NEW: base64 image from frontend
       website,
       telegram,
       twitter,
@@ -95,6 +96,8 @@ export async function createAgentHandler(req: Request, res: Response) {
     const agent = await Agent.create({
       onchainId,
       name,
+      symbol: symbol || undefined, // NEW: save symbol
+      imageUrl: imageData || undefined, // NEW: save image
       purpose,
       owner: creatorWallet,
       walletAddress: agentWallet.publicKey.toString(),
@@ -197,6 +200,8 @@ export async function getAgentHandler(req: Request, res: Response) {
         id: dbAgent.id,
         pubkey: dbAgent.walletAddress,
         name: dbAgent.name,
+        symbol: dbAgent.symbol, // NEW: include symbol
+        imageUrl: dbAgent.imageUrl, // NEW: include image
         purpose: dbAgent.purpose,
         tokenMint: dbAgent.tokenMint,
         agentWallet: dbAgent.walletAddress,
@@ -207,6 +212,12 @@ export async function getAgentHandler(req: Request, res: Response) {
         status: dbAgent.status === 'active' ? 'Active' : 'Paused',
         riskLevel: dbAgent.riskLevel,
         aiModel: dbAgent.aiModel,
+        website: dbAgent.website, // NEW: include socials
+        telegram: dbAgent.telegram,
+        twitter: dbAgent.twitter,
+        riskTolerance: dbAgent.riskTolerance,
+        tradingFrequency: dbAgent.tradingFrequency,
+        maxTradeSize: dbAgent.maxTradeSize,
         recentTrades: []
       });
     }
