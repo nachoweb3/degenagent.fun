@@ -7,19 +7,9 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 export default function UserProfile() {
   const router = useRouter();
-  const { publicKey, disconnect, connected, connecting, wallet } = useWallet();
+  const { publicKey, disconnect } = useWallet();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Debug logging
-  useEffect(() => {
-    console.log('[UserProfile] Wallet state:', {
-      connected,
-      connecting,
-      hasPublicKey: !!publicKey,
-      walletName: wallet?.adapter?.name
-    });
-  }, [connected, connecting, publicKey, wallet]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -31,8 +21,6 @@ export default function UserProfile() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  console.log('[UserProfile] Rendering - publicKey:', publicKey?.toString().slice(0, 8));
 
   if (!publicKey) {
     return <WalletMultiButton className="!bg-gradient-to-r !from-purple-600 !to-pink-600 hover:!from-purple-700 hover:!to-pink-700" />;

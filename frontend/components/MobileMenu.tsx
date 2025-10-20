@@ -9,16 +9,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 export default function MobileMenu() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { publicKey, disconnect, connected, wallet } = useWallet();
-
-  // Debug logging
-  useEffect(() => {
-    console.log('[MobileMenu] Wallet state:', {
-      connected,
-      hasPublicKey: !!publicKey,
-      walletName: wallet?.adapter?.name
-    });
-  }, [connected, publicKey, wallet]);
+  const { publicKey, disconnect } = useWallet();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
