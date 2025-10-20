@@ -312,7 +312,36 @@ export async function depositFundsHandler(req: Request, res: Response) {
 
 export async function getAllAgentsHandler(req: Request, res: Response) {
   try {
-    const agents = await getAllActiveAgents();
+    // Get all active agents from database (not blockchain)
+    const dbAgents = await Agent.findAll({
+      where: { status: 'active' },
+      order: [['createdAt', 'DESC']],
+      limit: 100
+    });
+
+    // Format agents for frontend (like pump.fun tokens)
+    const agents = dbAgents.map(agent => ({
+      id: agent.id,
+      pubkey: agent.walletAddress,
+      name: agent.name,
+      symbol: agent.symbol || agent.name.substring(0, 4).toUpperCase(),
+      imageUrl: agent.imageUrl,
+      purpose: agent.purpose,
+      tokenMint: agent.tokenMint,
+      owner: agent.owner,
+      balance: parseFloat(agent.balance) || 0,
+      totalTrades: agent.totalTrades,
+      totalVolume: agent.totalVolume,
+      totalProfit: agent.totalProfit,
+      riskLevel: agent.riskLevel,
+      riskTolerance: agent.riskTolerance,
+      tradingFrequency: agent.tradingFrequency,
+      maxTradeSize: agent.maxTradeSize,
+      website: agent.website,
+      telegram: agent.telegram,
+      twitter: agent.twitter,
+      createdAt: agent.createdAt
+    }));
 
     res.json({
       success: true,
