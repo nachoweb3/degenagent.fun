@@ -11,7 +11,20 @@ export interface RiskConfig {
   minLiquidity: number; // Min liquidity required (USD)
 }
 
-export const DEFAULT_RISK_CONFIG: RiskConfig = {
+// Production-ready conservative risk parameters for mainnet
+export const PRODUCTION_RISK_CONFIG: RiskConfig = {
+  maxPositionSize: 5, // 5% per position (very conservative)
+  maxDailyLoss: 5, // 5% daily loss limit
+  maxTradeSize: 0.5, // 0.5 SOL max per trade (~$100 at $200/SOL)
+  maxSlippage: 50, // 0.5% (50 bps)
+  maxPriceImpact: 1, // 1% max price impact
+  stopLossPercent: 10, // 10% stop loss (tighter for mainnet)
+  takeProfitPercent: 25, // 25% take profit (more realistic)
+  minLiquidity: 50000 // $50k min liquidity (safer pools)
+};
+
+// Development/testnet risk parameters (less conservative)
+export const DEVNET_RISK_CONFIG: RiskConfig = {
   maxPositionSize: 20, // 20% per position
   maxDailyLoss: 10, // 10% daily loss limit
   maxTradeSize: 1.0, // 1 SOL max per trade
@@ -21,6 +34,12 @@ export const DEFAULT_RISK_CONFIG: RiskConfig = {
   takeProfitPercent: 50, // 50% take profit
   minLiquidity: 10000 // $10k min liquidity
 };
+
+// Auto-select based on environment
+export const DEFAULT_RISK_CONFIG: RiskConfig =
+  process.env.NODE_ENV === 'production'
+    ? PRODUCTION_RISK_CONFIG
+    : DEVNET_RISK_CONFIG;
 
 export interface Position {
   tokenMint: string;
@@ -108,11 +127,26 @@ export async function validateTradeRisk(
     // Check daily loss limit (would need historical data)
     // Simplified: check if portfolio is down significantly
     const solBalance = await getTokenBalance(agentPubkey, TOKENS.SOL);
-    if (solBalance < 0.01) {
+    const minSolBalance = process.env.NODE_ENV === 'production' ? 0.05 : 0.01;
+    if (solBalance < minSolBalance) {
       return {
         allowed: false,
-        reason: 'Insufficient SOL balance for trading (< 0.01 SOL)'
+        reason: `Insufficient SOL balance for trading (< ${minSolBalance} SOL). Need buffer for transaction fees.`
       };
+    }
+
+    // Production-only: Additional safety checks
+    if (process.env.NODE_ENV === 'production') {
+      // Require higher minimum liquidity for production
+      // This check would need to be implemented with actual liquidity data
+
+      // Check if trade size is suspiciously large
+      if (tradeType === 'buy' && tradeAmount > 5) {
+        return {
+          allowed: false,
+          reason: `Trade size ${tradeAmount} SOL is too large for production safety (max 5 SOL per trade)`
+        };
+      }
     }
 
     return { allowed: true };

@@ -58,7 +58,7 @@ export async function executeSwap(params: SwapParams): Promise<SwapResult> {
       inputMint,
       outputMint,
       amount,
-      slippageBps = 50, // 0.5%
+      slippageBps = process.env.NODE_ENV === 'production' ? 50 : 100, // 0.5% for production, 1% for dev
       priorityFee = 0
     } = params;
 
@@ -156,7 +156,7 @@ export async function analyzeTradeOpportunity(
   inputMint: string,
   outputMint: string,
   amount: number,
-  maxPriceImpact: number = 2 // 2%
+  maxPriceImpact: number = process.env.NODE_ENV === 'production' ? 1 : 2 // 1% for production, 2% for dev
 ): Promise<TradeAnalysis> {
   try {
     // Check balance
