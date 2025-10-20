@@ -38,7 +38,8 @@ export async function initDatabase(): Promise<void> {
     await import('./models/Performance');
 
     // Sync models (creates tables if they don't exist)
-    await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+    // TEMPORARY: Use alter:true to add new columns (symbol, imageUrl)
+    await sequelize.sync({ alter: true });
     console.log('✅ Database models synchronized');
   } catch (error) {
     console.error('❌ Database initialization failed:', error);
