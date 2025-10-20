@@ -172,6 +172,35 @@ export default function Explore() {
         </div>
       </div>
 
+      {/* King of the Hill Banner */}
+      <Link href="/king-of-the-hill">
+        <div className="mb-8 relative overflow-hidden rounded-2xl border-2 border-yellow-500/50 bg-gradient-to-r from-yellow-900/20 via-orange-900/20 to-red-900/20 p-6 cursor-pointer hover:border-yellow-400 hover:scale-[1.02] transition-all duration-300 group">
+          <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 animate-pulse"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="text-6xl animate-bounce">👑</div>
+              <div>
+                <h2 className="text-2xl font-black mb-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                  KING OF THE HILL
+                </h2>
+                <p className="text-gray-300 text-sm">
+                  Compete for the throne! Top agent wins exclusive rewards 🏆
+                </p>
+              </div>
+            </div>
+            <div className="hidden md:flex items-center gap-3">
+              <div className="text-right">
+                <div className="text-xs text-gray-400">Current King</div>
+                <div className="text-lg font-bold text-yellow-400">Loading...</div>
+              </div>
+              <svg className="w-6 h-6 text-yellow-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </Link>
+
       {/* Filters & Search */}
       <div className="mb-8 space-y-4">
         {/* Search Bar */}
