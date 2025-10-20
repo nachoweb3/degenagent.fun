@@ -6,7 +6,7 @@
   "framework": "nextjs",
   "regions": ["iad1"],
   "env": {
-    "NEXT_PUBLIC_RPC_ENDPOINT": "https://api.devnet.solana.com",
-    "NEXT_PUBLIC_BACKEND_API": "https://your-backend-api.vercel.app/api"
+    "NEXT_PUBLIC_RPC_ENDPOINT": "https://mainnet.helius-rpc.com/?api-key=0609d375-ac29-4da3-be17-5ab640679dd8",
+    "NEXT_PUBLIC_BACKEND_API": "https://degenagent-backend.onrender.com/api"
   }
 }
