@@ -1,5 +1,22 @@
 services:
   - type: web
+    name: agent-fun-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: .next
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: NEXT_PUBLIC_BACKEND_API
+        value: https://degenagent-backend.onrender.com/api
+      - key: NEXT_PUBLIC_RPC_ENDPOINT
+        value: https://mainnet.helius-rpc.com/?api-key=0609d375-ac29-4da3-be17-5ab640679dd8
+
+  - type: web
     name: degenagent-backend
     runtime: node
     region: oregon
