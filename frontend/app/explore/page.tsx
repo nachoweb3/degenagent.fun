@@ -417,20 +417,37 @@ export default function Explore() {
   );
 }
 
-function AgentCard({ agent }: { agent: Agent }) {
+interface AgentWithImage extends Agent {
+  imageUrl?: string;
+}
+
+function AgentCard({ agent }: { agent: AgentWithImage }) {
   const successRate = agent.successfulTrades && agent.totalTrades > 0
     ? Math.round((agent.successfulTrades / agent.totalTrades) * 100)
     : 0;
 
   return (
     <Link href={`/agent/${agent.id}`}>
-      <div className="bg-gray-900/50 rounded-xl p-6 border border-gray-800 hover:border-solana-purple hover:scale-105 transition-all cursor-pointer">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-3">
-          <div>
-            <h3 className="text-2xl font-bold mb-1">{agent.name}</h3>
-            {agent.symbol && <p className="text-gray-400 text-sm">${agent.symbol}</p>}
+      <div className="group bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer hover:-translate-y-1">
+        {/* Agent Image */}
+        {agent.imageUrl && (
+          <div className="relative h-48 bg-gradient-to-br from-purple-900/20 to-pink-900/20">
+            <img
+              src={agent.imageUrl}
+              alt={agent.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60"></div>
           </div>
+        )}
+
+        <div className="p-6">
+          {/* Header */}
+          <div className="flex justify-between items-start mb-3">
+            <div>
+              <h3 className="text-2xl font-bold mb-1 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">{agent.name}</h3>
+              {agent.symbol && <p className="text-gray-400 text-sm font-mono">${agent.symbol}</p>}
+            </div>
           {agent.status && (
             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
               agent.status === 'active'
