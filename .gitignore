@@ -64,3 +64,6 @@ backend/data/*.db
 .turbo
 .vercel
 .railway
+
+# Local Netlify folder
+.netlify

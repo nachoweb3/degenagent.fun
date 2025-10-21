@@ -38,7 +38,7 @@ export async function initDatabase(): Promise<void> {
     await import('./models/Performance');
 
     // Sync models (creates tables if they don't exist)
-    // TEMPORARY: Use alter:true to add new columns (symbol, imageUrl)
+    // Use alter:true to update schema without losing data
     await sequelize.sync({ alter: true });
     console.log('✅ Database models synchronized');
   } catch (error) {
