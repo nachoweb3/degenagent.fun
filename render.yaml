@@ -28,7 +28,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: RPC_ENDPOINT
-        value: https://api.devnet.solana.com
+        value: https://mainnet.helius-rpc.com/?api-key=0609d375-ac29-4da3-be17-5ab640679dd8
       - key: PORT
         value: 3001
       - key: ALLOWED_ORIGINS
